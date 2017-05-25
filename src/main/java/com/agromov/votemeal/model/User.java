@@ -1,5 +1,6 @@
 package com.agromov.votemeal.model;
 
+import org.hibernate.annotations.BatchSize;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -30,12 +31,14 @@ public class User extends NamedEntity
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
+    @BatchSize(size = 200)
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user")
     @MapKey(name = "date")
     @CollectionTable(name = "vote_history", joinColumns = @JoinColumn(name = "user_id"))
     @ElementCollection(fetch = FetchType.LAZY)
+    @BatchSize(size = 200)
     private Map<LocalDate, Vote> voteHistory;
 
     public User()
