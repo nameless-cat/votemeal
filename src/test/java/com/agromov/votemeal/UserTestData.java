@@ -1,13 +1,13 @@
 package com.agromov.votemeal;
 
-import com.agromov.votemeal.Util.UserBuilder;
+import com.agromov.votemeal.util.DateTimeUtil;
+import com.agromov.votemeal.util.UserBuilder;
 import com.agromov.votemeal.matchers.ModelMatcher;
 import com.agromov.votemeal.model.Role;
 import com.agromov.votemeal.model.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.EnumSet;
 import java.util.Objects;
 
 /**
@@ -20,12 +20,30 @@ public class UserTestData
             .withName("Maria")
             .withEmail("maria@yandex.ru")
             .withPassword("password")
+            .withDate(DateTimeUtil.parse("2015-04-23 17:15:02"))
+            .build();
+
+    public static final User OLEG = new UserBuilder()
+            .withId(3)
+            .withName("Oleg")
+            .withEmail("oleg@yandex.ru")
+            .withPassword("psswd")
+            .withDate(DateTimeUtil.parse("2015-05-15 14:15:00"))
+            .build();
+
+    public static final User ADMIN = new UserBuilder()
+            .withId(1)
+            .withName("Admin")
+            .withEmail("admin@gmail.com")
+            .withPassword("admin")
+            .withDate(DateTimeUtil.parse("2015-01-01 00:00:00"))
             .withEnabled(true)
-            .withDate(LocalDateTime.parse("2015-04-23 17:15:02", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-            .withRoles(Role.ROLE_USER)
+            .withRoles(Role.ROLE_ADMIN)
             .build();
 
     public static final int MARIA_ID = MARIA.getId();
+    public static final int OLEG_ID = OLEG.getId();
+    public static final int ADMIN_ID = ADMIN.getId();
 
     public static final ModelMatcher<User> MATCHER = ModelMatcher.of(User.class,
             (expected, actual) -> expected == actual ||
@@ -38,4 +56,19 @@ public class UserTestData
                             && Objects.equals(expected.getRoles(), actual.getRoles())
                     )
     );
+
+    public static User getUpdated()
+    {
+        return new UserBuilder(OLEG).withName("Aaron").build();
+    }
+
+    public static User getCreated()
+    {
+        return new UserBuilder()
+                .withName("New user")
+                .withDate(LocalDateTime.now())
+                .withEmail("new@gmail.com")
+                .withPassword("psssswwwd")
+                .build();
+    }
 }

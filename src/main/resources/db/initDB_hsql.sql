@@ -61,6 +61,6 @@ CREATE TABLE vote_history
   user_id           INTEGER NOT NULL,
   date              DATE NOT NULL,
   FOREIGN KEY ( restaurant_id ) REFERENCES RESTAURANTS (id),
-  FOREIGN KEY ( user_id ) REFERENCES users (id)
+  FOREIGN KEY ( user_id ) REFERENCES users (id) ON DELETE CASCADE
 );
 CREATE UNIQUE INDEX history_unique_date_user_restaurant_idx ON vote_history (date, user_id, restaurant_id);

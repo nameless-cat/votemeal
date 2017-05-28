@@ -1,6 +1,8 @@
 package com.agromov.votemeal.model;
 
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -29,6 +31,7 @@ public class User extends NamedEntity
 
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     @BatchSize(size = 200)

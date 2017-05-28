@@ -16,6 +16,7 @@
 
         <!--test-->
         <junit.version>4.12</junit.version>
+        <datasource-proxy.version>1.4.1</datasource-proxy.version>
         <!--spring-->
         <springData.version>1.11.3.RELEASE</springData.version>
         <spring.version>4.3.8.RELEASE</spring.version>
@@ -87,11 +88,22 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.ttddyy</groupId>
+            <artifactId>datasource-proxy</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.mockito</groupId>
+                    <artifactId>mockito-core</artifactId>
+                </exclusion>
+            </exclusions>
+            <version>${datasource-proxy.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

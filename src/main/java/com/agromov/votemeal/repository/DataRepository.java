@@ -1,19 +1,42 @@
 package com.agromov.votemeal.repository;
 
-import com.agromov.votemeal.model.User;
-
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+
+import static com.agromov.votemeal.util.ClassUtils.NOT_IMPLEMENTED;
 
 /**
  * Created by A.Gromov on 22.05.2017.
  */
 public interface DataRepository<T>
 {
-    List<T> getList(int offset, int limit);
+    default List<T> getList(int offset, int limit)
+    {
+        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+    }
 
-    T save(T restaurant);
+    default T save(T object)
+    {
+        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+    }
 
-    int delete(int id);
+    default int delete(int id) throws EntityNotFoundException
+    {
+        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+    }
 
-    T get(int id);
+    default T get(int id) throws EntityNotFoundException
+    {
+        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+    }
+
+    default List<T> getAll()
+    {
+        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+    }
+
+    default T update(T updated) throws EntityNotFoundException
+    {
+        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+    }
 }

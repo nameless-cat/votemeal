@@ -1,10 +1,11 @@
-package com.agromov.votemeal.Util;
+package com.agromov.votemeal.util;
 
 import com.agromov.votemeal.model.Role;
 import com.agromov.votemeal.model.User;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.EnumSet;
 
 /**
  * Created by A.Gromov on 24.05.2017.
@@ -17,6 +18,13 @@ public class UserBuilder
     public UserBuilder()
     {
         user = new User();
+        user.setEnabled(true);
+        user.setRoles(EnumSet.of(Role.ROLE_USER));
+    }
+
+    public UserBuilder(User user)
+    {
+        this.user = user;
     }
 
     public UserBuilder withId(int id)
