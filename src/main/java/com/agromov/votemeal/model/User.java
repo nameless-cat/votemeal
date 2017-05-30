@@ -35,14 +35,14 @@ public class User extends NamedEntity
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     @BatchSize(size = 200)
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     @MapKey(name = "date")
     @CollectionTable(name = "vote_history", joinColumns = @JoinColumn(name = "user_id"))
     @ElementCollection(fetch = FetchType.LAZY)
     @BatchSize(size = 200)
-    private Map<LocalDate, Vote> voteHistory;
+    private Map<LocalDate, Vote> voteHistory = new HashMap<>();
 
     public User()
     {}

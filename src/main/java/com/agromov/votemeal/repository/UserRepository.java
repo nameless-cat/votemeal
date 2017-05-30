@@ -1,59 +1,16 @@
 package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.List;
+import static com.agromov.votemeal.util.ClassUtils.NOT_IMPLEMENTED;
 
 /**
- * Created by A.Gromov on 22.05.2017.
+ * Created by A.Gromov on 30.05.2017.
  */
-
-@Repository
-public class UserRepository
-        implements DataRepository<User>
+public interface UserRepository extends DataRepository<User>
 {
-    @Autowired
-    private UserCrudRepository repository;
-
-    @Override
-    public User save(User user)
+    default int delete(int id)
     {
-        return repository.save(user);
-    }
-
-    @Override
-    public User update(User updated) throws EntityNotFoundException
-    {
-        // todo см комментарии в UserRepositoryTest#getAndModifyUserAndPersistMustReflectThisOnDB()
-        return repository.save(updated);
-    }
-
-    @Override
-    public int delete(int id) throws EntityNotFoundException
-    {
-        return repository.delete(id);
-    }
-
-    @Override
-    public User get(int id) throws EntityNotFoundException
-    {
-        return repository.findOne(id);
-    }
-
-    @Override
-    public List<User> getAll()
-    {
-        return repository.findAllByOrderByName();
-    }
-
-    @Override
-    public List<User> getList(int offset, int limit)
-    {
-        return repository.findAllByOrderByName(new PageRequest(offset, limit));
+        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
 }

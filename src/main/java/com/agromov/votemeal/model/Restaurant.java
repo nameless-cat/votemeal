@@ -2,6 +2,7 @@ package com.agromov.votemeal.model;
 
 import javax.persistence.*;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -14,14 +15,17 @@ public class Restaurant extends NamedEntity
     @Column(name = "vote", nullable = false)
     private int vote;
 
+    @Column(name = "closed", nullable = false, columnDefinition = "default false")
+    private boolean closed;
+
     @Embedded
     private Address address;
 
     @Embedded
     private WorkingTime workingTime;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant")
-    private Set<Lunch> lunches;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    private Set<Lunch> lunches = new HashSet<>();
 
     public Restaurant(int id, String name, int vote, Address address, WorkingTime workingTime, Set<Lunch> lunches)
     {
@@ -32,28 +36,7 @@ public class Restaurant extends NamedEntity
         this.lunches = lunches;
     }
 
-    @Embeddable
-    private static class WorkingTime
-    {
-        @Column(name = "work_from", nullable = false)
-        private LocalTime workFrom;
-
-        @Column(name = "work_until", nullable = false)
-        private LocalTime workUntil;
-    }
-
-    @Embeddable
-    private static class Address
-    {
-        @Column(name = "street", nullable = false)
-        private String street;
-
-        @Column(name = "building", nullable = false)
-        private int building;
-
-        @Column(name = "route_guide")
-        private String routeGuide;
-    }
+    public Restaurant(){}
 
     public int getVote()
     {
@@ -63,6 +46,16 @@ public class Restaurant extends NamedEntity
     public void setVote(int vote)
     {
         this.vote = vote;
+    }
+
+    public boolean isClosed()
+    {
+        return closed;
+    }
+
+    public void setClosed(boolean closed)
+    {
+        this.closed = closed;
     }
 
     public Address getAddress()
@@ -93,5 +86,16 @@ public class Restaurant extends NamedEntity
     public void setLunches(Set<Lunch> lunches)
     {
         this.lunches = lunches;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Restaurant{" +
+                "id='" + getId() + '\'' +
+                "name='" + getName() + '\'' +
+                "address={" + address + '}' +
+                ", workingTime={" + workingTime + '}' +
+                '}';
     }
 }

@@ -10,7 +10,7 @@ import static com.agromov.votemeal.util.ClassUtils.NOT_IMPLEMENTED;
  */
 public interface DataRepository<T>
 {
-    default List<T> getList(int offset, int limit)
+    default List<T> getRange(int offset, int limit)
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
@@ -20,10 +20,8 @@ public interface DataRepository<T>
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
 
-    default int delete(int id) throws EntityNotFoundException
-    {
-        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
-    }
+    //todo убрать ненужные выбросы EntityNotFoundException, т.к. если не найдено, то вернет "0 rows affected"
+
 
     default T get(int id) throws EntityNotFoundException
     {

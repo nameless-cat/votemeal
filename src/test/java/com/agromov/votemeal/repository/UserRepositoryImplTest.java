@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 
 import static com.agromov.votemeal.UserTestData.*;
@@ -14,11 +13,11 @@ import static com.agromov.votemeal.UserTestData.*;
 /**
  * Created by A.Gromov on 23.05.2017.
  */
-public class UserRepositoryTest
+public class UserRepositoryImplTest
         extends AbstractRepositoryTest
 {
     @Autowired
-    private DataRepository<User> repository;
+    private UserRepository repository;
 
     @Test
     public void getUserMustReturnCorrectObject() throws Exception
@@ -86,7 +85,7 @@ public class UserRepositoryTest
     {
         User created = UserTestData.getCreated();
         created.setId(repository.save(created).getId());
-        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, MARIA, created), repository.getList(0, 3));
+        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, MARIA, created), repository.getRange(0, 3));
         // todo попробовать sql query
         expectedQueries(5);
     }
