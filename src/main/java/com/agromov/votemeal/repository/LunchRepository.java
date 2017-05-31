@@ -1,7 +1,6 @@
 package com.agromov.votemeal.repository;
 
-
-import com.agromov.votemeal.model.User;
+import com.agromov.votemeal.model.Lunch;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -9,21 +8,21 @@ import java.util.List;
 import static com.agromov.votemeal.util.ClassUtils.NOT_IMPLEMENTED;
 
 /**
- * Created by A.Gromov on 30.05.2017.
+ * Created by A.Gromov on 31.05.2017.
  */
-public interface UserRepository
+public interface LunchRepository
 {
-    default int delete(int id)
+    default int delete(int id, int restaurantId)
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
 
-    default List<User> getRange(int offset, int limit)
+    default List<Lunch> getRange(int offset, int limit, int restaurantId)
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
 
-    default User save(User object)
+    default Lunch save(Lunch object)
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
@@ -31,17 +30,12 @@ public interface UserRepository
     //todo убрать ненужные выбросы EntityNotFoundException, т.к. если не найдено, то вернет "0 rows affected"
 
 
-    default User get(int id) throws EntityNotFoundException
+    default Lunch get(int id, int restaurantId) throws EntityNotFoundException
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
 
-    default List<User> getAll()
-    {
-        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
-    }
-
-    default User update(User updated) throws EntityNotFoundException
+    default List<Lunch> getAll(int restaurantId)
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }

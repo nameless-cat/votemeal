@@ -15,7 +15,8 @@ import java.util.List;
  * Created by A.Gromov on 22.05.2017.
  */
 @Transactional(readOnly = true)
-public interface UserCrudRepository extends JpaRepository<User, Integer>
+public interface UserJpaRepository
+        extends JpaRepository<User, Integer>
 {
     @Transactional
     @Modifying

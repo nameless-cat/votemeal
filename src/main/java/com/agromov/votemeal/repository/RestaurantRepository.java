@@ -2,6 +2,7 @@ package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.model.Restaurant;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static com.agromov.votemeal.util.ClassUtils.NOT_IMPLEMENTED;
@@ -10,8 +11,35 @@ import static com.agromov.votemeal.util.ClassUtils.NOT_IMPLEMENTED;
  * Created by A.Gromov on 30.05.2017.
  */
 public interface RestaurantRepository
-        extends DataRepository<Restaurant>
 {
+    default List<Restaurant> getRange(int offset, int limit)
+    {
+        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+    }
+
+    default Restaurant save(Restaurant object)
+    {
+        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+    }
+
+    //todo убрать ненужные выбросы EntityNotFoundException, т.к. если не найдено, то вернет "0 rows affected"
+
+
+    default Restaurant get(int id) throws EntityNotFoundException
+    {
+        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+    }
+
+    default List<Restaurant> getAll()
+    {
+        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+    }
+
+    default Restaurant update(Restaurant updated) throws EntityNotFoundException
+    {
+        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+    }
+
     default boolean close(int id)
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);

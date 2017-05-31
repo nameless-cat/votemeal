@@ -24,6 +24,7 @@
         <hsqldb.version>2.4.0</hsqldb.version>
         <!--hibernate-->
         <hibernate.version>5.2.10.Final</hibernate.version>
+        <hibernate-validator.version>5.4.1.Final</hibernate-validator.version>
     </properties>
     <dependencies>
         <!-- Logging with SLF4J & LogBack -->
@@ -80,6 +81,11 @@
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
+        </dependency>
 
         <!--test-->
         <dependency>
@@ -106,6 +112,7 @@
             <version>${datasource-proxy.version}</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
     <build>
         <finalName>votemeal</finalName>

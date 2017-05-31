@@ -51,6 +51,7 @@ CREATE TABLE lunches
   price             INTEGER       NOT NULL,
   restaurant_id     INTEGER       NOT NULL,
   description       VARCHAR(255),
+  enabled           BOOLEAN DEFAULT TRUE,
   FOREIGN KEY ( restaurant_id ) REFERENCES RESTAURANTS (id) ON DELETE CASCADE
 );
 CREATE UNIQUE INDEX lunches_unique_restaurant_name_idx ON lunches (restaurant_id, name);

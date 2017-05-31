@@ -3,7 +3,6 @@ package com.agromov.votemeal.repository;
 import com.agromov.votemeal.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityNotFoundException;
@@ -18,7 +17,7 @@ public class UserRepositoryImpl
         implements UserRepository
 {
     @Autowired
-    private UserCrudRepository repository;
+    private UserJpaRepository repository;
 
     @Override
     public User save(User user)

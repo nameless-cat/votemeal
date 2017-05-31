@@ -14,7 +14,8 @@ import java.util.List;
  * Created by A.Gromov on 30.05.2017.
  */
 @Transactional(readOnly = true)
-public interface RestaurantCrudRepository extends JpaRepository<Restaurant, Integer>
+public interface RestaurantJpaRepository
+        extends JpaRepository<Restaurant, Integer>
 {
     @Override
     Restaurant findOne(Integer integer);

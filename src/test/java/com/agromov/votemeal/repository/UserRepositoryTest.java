@@ -13,7 +13,7 @@ import static com.agromov.votemeal.UserTestData.*;
 /**
  * Created by A.Gromov on 23.05.2017.
  */
-public class UserRepositoryImplTest
+public class UserRepositoryTest
         extends AbstractRepositoryTest
 {
     @Autowired

@@ -22,7 +22,7 @@ public class RestaurantRepositoryTest
     @Test
     public void getCafeMustReturnCorrectObject() throws Exception
     {
-        MATCHER.assertEquals(RESTAURANT_1, repository.get(RESTAURANT_ID));
+        MATCHER.assertEquals(MCDONALDS, repository.get(MCDONALDS_ID));
         expectedQueries(1);
     }
 
@@ -43,8 +43,8 @@ public class RestaurantRepositoryTest
     @Test
     public void closeCafeMustReflectChangesInDB() throws Exception
     {
-        repository.close(RESTAURANT_ID);
-        MATCHER.assertCollectionEquals(Arrays.asList(RESTAURANT_5, RESTAURANT_4, RESTAURANT_2, RESTAURANT_3), repository.getAllOpened());
+        repository.close(MCDONALDS_ID);
+        MATCHER.assertCollectionEquals(Arrays.asList(SUBWAY, BENJAMIN, POTATO, CHOCO), repository.getAllOpened());
         expectedQueries(2);
     }
 
@@ -61,7 +61,7 @@ public class RestaurantRepositoryTest
         Restaurant created = RestaurantTestData.getCreated();
         created.setId(repository.save(created).getId());
 
-        MATCHER.assertCollectionEquals(Arrays.asList(created, RESTAURANT_5, RESTAURANT_4, RESTAURANT_2, RESTAURANT_1, RESTAURANT_3),
+        MATCHER.assertCollectionEquals(Arrays.asList(created, SUBWAY, BENJAMIN, POTATO, MCDONALDS, CHOCO),
                 repository.getAll());
 
         expectedQueries(3);
@@ -74,14 +74,14 @@ public class RestaurantRepositoryTest
         created.setClosed(true);
         created.setId(repository.save(created).getId());
         repository.open(created.getId());
-        MATCHER.assertCollectionEquals(Arrays.asList(created, RESTAURANT_5, RESTAURANT_4, RESTAURANT_2, RESTAURANT_1, RESTAURANT_3),
+        MATCHER.assertCollectionEquals(Arrays.asList(created, SUBWAY, BENJAMIN, POTATO, MCDONALDS, CHOCO),
                 repository.getAllOpened());
     }
 
     @Test
     public void getListCafeInRangeMustReturnCorrectResult() throws Exception
     {
-        MATCHER.assertCollectionEquals(Arrays.asList(RESTAURANT_5, RESTAURANT_4, RESTAURANT_2), repository.getRange(0, 3));
+        MATCHER.assertCollectionEquals(Arrays.asList(SUBWAY, BENJAMIN, POTATO), repository.getRange(0, 3));
         expectedQueries(1);
     }
 }

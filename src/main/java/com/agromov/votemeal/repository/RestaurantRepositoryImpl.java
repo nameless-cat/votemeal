@@ -16,7 +16,7 @@ public class RestaurantRepositoryImpl
     implements RestaurantRepository
 {
     @Autowired
-    private RestaurantCrudRepository repository;
+    private RestaurantJpaRepository repository;
 
     @Override
     public Restaurant get(int id) throws EntityNotFoundException

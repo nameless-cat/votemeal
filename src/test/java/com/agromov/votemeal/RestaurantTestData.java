@@ -4,7 +4,6 @@ import com.agromov.votemeal.matchers.ModelMatcher;
 import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.util.RestaurantBuilder;
 
-import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +25,7 @@ public class RestaurantTestData
                             && Objects.equals(expected.getWorkingTime().getWorkUntil(), actual.getWorkingTime().getWorkUntil())
                     ));
 
-    public static final Restaurant RESTAURANT_1 = new RestaurantBuilder()
+    public static final Restaurant MCDONALDS = new RestaurantBuilder()
             .withId(4)
             .withName("Макдоналдс")
             .withAddress().street("МКАД, 47-й километр")
@@ -36,7 +35,7 @@ public class RestaurantTestData
             .withWorkTime().until(22, 30)
             .build();
 
-    public static final Restaurant RESTAURANT_2 = new RestaurantBuilder()
+    public static final Restaurant POTATO = new RestaurantBuilder()
             .withId(5)
             .withName("Крошка Картошка")
             .withAddress().street("МКАД, 47-й километр")
@@ -46,7 +45,7 @@ public class RestaurantTestData
             .withWorkTime().until(22, 0)
             .build();
 
-    public static final Restaurant RESTAURANT_3 = new RestaurantBuilder()
+    public static final Restaurant CHOCO = new RestaurantBuilder()
             .withId(6)
             .withName("Шоколадница")
             .withAddress().street("Солнцевский проспект")
@@ -56,7 +55,7 @@ public class RestaurantTestData
             .withWorkTime().until(22, 0)
             .build();
 
-    public static final Restaurant RESTAURANT_4 = new RestaurantBuilder()
+    public static final Restaurant BENJAMIN = new RestaurantBuilder()
             .withId(7)
             .withName("Бенджамин")
             .withAddress().street("50 лет Октября")
@@ -65,7 +64,7 @@ public class RestaurantTestData
             .withWorkTime().until(0, 0)
             .build();
 
-    public static final Restaurant RESTAURANT_5 = new RestaurantBuilder()
+    public static final Restaurant SUBWAY = new RestaurantBuilder()
             .withId(8)
             .withName("Subway")
             .withAddress().street("50 лет Октября")
@@ -74,9 +73,9 @@ public class RestaurantTestData
             .withWorkTime().until(22, 0)
             .build();
 
-    public static final List<Restaurant> RESTAURANTS  = Arrays.asList(RESTAURANT_5, RESTAURANT_4, RESTAURANT_2, RESTAURANT_1, RESTAURANT_3);
+    public static final List<Restaurant> RESTAURANTS  = Arrays.asList(SUBWAY, BENJAMIN, POTATO, MCDONALDS, CHOCO);
 
-    public static final int RESTAURANT_ID = RESTAURANT_1.getId();
+    public static final int MCDONALDS_ID = MCDONALDS.getId();
 
     public static Restaurant getCreated()
     {
