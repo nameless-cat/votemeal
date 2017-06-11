@@ -58,4 +58,26 @@ public class Address
                 ", routeGuide='" + routeGuide + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Address address = (Address) o;
+
+        if (getBuilding() != address.getBuilding()) return false;
+        if (getStreet() != null ? !getStreet().equals(address.getStreet()) : address.getStreet() != null) return false;
+        return getRouteGuide() != null ? getRouteGuide().equals(address.getRouteGuide()) : address.getRouteGuide() == null;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = getStreet() != null ? getStreet().hashCode() : 0;
+        result = 31 * result + getBuilding();
+        result = 31 * result + (getRouteGuide() != null ? getRouteGuide().hashCode() : 0);
+        return result;
+    }
 }

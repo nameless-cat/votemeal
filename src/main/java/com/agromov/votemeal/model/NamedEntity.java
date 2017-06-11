@@ -12,7 +12,7 @@ public class NamedEntity extends BaseEntity
     @Column(name = "name", nullable = false)
     private String name;
 
-    NamedEntity(int id, String name)
+    NamedEntity(long id, String name)
     {
         super(id);
         this.name = name;
@@ -30,5 +30,25 @@ public class NamedEntity extends BaseEntity
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        NamedEntity that = (NamedEntity) o;
+
+        return getName() != null ? getName().equals(that.getName()) : that.getName() == null;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        return result;
     }
 }

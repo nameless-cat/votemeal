@@ -25,7 +25,7 @@ public interface RestaurantRepository
     //todo убрать ненужные выбросы EntityNotFoundException, т.к. если не найдено, то вернет "0 rows affected"
 
 
-    default Restaurant get(int id) throws EntityNotFoundException
+    default Restaurant get(long id) throws EntityNotFoundException
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
@@ -40,12 +40,12 @@ public interface RestaurantRepository
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
 
-    default boolean close(int id)
+    default boolean close(long id)
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
 
-    default boolean open(int id)
+    default boolean open(long id)
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }

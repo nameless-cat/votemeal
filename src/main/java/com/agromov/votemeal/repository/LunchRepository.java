@@ -12,12 +12,12 @@ import static com.agromov.votemeal.util.ClassUtils.NOT_IMPLEMENTED;
  */
 public interface LunchRepository
 {
-    default int delete(int id, int restaurantId)
+    default int delete(long id, long restaurantId)
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
 
-    default List<Lunch> getRange(int offset, int limit, int restaurantId)
+    default List<Lunch> getRange(int offset, int limit, long restaurantId)
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
@@ -30,12 +30,12 @@ public interface LunchRepository
     //todo убрать ненужные выбросы EntityNotFoundException, т.к. если не найдено, то вернет "0 rows affected"
 
 
-    default Lunch get(int id, int restaurantId) throws EntityNotFoundException
+    default Lunch get(long id, long restaurantId) throws EntityNotFoundException
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
 
-    default List<Lunch> getAll(int restaurantId)
+    default List<Lunch> getAll(long restaurantId)
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }

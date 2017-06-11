@@ -75,7 +75,7 @@ public class RestaurantTestData
 
     public static final List<Restaurant> RESTAURANTS  = Arrays.asList(SUBWAY, BENJAMIN, POTATO, MCDONALDS, CHOCO);
 
-    public static final int MCDONALDS_ID = MCDONALDS.getId();
+    public static final long MCDONALDS_ID = MCDONALDS.getId();
 
     public static Restaurant getCreated()
     {

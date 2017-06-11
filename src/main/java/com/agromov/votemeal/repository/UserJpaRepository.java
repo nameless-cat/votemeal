@@ -16,19 +16,19 @@ import java.util.List;
  */
 @Transactional(readOnly = true)
 public interface UserJpaRepository
-        extends JpaRepository<User, Integer>
+        extends JpaRepository<User, Long>
 {
     @Transactional
     @Modifying
     @Query("DELETE FROM User u WHERE u.id=:id")
-    int delete(@Param("id") int id) throws EntityNotFoundException;
+    int delete(@Param("id") long id) throws EntityNotFoundException;
 
     @Override
     @Transactional
     User save(User user);
 
     @Override
-    User findOne(Integer integer);
+    User findOne(Long integer);
 
     List<User> findAllByOrderByName();
 

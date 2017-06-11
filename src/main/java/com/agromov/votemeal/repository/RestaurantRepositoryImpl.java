@@ -19,7 +19,7 @@ public class RestaurantRepositoryImpl
     private RestaurantJpaRepository repository;
 
     @Override
-    public Restaurant get(int id) throws EntityNotFoundException
+    public Restaurant get(long id) throws EntityNotFoundException
     {
         return repository.findOne(id);
     }
@@ -31,13 +31,13 @@ public class RestaurantRepositoryImpl
     }
 
     @Override
-    public boolean close(int id)
+    public boolean close(long id)
     {
         return repository.close(id) != 0;
     }
 
     @Override
-    public boolean open(int id)
+    public boolean open(long id)
     {
         return repository.open(id) != 0;
     }

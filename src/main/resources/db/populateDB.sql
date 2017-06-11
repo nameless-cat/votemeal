@@ -4,7 +4,6 @@ DELETE FROM RESTAURANTS;
 DELETE FROM USER_ROLES;
 DELETE FROM USERS;
 ALTER SEQUENCE global_seq RESTART WITH 1;
-ALTER SEQUENCE vote_history_seq RESTART WITH 1;
 
 INSERT INTO USERS (NAME, EMAIL, PASSWORD, REGISTERED) VALUES
   ('Admin', 'admin@gmail.com', 'admin', '2015-01-01 00:00:00'),
@@ -49,4 +48,16 @@ INSERT INTO VOTE_HISTORY (RESTAURANT_ID, USER_ID, DATE) VALUES
   (7, 3, '2015-05-17'),
   (5, 3, '2015-05-18');
 
+-- INSERT INTO VOTES (DATE) VALUES
+--   ('2014-05-20'),
+--   (current_date);
 
+INSERT INTO VOTES (DATE, RESTAURANT_ID, VOTES) VALUES
+  ('2014-05-20', 4, 0),
+  ('2014-05-20', 5, 4),
+  ('2014-05-20', 6, 60),
+  ('2014-05-20', 7, 9),
+  ('2014-05-20', 8, 12),
+  (current_date, 6, 60),
+  (current_date, 7, 0),
+  (current_date, 8, 12);

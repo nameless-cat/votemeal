@@ -13,7 +13,7 @@ import static com.agromov.votemeal.util.ClassUtils.NOT_IMPLEMENTED;
  */
 public interface UserRepository
 {
-    default int delete(int id)
+    default int delete(long id)
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
@@ -31,7 +31,7 @@ public interface UserRepository
     //todo убрать ненужные выбросы EntityNotFoundException, т.к. если не найдено, то вернет "0 rows affected"
 
 
-    default User get(int id) throws EntityNotFoundException
+    default User get(long id) throws EntityNotFoundException
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }

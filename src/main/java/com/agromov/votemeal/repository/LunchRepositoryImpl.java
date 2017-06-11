@@ -18,19 +18,19 @@ public class LunchRepositoryImpl
     private LunchJpaRepository repository;
 
     @Override
-    public Lunch get(int id, int restaurantId) throws EntityNotFoundException
+    public Lunch get(long id, long restaurantId) throws EntityNotFoundException
     {
         return repository.findByIdAndRestaurantId(id, restaurantId);
     }
 
     @Override
-    public List<Lunch> getAll(int restaurantId)
+    public List<Lunch> getAll(long restaurantId)
     {
         return repository.findAllByRestaurantIdOrderByName(restaurantId);
     }
 
     @Override
-    public int delete(int id, int restaurantId)
+    public int delete(long id, long restaurantId)
     {
         return repository.delete(id, restaurantId);
     }

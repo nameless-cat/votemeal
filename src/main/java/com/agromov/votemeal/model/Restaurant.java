@@ -12,16 +12,11 @@ import java.util.Set;
 @Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(name = "restaurants_unique_name_id_idx", columnNames = {"id", "name"})})
 public class Restaurant extends NamedEntity
 {
-    @Column(name = "vote", nullable = false)
-    private int vote;
-
     @Column(name = "closed", nullable = false, columnDefinition = "default false")
     private boolean closed;
 
-    @Embedded
     private Address address;
 
-    @Embedded
     private WorkingTime workingTime;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
@@ -30,23 +25,12 @@ public class Restaurant extends NamedEntity
     public Restaurant(int id, String name, int vote, Address address, WorkingTime workingTime, Set<Lunch> lunches)
     {
         super(id, name);
-        this.vote = vote;
         this.address = address;
         this.workingTime = workingTime;
         this.lunches = lunches;
     }
 
     public Restaurant(){}
-
-    public int getVote()
-    {
-        return vote;
-    }
-
-    public void setVote(int vote)
-    {
-        this.vote = vote;
-    }
 
     public boolean isClosed()
     {
@@ -97,5 +81,29 @@ public class Restaurant extends NamedEntity
                 "address={" + address + '}' +
                 ", workingTime={" + workingTime + '}' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Restaurant that = (Restaurant) o;
+
+        if (isClosed() != that.isClosed()) return false;
+        if (getAddress() != null ? !getAddress().equals(that.getAddress()) : that.getAddress() != null) return false;
+        return getWorkingTime() != null ? getWorkingTime().equals(that.getWorkingTime()) : that.getWorkingTime() == null;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = 31 * result + (isClosed() ? 1 : 0);
+        result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
+        result = 31 * result + (getWorkingTime() != null ? getWorkingTime().hashCode() : 0);
+        return result;
     }
 }

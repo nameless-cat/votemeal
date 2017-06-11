@@ -15,10 +15,10 @@ import java.util.List;
  */
 @Transactional(readOnly = true)
 public interface RestaurantJpaRepository
-        extends JpaRepository<Restaurant, Integer>
+        extends JpaRepository<Restaurant, Long>
 {
     @Override
-    Restaurant findOne(Integer integer);
+    Restaurant findOne(Long integer);
 
     List<Restaurant> findAllByOrderByName();
 
@@ -27,12 +27,12 @@ public interface RestaurantJpaRepository
     @Transactional
     @Modifying
     @Query("UPDATE Restaurant r SET r.closed=true WHERE r.id=:id")
-    int close(@Param("id") int id);
+    int close(@Param("id") long id);
 
     @Transactional
     @Modifying
     @Query("UPDATE Restaurant r SET r.closed=false WHERE r.id=:id")
-    int open(@Param("id") int id);
+    int open(@Param("id") long id);
 
     List<Restaurant> findAllByClosedIsFalseOrderByName();
 

@@ -41,9 +41,9 @@ public class UserTestData
             .withRoles(Role.ROLE_ADMIN)
             .build();
 
-    public static final int MARIA_ID = MARIA.getId();
-    public static final int OLEG_ID = OLEG.getId();
-    public static final int ADMIN_ID = ADMIN.getId();
+    public static final long MARIA_ID = MARIA.getId();
+    public static final long OLEG_ID = OLEG.getId();
+    public static final long ADMIN_ID = ADMIN.getId();
 
     public static final ModelMatcher<User> MATCHER = ModelMatcher.of(User.class,
             (expected, actual) -> expected == actual ||

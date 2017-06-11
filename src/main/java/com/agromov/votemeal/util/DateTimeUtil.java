@@ -1,5 +1,6 @@
 package com.agromov.votemeal.util;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -11,5 +12,10 @@ public class DateTimeUtil
     public static LocalDateTime parse(String asString)
     {
         return LocalDateTime.parse(asString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    public static LocalDate currentDate()
+    {
+        return LocalDate.now();
     }
 }

@@ -42,7 +42,7 @@ public class User extends NamedEntity
     @CollectionTable(name = "vote_history", joinColumns = @JoinColumn(name = "user_id"))
     @ElementCollection(fetch = FetchType.LAZY)
     @BatchSize(size = 200)
-    private Map<LocalDate, Vote> voteHistory = new HashMap<>();
+    private Map<LocalDate, VoteHistory> voteHistory = new HashMap<>();
 
     public User()
     {}
@@ -51,11 +51,11 @@ public class User extends NamedEntity
         this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.isEnabled(), u.getRegistered(), u.getRoles());
     }
 
-    public User(Integer id, String name, String email, String password, Role role, Role... roles) {
+    public User(Long id, String name, String email, String password, Role role, Role... roles) {
         this(id, name, email, password, true, LocalDateTime.now(), EnumSet.of(role, roles));
     }
 
-    public User(int id, String name, String email, String password, boolean enabled, LocalDateTime  registered, Collection<Role> roles)
+    public User(long id, String name, String email, String password, boolean enabled, LocalDateTime  registered, Collection<Role> roles)
     {
         super(id, name);
         this.email = email;

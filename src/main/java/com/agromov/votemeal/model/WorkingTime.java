@@ -44,4 +44,25 @@ public class WorkingTime
     {
         this.workUntil = workUntil;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WorkingTime that = (WorkingTime) o;
+
+        if (getWorkFrom() != null ? !getWorkFrom().equals(that.getWorkFrom()) : that.getWorkFrom() != null)
+            return false;
+        return getWorkUntil() != null ? getWorkUntil().equals(that.getWorkUntil()) : that.getWorkUntil() == null;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = getWorkFrom() != null ? getWorkFrom().hashCode() : 0;
+        result = 31 * result + (getWorkUntil() != null ? getWorkUntil().hashCode() : 0);
+        return result;
+    }
 }

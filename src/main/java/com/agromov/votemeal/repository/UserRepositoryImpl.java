@@ -33,13 +33,13 @@ public class UserRepositoryImpl
     }
 
     @Override
-    public int delete(int id) throws EntityNotFoundException
+    public int delete(long id) throws EntityNotFoundException
     {
         return repository.delete(id);
     }
 
     @Override
-    public User get(int id) throws EntityNotFoundException
+    public User get(long id) throws EntityNotFoundException
     {
         return repository.findOne(id);
     }
