@@ -12,46 +12,20 @@ import static com.agromov.votemeal.util.ClassUtils.NOT_IMPLEMENTED;
  */
 public interface RestaurantRepository
 {
-    default List<Restaurant> getRange(int offset, int limit)
-    {
-        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
-    }
+    List<Restaurant> getRange(int offset, int limit);
 
-    default Restaurant save(Restaurant object)
-    {
-        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
-    }
+    Restaurant save(Restaurant object);
 
     //todo убрать ненужные выбросы EntityNotFoundException, т.к. если не найдено, то вернет "0 rows affected"
 
 
-    default Restaurant get(long id) throws EntityNotFoundException
-    {
-        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
-    }
+    Restaurant get(long id);
 
-    default List<Restaurant> getAll()
-    {
-        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
-    }
+    List<Restaurant> getAll();
 
-    default Restaurant update(Restaurant updated) throws EntityNotFoundException
-    {
-        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
-    }
+    List<Restaurant> getAllOpened();
 
-    default boolean close(long id)
-    {
-        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
-    }
+    Restaurant getWithLunches(Long id);
 
-    default boolean open(long id)
-    {
-        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
-    }
-
-    default List<Restaurant> getAllOpened()
-    {
-        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
-    }
+    Restaurant testGet(long id);
 }

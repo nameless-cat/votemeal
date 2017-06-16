@@ -1,5 +1,6 @@
 package com.agromov.votemeal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Range;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,6 +15,7 @@ public class Lunch extends NamedEntity
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id")
+    @JsonIgnore
     private Restaurant restaurant;
 
     @Column(name = "description")
@@ -24,7 +26,7 @@ public class Lunch extends NamedEntity
 
     @Range(min = 10, max = 5000)
     @Column(name = "price")
-    private int price;
+    private float price;
 
     public Lunch(int id, String name, Restaurant restaurant, String description)
     {
@@ -65,13 +67,24 @@ public class Lunch extends NamedEntity
         this.enabled = enabled;
     }
 
-    public void setPrice(int price)
+    public void setPrice(float price)
     {
         this.price = price;
     }
 
-    public int getPrice()
+    public float getPrice()
     {
         return price;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Lunch{" +
+                "name='" + this.getName() + '\'' +
+                ", description='" + description + '\'' +
+                ", enabled=" + enabled +
+                ", price=" + price +
+                '}';
     }
 }

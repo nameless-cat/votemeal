@@ -1,5 +1,7 @@
 package com.agromov.votemeal.matchers;
 
+import com.agromov.votemeal.TestUtil;
+import com.agromov.votemeal.web.json.JsonUtil;
 import org.junit.Assert;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -71,7 +73,7 @@ public class ModelMatcher<T> {
         }
     }
 
-    /*private T fromJsonValue(String json) {
+    private T fromJsonValue(String json) {
         return JsonUtil.readValue(json, entityClass);
     }
 
@@ -82,7 +84,7 @@ public class ModelMatcher<T> {
     public T fromJsonAction(ResultActions action) throws UnsupportedEncodingException
     {
         return fromJsonValue(TestUtil.getContent(action));
-    }*/
+    }
 
     public void assertEquals(T expected, T actual) {
         Assert.assertEquals(wrap(expected), wrap(actual));
@@ -100,7 +102,7 @@ public class ModelMatcher<T> {
         return collection.stream().map(this::wrap).collect(Collectors.toList());
     }
 
-    /*public ResultMatcher contentMatcher(T expect) {
+    public ResultMatcher contentMatcher(T expect) {
         return content().string(
                 new TestMatcher<T>(expect) {
                     @Override
@@ -127,6 +129,6 @@ public class ModelMatcher<T> {
                         return expectedList.equals(actualList);
                     }
                 });
-    }*/
+    }
 }
 

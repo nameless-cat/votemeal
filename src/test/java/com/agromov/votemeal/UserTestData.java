@@ -1,14 +1,21 @@
 package com.agromov.votemeal;
 
+import com.agromov.votemeal.model.VoteHistory;
 import com.agromov.votemeal.util.DateTimeUtil;
 import com.agromov.votemeal.util.UserBuilder;
 import com.agromov.votemeal.matchers.ModelMatcher;
 import com.agromov.votemeal.model.Role;
 import com.agromov.votemeal.model.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+
+import static com.agromov.votemeal.RestaurantTestData.*;
 
 /**
  * Created by A.Gromov on 23.05.2017.
@@ -45,6 +52,19 @@ public class UserTestData
     public static final long OLEG_ID = OLEG.getId();
     public static final long ADMIN_ID = ADMIN.getId();
 
+    public static final List<VoteHistory> MARIA_HISTORY  = new ArrayList<>(Arrays.asList(
+            new VoteHistory(LocalDate.now(), CHOCO, MARIA_ID),
+            new VoteHistory(LocalDate.parse("2014-05-20"), POTATO, MARIA_ID)
+    ));
+
+    public static final ModelMatcher<VoteHistory> VOTE_MATCHER = ModelMatcher.of(VoteHistory.class,
+            (expected, actual) -> expected == actual ||
+                    (Objects.equals(expected.getDate(), actual.getDate())
+                    && Objects.equals(expected.getRestaurant().getName(), actual.getRestaurant().getName())
+                    && Objects.equals(expected.getRestaurant().getAddress().getStreet(), actual.getRestaurant().getAddress().getStreet())
+                    && Objects.equals(expected.getRestaurant().getAddress().getBuilding(), actual.getRestaurant().getAddress().getBuilding()))
+            );
+
     public static final ModelMatcher<User> MATCHER = ModelMatcher.of(User.class,
             (expected, actual) -> expected == actual ||
                     (Objects.equals(expected.getPassword(), actual.getPassword())
@@ -59,7 +79,7 @@ public class UserTestData
 
     public static User getUpdated()
     {
-        return new UserBuilder(OLEG).withName("Aaron").build();
+        return new UserBuilder(MARIA).withEmail("masha@mail.ru").build();
     }
 
     public static User getCreated()

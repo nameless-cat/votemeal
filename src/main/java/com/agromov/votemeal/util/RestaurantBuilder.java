@@ -21,6 +21,10 @@ public class RestaurantBuilder
         restaurant = new Restaurant();
     }
 
+    public RestaurantBuilder(Restaurant restaurant)
+    {
+        this.restaurant = restaurant;
+    }
 
     public RestaurantBuilder withName(String name)
     {
@@ -47,7 +51,7 @@ public class RestaurantBuilder
         return restaurant;
     }
 
-    public RestaurantBuilder withId(int id)
+    public RestaurantBuilder withId(long id)
     {
         restaurant.setId(id);
         return this;

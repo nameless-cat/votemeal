@@ -41,7 +41,7 @@ public class LunchBuilder
         return this;
     }
 
-    public LunchBuilder withPrice(int price)
+    public LunchBuilder withPrice(float price)
     {
         lunch.setPrice(price);
         return this;

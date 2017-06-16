@@ -1,10 +1,14 @@
 package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.model.Lunch;
+import com.agromov.votemeal.model.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -17,10 +21,13 @@ public class LunchRepositoryImpl
     @Autowired
     private LunchJpaRepository repository;
 
+    @Autowired
+    private RestaurantJpaRepository restaurantJpaRepository;
+
     @Override
-    public Lunch get(long id, long restaurantId) throws EntityNotFoundException
+    public Lunch get( long restaurantId, long id) throws EntityNotFoundException
     {
-        return repository.findByIdAndRestaurantId(id, restaurantId);
+        return repository.findByRestaurantIdAndId(restaurantId, id );
     }
 
     @Override
@@ -30,14 +37,21 @@ public class LunchRepositoryImpl
     }
 
     @Override
-    public int delete(long id, long restaurantId)
+    public int delete(long restaurantId, long id)
     {
-        return repository.delete(id, restaurantId);
+        return repository.delete(restaurantId, id);
     }
 
+    @Transactional
     @Override
-    public Lunch save(Lunch lunch)
+    public Lunch save(long restaurantId, Lunch lunch)
     {
+        Restaurant restaurant = restaurantJpaRepository.findOne(restaurantId);
+        if (restaurant == null)
+        {
+            throw new EntityNotFoundException();
+        }
+        lunch.setRestaurant(restaurant);
         return repository.save(lunch);
     }
 }

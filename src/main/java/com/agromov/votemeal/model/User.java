@@ -1,5 +1,8 @@
 package com.agromov.votemeal.model;
 
+import com.agromov.votemeal.web.ViewWhen;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -17,15 +20,18 @@ import java.util.*;
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
 public class User extends NamedEntity
 {
+    @JsonView(ViewWhen.SendUser.class)
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
 
+    @JsonView(ViewWhen.SendUser.class)
     @Column(name = "registered", columnDefinition = "timestamp default now()")
     private LocalDateTime registered;
 
+    @JsonView(ViewWhen.SendUser.class)
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
@@ -37,12 +43,18 @@ public class User extends NamedEntity
     @BatchSize(size = 200)
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
-    @MapKey(name = "date")
-    @CollectionTable(name = "vote_history", joinColumns = @JoinColumn(name = "user_id"))
+    @OneToMany
+    @MapKeyColumn(name = "date")
+//    @CollectionTable(name = "vote_history", joinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(
+            name = "vote_history",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     @ElementCollection(fetch = FetchType.LAZY)
     @BatchSize(size = 200)
-    private Map<LocalDate, VoteHistory> voteHistory = new HashMap<>();
+    @JsonIgnore
+    private Map<LocalDate, Restaurant> voteHistory = new HashMap<>();
 
     public User()
     {}

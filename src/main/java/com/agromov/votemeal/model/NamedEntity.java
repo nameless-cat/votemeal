@@ -1,5 +1,8 @@
 package com.agromov.votemeal.model;
 
+import com.agromov.votemeal.web.ViewWhen;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
@@ -9,6 +12,7 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class NamedEntity extends BaseEntity
 {
+    @JsonView({ViewWhen.GetVoteHistory.class, ViewWhen.SendUser.class})
     @Column(name = "name", nullable = false)
     private String name;
 

@@ -16,14 +16,14 @@ import java.util.List;
 public interface LunchJpaRepository
         extends JpaRepository<Lunch, Long>
 {
-    Lunch findByIdAndRestaurantId(long restaurantId, long id);
+    Lunch findByRestaurantIdAndId(long restaurantId, long id);
 
     List<Lunch> findAllByRestaurantIdOrderByName(long restaurantId);
 
     @Transactional
     @Modifying
     @Query("DELETE FROM Lunch l WHERE l.id=:id AND l.restaurant.id=:restaurantId")
-    int delete(@Param("id") long id, @Param("restaurantId") long restaurantId);
+    int delete(@Param("restaurantId") long restaurantId, @Param("id") long id);
 
     @Transactional
     Lunch save(Lunch lunch);

@@ -1,5 +1,8 @@
 package com.agromov.votemeal.model;
 
+import com.agromov.votemeal.web.ViewWhen;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -9,9 +12,11 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Address
 {
+    @JsonView(ViewWhen.GetVoteHistory.class)
     @Column(name = "street", nullable = false)
     private String street;
 
+    @JsonView(ViewWhen.GetVoteHistory.class)
     @Column(name = "building", nullable = false)
     private int building;
 

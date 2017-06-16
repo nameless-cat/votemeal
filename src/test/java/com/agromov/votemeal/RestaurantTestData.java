@@ -15,8 +15,7 @@ public class RestaurantTestData
 {
     public static final ModelMatcher<Restaurant> MATCHER = ModelMatcher.of(Restaurant.class,
             (expected, actual) -> expected == actual ||
-                    (Objects.equals(expected.getId(), actual.getId())
-                            && Objects.equals(expected.getName(), actual.getName())
+                    (Objects.equals(expected.getName(), actual.getName())
                             && Objects.equals(expected.isClosed(), actual.isClosed())
                             && Objects.equals(expected.getAddress().getStreet(), actual.getAddress().getStreet())
                             && Objects.equals(expected.getAddress().getBuilding(), actual.getAddress().getBuilding())
@@ -26,7 +25,7 @@ public class RestaurantTestData
                     ));
 
     public static final Restaurant MCDONALDS = new RestaurantBuilder()
-            .withId(4)
+            .withId(5)
             .withName("Макдоналдс")
             .withAddress().street("МКАД, 47-й километр")
             .withAddress().building(20)
@@ -36,7 +35,7 @@ public class RestaurantTestData
             .build();
 
     public static final Restaurant POTATO = new RestaurantBuilder()
-            .withId(5)
+            .withId(6)
             .withName("Крошка Картошка")
             .withAddress().street("МКАД, 47-й километр")
             .withAddress().building(20)
@@ -46,7 +45,7 @@ public class RestaurantTestData
             .build();
 
     public static final Restaurant CHOCO = new RestaurantBuilder()
-            .withId(6)
+            .withId(7)
             .withName("Шоколадница")
             .withAddress().street("Солнцевский проспект")
             .withAddress().building(21)
@@ -56,7 +55,7 @@ public class RestaurantTestData
             .build();
 
     public static final Restaurant BENJAMIN = new RestaurantBuilder()
-            .withId(7)
+            .withId(8)
             .withName("Бенджамин")
             .withAddress().street("50 лет Октября")
             .withAddress().building(2)
@@ -65,7 +64,7 @@ public class RestaurantTestData
             .build();
 
     public static final Restaurant SUBWAY = new RestaurantBuilder()
-            .withId(8)
+            .withId(9)
             .withName("Subway")
             .withAddress().street("50 лет Октября")
             .withAddress().building(10)
@@ -77,6 +76,8 @@ public class RestaurantTestData
 
     public static final long MCDONALDS_ID = MCDONALDS.getId();
 
+    public static final long NONEXISTENT_ID = 100L;
+
     public static Restaurant getCreated()
     {
         return new RestaurantBuilder()
@@ -87,6 +88,4 @@ public class RestaurantTestData
                 .withWorkTime().until(22, 0)
                 .build();
     }
-
-
 }

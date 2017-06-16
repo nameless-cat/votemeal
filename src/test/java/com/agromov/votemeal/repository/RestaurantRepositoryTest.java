@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Arrays;
 
 import static com.agromov.votemeal.RestaurantTestData.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by A.Gromov on 30.05.2017.
@@ -41,21 +42,6 @@ public class RestaurantRepositoryTest
     }
 
     @Test
-    public void closeCafeMustReflectChangesInDB() throws Exception
-    {
-        repository.close(MCDONALDS_ID);
-        MATCHER.assertCollectionEquals(Arrays.asList(SUBWAY, BENJAMIN, POTATO, CHOCO), repository.getAllOpened());
-        expectedQueries(2);
-    }
-
-    @Test
-    public void attemptToCloseInexistentCafeMustReturnFalse() throws Exception
-    {
-        Assert.assertEquals(false, repository.close(100));
-        expectedQueries(1);
-    }
-
-    @Test
     public void addCafeMustReflectChangesInDB() throws Exception
     {
         Restaurant created = RestaurantTestData.getCreated();
@@ -68,20 +54,16 @@ public class RestaurantRepositoryTest
     }
 
     @Test
-    public void openCafeMustReflectChangesInDB() throws Exception
-    {
-        Restaurant created = RestaurantTestData.getCreated();
-        created.setClosed(true);
-        created.setId(repository.save(created).getId());
-        repository.open(created.getId());
-        MATCHER.assertCollectionEquals(Arrays.asList(created, SUBWAY, BENJAMIN, POTATO, MCDONALDS, CHOCO),
-                repository.getAllOpened());
-    }
-
-    @Test
     public void getListCafeInRangeMustReturnCorrectResult() throws Exception
     {
         MATCHER.assertCollectionEquals(Arrays.asList(SUBWAY, BENJAMIN, POTATO), repository.getRange(0, 3));
         expectedQueries(1);
+    }
+
+    @Test
+    public void test() throws Exception
+    {
+        Restaurant restaurant = repository.testGet(6L);
+        assertEquals(Long.valueOf(6) , restaurant.getId());
     }
 }

@@ -77,7 +77,7 @@ public class LunchRepositoryTest
     {
         Lunch created = LunchTestData.getCreated();
         created.setRestaurant(MCDONALDS);
-        created.setId(repository.save(created).getId());
+        created.setId(repository.save(MCDONALDS_ID, created).getId());
         MATCHER.assertCollectionEquals(Arrays.asList(created, GRILLE_GURME, CHEESEBURGER), repository.getAll(MCDONALDS_ID));
         expectedQueries(4);
     }
@@ -86,7 +86,7 @@ public class LunchRepositoryTest
     public void updateLunchMustReflectChangesInDB() throws Exception
     {
         Lunch updated = LunchTestData.getUpdated();
-        repository.save(updated);
+        repository.save(MCDONALDS_ID, updated);
         MATCHER.assertCollectionEquals(Arrays.asList(updated, CHEESEBURGER), repository.getAll(MCDONALDS_ID));
         expectedQueries(4);
     }

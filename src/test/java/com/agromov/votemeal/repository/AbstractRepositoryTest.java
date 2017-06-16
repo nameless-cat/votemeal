@@ -20,7 +20,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 @Ignore
 @ContextConfiguration("classpath:spring/spring-db-test.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
-@Transactional
+//@Transactional
 public class AbstractRepositoryTest
 {
     public final Logger log = getLogger(getClass());

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,9 +55,8 @@ public class VoteRepositoryImpl
             throw new IllegalArgumentException("Decrement operation forbidden. Initial value less than 1.");
 
         vote.setVotes(vote.getVotes() - 1);
-        simpleRepository.save(vote);
 
-        return true;
+        return simpleRepository.save(vote) != null;
     }
 
     @Override
@@ -64,12 +64,9 @@ public class VoteRepositoryImpl
     {
         return voteRepository.findByDate(date)
                 .stream()
-                .sorted((o1, o2) -> {
-                    if (o1.getVotes() == o2.getVotes())
-                        return o1.getRestaurant().getName().compareTo(o2.getRestaurant().getName());
-                    else
-                        return Integer.compare(o2.getVotes(), o1.getVotes());
-                })
+                .sorted((o1, o2) -> (o1.getVotes() == o2.getVotes()) ?
+                        o1.getRestaurant().getName().compareTo(o2.getRestaurant().getName())
+                        : Integer.compare(o2.getVotes(), o1.getVotes()))
                 .collect(Collectors.toList());
     }
 

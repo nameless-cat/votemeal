@@ -2,6 +2,7 @@ package com.agromov.votemeal.repository;
 
 
 import com.agromov.votemeal.model.User;
+import com.agromov.votemeal.model.VoteHistory;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -45,4 +46,6 @@ public interface UserRepository
     {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED);
     }
+
+    List<VoteHistory> getHistory(Long id);
 }

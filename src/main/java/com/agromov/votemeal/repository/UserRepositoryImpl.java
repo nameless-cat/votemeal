@@ -1,6 +1,7 @@
 package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.model.User;
+import com.agromov.votemeal.model.VoteHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
@@ -18,6 +19,9 @@ public class UserRepositoryImpl
 {
     @Autowired
     private UserJpaRepository repository;
+
+    @Autowired
+    private VoteHistoryJpaRepository historyRepository;
 
     @Override
     public User save(User user)
@@ -54,5 +58,11 @@ public class UserRepositoryImpl
     public List<User> getRange(int offset, int limit)
     {
         return repository.findAllByOrderByName(new PageRequest(offset, limit));
+    }
+
+    @Override
+    public List<VoteHistory> getHistory(Long id)
+    {
+        return historyRepository.findAllByUserIdOrderByDateDesc(id);
     }
 }

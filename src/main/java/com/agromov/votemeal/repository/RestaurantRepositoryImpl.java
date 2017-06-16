@@ -19,7 +19,7 @@ public class RestaurantRepositoryImpl
     private RestaurantJpaRepository repository;
 
     @Override
-    public Restaurant get(long id) throws EntityNotFoundException
+    public Restaurant get(long id)
     {
         return repository.findOne(id);
     }
@@ -31,18 +31,6 @@ public class RestaurantRepositoryImpl
     }
 
     @Override
-    public boolean close(long id)
-    {
-        return repository.close(id) != 0;
-    }
-
-    @Override
-    public boolean open(long id)
-    {
-        return repository.open(id) != 0;
-    }
-
-    @Override
     public List<Restaurant> getAllOpened()
     {
         return repository.findAllByClosedIsFalseOrderByName();
@@ -51,6 +39,7 @@ public class RestaurantRepositoryImpl
     @Override
     public Restaurant save(Restaurant restaurant)
     {
+        //todo Assert.notNull проверять все сущности перед сохранением во всех репозиториях
         return repository.save(restaurant);
     }
 
@@ -58,5 +47,17 @@ public class RestaurantRepositoryImpl
     public List<Restaurant> getRange(int offset, int limit)
     {
         return repository.findAllByOrderByName(new PageRequest(offset, limit));
+    }
+
+    @Override
+    public Restaurant getWithLunches(Long id)
+    {
+        return repository.findOneWithLunches(id);
+    }
+
+    @Override
+    public Restaurant testGet(long id)
+    {
+        return repository.findById(id);
     }
 }

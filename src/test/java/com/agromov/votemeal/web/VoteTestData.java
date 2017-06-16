@@ -18,15 +18,19 @@ public class VoteTestData
             (expected, actual) -> expected == actual ||
                             Objects.equals(expected.getDate(), actual.getDate())
                             && Objects.equals(expected.getVotes(), actual.getVotes())
-                            && Objects.equals(expected.getRestaurant(), actual.getRestaurant())
+                            && Objects.equals(expected.getRestaurant().getName(), actual.getRestaurant().getName())
+                            && Objects.equals(expected.getRestaurant().getAddress(), actual.getRestaurant().getAddress())
     );
 
 
     public static final LocalDate TEST_DATE = LocalDate.parse("2014-05-20");
 
+
+    public static final Vote POTATO_VOTE_PAST = new Vote(TEST_DATE, POTATO, 2);
+    public static final Vote MCDONALDS_VOTE_PAST = new Vote(TEST_DATE, MCDONALDS, 0);
+
     public static final Vote MCDONALDS_VOTE = new Vote(currentDate(), MCDONALDS, 0);
-    public static final Vote POTATO_VOTE = new Vote(currentDate(), POTATO, 4);
-    public static final Vote CHOCO_VOTE = new Vote(currentDate(), CHOCO, 60);
+    public static final Vote CHOCO_VOTE = new Vote(currentDate(), CHOCO, 2);
     public static final Vote BENJAMIN_VOTE = new Vote(currentDate(), BENJAMIN, 0);
-    public static final Vote SUBWAY_VOTE = new Vote(currentDate(), SUBWAY, 12);
+    public static final Vote SUBWAY_VOTE = new Vote(currentDate(), SUBWAY, 1);
 }

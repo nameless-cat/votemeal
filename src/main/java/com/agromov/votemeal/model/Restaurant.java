@@ -1,7 +1,9 @@
 package com.agromov.votemeal.model;
 
+import com.agromov.votemeal.web.ViewWhen;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
-import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +17,7 @@ public class Restaurant extends NamedEntity
     @Column(name = "closed", nullable = false, columnDefinition = "default false")
     private boolean closed;
 
+    @JsonView(ViewWhen.GetVoteHistory.class)
     private Address address;
 
     private WorkingTime workingTime;
@@ -22,7 +25,7 @@ public class Restaurant extends NamedEntity
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private Set<Lunch> lunches = new HashSet<>();
 
-    public Restaurant(int id, String name, int vote, Address address, WorkingTime workingTime, Set<Lunch> lunches)
+    public Restaurant(long id, String name, Address address, WorkingTime workingTime, Set<Lunch> lunches)
     {
         super(id, name);
         this.address = address;
@@ -30,7 +33,18 @@ public class Restaurant extends NamedEntity
         this.lunches = lunches;
     }
 
+    public Restaurant(Restaurant restaurant)
+    {
+        this(restaurant.getId(), restaurant.getName(), restaurant.getAddress(), restaurant.getWorkingTime(), restaurant.getLunches());
+    }
+
     public Restaurant(){}
+
+    public void addLunch(Lunch lunch)
+    {
+        lunch.setRestaurant(this);
+        lunches.add(lunch);
+    }
 
     public boolean isClosed()
     {

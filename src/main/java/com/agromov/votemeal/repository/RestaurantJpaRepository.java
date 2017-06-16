@@ -2,6 +2,7 @@ package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.model.Restaurant;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,7 @@ import java.util.List;
 public interface RestaurantJpaRepository
         extends JpaRepository<Restaurant, Long>
 {
+
     @Override
     Restaurant findOne(Long integer);
 
@@ -39,4 +41,15 @@ public interface RestaurantJpaRepository
     @Override
     @Transactional
     Restaurant save(Restaurant restaurant);
+
+    @EntityGraph(attributePaths = "lunches")
+    @Query("SELECT r FROM Restaurant r WHERE r.id=:id")
+    Restaurant findOneWithLunches(@Param("id") long id);
+
+    //todo что такое @EntityGraph, поможет ли он при извлечении определенных столбцов?
+
+    @EntityGraph(attributePaths = {"id", "name", "address", "workingTime", "closed"}, type = EntityGraph.EntityGraphType.LOAD)
+    @Query("SELECT r FROM Restaurant r WHERE r.id=:id")
+    Restaurant findById(@Param("id") long id);
 }
+
