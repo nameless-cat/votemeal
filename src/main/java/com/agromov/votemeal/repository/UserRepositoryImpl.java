@@ -1,5 +1,6 @@
 package com.agromov.votemeal.repository;
 
+import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.model.User;
 import com.agromov.votemeal.model.VoteHistory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.List;
+
+import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
 
 /**
  * Created by A.Gromov on 22.05.2017.
@@ -61,8 +65,19 @@ public class UserRepositoryImpl
     }
 
     @Override
-    public List<VoteHistory> getHistory(Long id)
+    public List<VoteHistory> getHistory(Long userId)
     {
-        return historyRepository.findAllByUserIdOrderByDateDesc(id);
+        return historyRepository.findAllByUserIdOrderByDateDesc(userId);
+    }
+
+    @Override
+    public void refreshHistory(long userId, Restaurant restaurant)
+    {
+        LocalDate date = currentDate();
+        historyRepository.delete(userId, date);
+        if (restaurant != null)
+        {
+            historyRepository.save(new VoteHistory(date, restaurant, userId));
+        }
     }
 }

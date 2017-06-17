@@ -1,6 +1,7 @@
 package com.agromov.votemeal.service;
 
 import com.agromov.votemeal.model.Vote;
+import com.agromov.votemeal.util.exception.VoteNotAcceptedException;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
@@ -15,5 +16,9 @@ public interface VoteService
 
     void add(List<Long> restaurantIds);
 
-    void delete(Long restaurantId) throws EntityNotFoundException;
+    void delete(long restaurantId) throws EntityNotFoundException;
+
+    void increment(long restaurantId, long userId) throws EntityNotFoundException, VoteNotAcceptedException;
+
+    void decrement(Long userId) throws VoteNotAcceptedException;
 }

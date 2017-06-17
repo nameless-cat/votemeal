@@ -1,5 +1,6 @@
 package com.agromov.votemeal.web;
 
+import com.agromov.votemeal.util.exception.VoteNotAcceptedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -27,4 +28,8 @@ public class ExceptionInfoHandler
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public void illegalArgumentHandle() {}
+
+    @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
+    @ExceptionHandler(VoteNotAcceptedException.class)
+    public void voteNotAcceptedHandle() {}
 }
