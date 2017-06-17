@@ -18,13 +18,13 @@ import javax.annotation.PostConstruct;
  */
 @Ignore
 @ContextConfiguration({
-        "classpath:spring/spring-app.xml",
+        "classpath:spring/spring-app-test.xml",
         "classpath:spring/spring-mvc.xml",
         "classpath:spring/spring-db-test.xml"
 })
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-public class AbstractControllerTest
+public abstract class AbstractControllerTest
 {
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
 

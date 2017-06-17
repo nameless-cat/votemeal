@@ -5,10 +5,12 @@ import com.agromov.votemeal.model.User;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 
 import static com.agromov.votemeal.UserTestData.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by A.Gromov on 23.05.2017.
@@ -32,15 +34,17 @@ public class UserRepositoryTest
         Assert.assertEquals(null,repository.get(100));
     }
 
+    @Transactional
     @Test
-    public void deleteUserMustRemoveHisPermanentlyFromDB() throws Exception
+    public void deleteUserMustRemoveHimPermanentlyFromDB() throws Exception
     {
         repository.delete(OLEG_ID);
-        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, MARIA), repository.getAll());
-        // toDO добавить проверку удаленной истории голосования после реализации VoteHistoryRepository
-        expectedQueries(4);
+        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, MARIA, USER), repository.getAll());
+        assertTrue(repository.getHistory(OLEG_ID).isEmpty());
+        expectedQueries(5);
     }
 
+    @Transactional
     @Test
     public void deleteInexistentUserMustReturnZero() throws Exception
     {
@@ -60,6 +64,7 @@ public class UserRepositoryTest
         expectedQueries(2);
     }
 
+    @Transactional
     @Test
     public void getAndModifyUserAndPersistMustReflectThisOnDB() throws Exception
     {
@@ -71,6 +76,7 @@ public class UserRepositoryTest
         expectedQueries(5);
     }
 
+    @Transactional
     @Test
     public void saveUserMustPersistItToDB() throws Exception
     {
@@ -80,6 +86,7 @@ public class UserRepositoryTest
         expectedQueries(5);
     }
 
+    @Transactional
     @Test
     public void getListUserWithLimitAndOffsetInCorrectOrder() throws Exception
     {

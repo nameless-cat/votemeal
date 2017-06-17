@@ -1,7 +1,6 @@
 package com.agromov.votemeal.web;
 
 import com.agromov.votemeal.model.Vote;
-import com.agromov.votemeal.model.VoteHistory;
 import com.agromov.votemeal.repository.UserRepository;
 import com.agromov.votemeal.repository.VoteRepository;
 import com.agromov.votemeal.config.ProjectConstants;
@@ -25,10 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Created by A.Gromov on 17.06.2017.
- */
-
-/**
- * todo для постоянной работы этого теста нужно добавть спец бин, расширяющий {@value ProjectConstants#VOTE_DEADLINE}
  */
 public class VoteControllerTest
         extends AbstractControllerTest

@@ -6,8 +6,8 @@ import com.agromov.votemeal.model.Vote;
 import com.agromov.votemeal.service.LunchService;
 import com.agromov.votemeal.service.RestaurantService;
 import com.agromov.votemeal.service.VoteService;
+import com.agromov.votemeal.util.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
+import static com.agromov.votemeal.util.ValidationUtils.checkForNew;
+import static com.agromov.votemeal.util.ValidationUtils.checkIdConsistence;
 
 /**
  * Created by A.Gromov on 14.06.2017.
@@ -30,8 +32,7 @@ import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
 @RequestMapping(AdminController.ADMIN_URL)
 public class AdminController
 {
-    //todo добавить версию приложения в каждый путь "/v1/admin/...."
-    static final String ADMIN_URL = "/admin/";
+    static final String ADMIN_URL = "/v1/admin/";
 
     @Autowired
     private RestaurantService restaurantService;
@@ -55,16 +56,11 @@ public class AdminController
         return restaurantService.get(id);
     }
 
-
-
     @PostMapping(value = "restaurants", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Restaurant> createRestaurant(@RequestBody Restaurant restaurant)
             throws IllegalArgumentException
     {
-        if (!restaurant.isNew())
-        {
-            throw new IllegalArgumentException();
-        }
+        checkForNew(restaurant);
 
         Restaurant saved = restaurantService.save(restaurant);
 
@@ -80,18 +76,26 @@ public class AdminController
     public void updateRestaurant(@PathVariable long id, @RequestBody Restaurant restaurant)
             throws EntityNotFoundException, IllegalArgumentException
     {
-        if (restaurant.isNew() || !Objects.equals(id, restaurant.getId()))
-        {
-            throw new IllegalArgumentException();
-        }
+        ValidationUtils.checkIdConsistence(restaurant, id);
 
         restaurantService.update(restaurant);
     }
 
     @GetMapping(value = {"vote/{date}", "vote"}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Vote> getVoteAtDate(@PathVariable(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date)
+            throws IllegalArgumentException
     {
-        return  (date == null) ? voteService.get(currentDate()) : voteService.get(date);
+        if (date != null)
+        {
+            if (date.isAfter(currentDate()))
+            {
+                //todo i18n
+                throw new IllegalArgumentException();
+            }
+
+            return voteService.get(date);
+        } else
+            return  voteService.get(currentDate());
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -114,10 +118,8 @@ public class AdminController
     public void addLunchToRestaurantMenu(@PathVariable Long id, @RequestBody Lunch lunch)
             throws EntityNotFoundException
     {
-        if (!lunch.isNew())
-        {
-            throw new IllegalArgumentException();
-        }
+        checkForNew(lunch);
+
         lunchService.save(id, lunch);
     }
 
@@ -133,10 +135,7 @@ public class AdminController
     public void putLunch(@PathVariable Long id, @PathVariable Long lunchId, @RequestBody Lunch lunch)
             throws EntityNotFoundException, IllegalArgumentException
     {
-        if (lunch.isNew() || !Objects.equals(lunch.getId(), lunchId))
-        {
-            throw new IllegalArgumentException();
-        }
+        checkIdConsistence(lunch, lunchId);
 
         lunchService.update(id, lunch);
     }

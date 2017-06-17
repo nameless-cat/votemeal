@@ -8,6 +8,13 @@
 
     <context:component-scan base-package="com.agromov.**.service"/>
 
-    <bean id="projectConstants" class="com.agromov.votemeal.config.ProjectConstants"/>
+    <bean id="projectConstants" class="com.agromov.votemeal.config.ProjectConstants">
+        <property name="projectSettings">
+            <map>
+                <entry key="#{T(com.agromov.votemeal.config.ProjectProperties).VOTE_DEADLINE}"
+                       value="#{T(com.agromov.votemeal.util.DateTimeUtil).currentTime().plusHours(1)}"/>
+            </map>
+        </property>
+    </bean>
 
 </beans>

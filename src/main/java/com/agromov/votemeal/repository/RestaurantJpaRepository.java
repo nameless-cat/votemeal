@@ -18,7 +18,6 @@ import java.util.List;
 public interface RestaurantJpaRepository
         extends JpaRepository<Restaurant, Long>
 {
-
     @Override
     Restaurant findOne(Long integer);
 
@@ -36,8 +35,6 @@ public interface RestaurantJpaRepository
     @Query("UPDATE Restaurant r SET r.closed=false WHERE r.id=:id")
     int open(@Param("id") long id);
 
-    List<Restaurant> findAllByClosedIsFalseOrderByName();
-
     @Override
     @Transactional
     Restaurant save(Restaurant restaurant);
@@ -46,10 +43,6 @@ public interface RestaurantJpaRepository
     @Query("SELECT r FROM Restaurant r WHERE r.id=:id")
     Restaurant findOneWithLunches(@Param("id") long id);
 
-    //todo что такое @EntityGraph, поможет ли он при извлечении определенных столбцов?
-
-    @EntityGraph(attributePaths = {"id", "name", "address", "workingTime", "closed"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT r FROM Restaurant r WHERE r.id=:id")
     Restaurant findById(@Param("id") long id);
 }
-

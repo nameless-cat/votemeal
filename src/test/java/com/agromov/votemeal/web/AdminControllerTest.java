@@ -4,6 +4,8 @@ import com.agromov.votemeal.LunchTestData;
 import com.agromov.votemeal.RestaurantTestData;
 import com.agromov.votemeal.model.Lunch;
 import com.agromov.votemeal.model.Restaurant;
+import com.agromov.votemeal.model.VoteHistory;
+import com.agromov.votemeal.repository.UserRepository;
 import com.agromov.votemeal.service.LunchService;
 import com.agromov.votemeal.service.RestaurantService;
 import com.agromov.votemeal.service.VoteService;
@@ -28,6 +30,7 @@ import static com.agromov.votemeal.LunchTestData.GRILLE_GURME;
 import static com.agromov.votemeal.RestaurantTestData.*;
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
 import static com.agromov.votemeal.web.VoteTestData.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -54,6 +57,9 @@ public class AdminControllerTest
 
     @Autowired
     private LunchService lunchService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PersistenceContext
     private EntityManager em;
@@ -187,7 +193,13 @@ public class AdminControllerTest
                 Arrays.asList(SUBWAY_VOTE, BENJAMIN_VOTE),
                 voteService.get(currentDate()));
 
-        //todo сделать проверку на каскадное удаление
+        int finded = em.createQuery("SELECT vh FROM VoteHistory vh WHERE vh.date=?1 AND vh.restaurant.id=?2", VoteHistory.class)
+                .setParameter(1, currentDate())
+                .setParameter(2, CHOCO.getId())
+                .getResultList()
+                .size();
+
+        assertEquals(0, finded);
     }
 
     @Transactional

@@ -2,6 +2,7 @@ package com.agromov.votemeal.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -17,5 +18,10 @@ public class DateTimeUtil
     public static LocalDate currentDate()
     {
         return LocalDate.now();
+    }
+
+    public static LocalTime currentTime()
+    {
+        return LocalTime.now();
     }
 }

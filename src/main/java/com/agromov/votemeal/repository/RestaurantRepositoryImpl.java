@@ -31,12 +31,6 @@ public class RestaurantRepositoryImpl
     }
 
     @Override
-    public List<Restaurant> getAllOpened()
-    {
-        return repository.findAllByClosedIsFalseOrderByName();
-    }
-
-    @Override
     public Restaurant save(Restaurant restaurant)
     {
         //todo Assert.notNull проверять все сущности перед сохранением во всех репозиториях

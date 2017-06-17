@@ -22,6 +22,16 @@ import static com.agromov.votemeal.RestaurantTestData.*;
  */
 public class UserTestData
 {
+    public static final User ADMIN = new UserBuilder()
+            .withId(1)
+            .withName("Admin")
+            .withEmail("admin@gmail.com")
+            .withPassword("admin")
+            .withDate(DateTimeUtil.parse("2015-01-01 00:00:00"))
+            .withEnabled(true)
+            .withRoles(Role.ROLE_ADMIN)
+            .build();
+
     public static final User MARIA = new UserBuilder()
             .withId(2)
             .withName("Maria")
@@ -38,14 +48,12 @@ public class UserTestData
             .withDate(DateTimeUtil.parse("2015-05-15 14:15:00"))
             .build();
 
-    public static final User ADMIN = new UserBuilder()
-            .withId(1)
-            .withName("Admin")
-            .withEmail("admin@gmail.com")
-            .withPassword("admin")
-            .withDate(DateTimeUtil.parse("2015-01-01 00:00:00"))
-            .withEnabled(true)
-            .withRoles(Role.ROLE_ADMIN)
+    public static final User USER = new UserBuilder()
+            .withId(4)
+            .withName("User")
+            .withEmail("user@gmail.com")
+            .withPassword("user1234")
+            .withDate(DateTimeUtil.parse("2016-01-01 00:00:00"))
             .build();
 
     public static final long MARIA_ID = MARIA.getId();

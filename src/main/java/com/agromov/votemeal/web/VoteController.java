@@ -1,5 +1,6 @@
 package com.agromov.votemeal.web;
 
+import com.agromov.votemeal.config.ProjectConstants;
 import com.agromov.votemeal.service.VoteService;
 import com.agromov.votemeal.util.Authorized;
 import com.agromov.votemeal.util.exception.VoteNotAcceptedException;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalTime;
 
-import static com.agromov.votemeal.config.ProjectConstants.VOTE_DEADLINE;
+import static com.agromov.votemeal.util.DateTimeUtil.currentTime;
 
 /**
  * Created by A.Gromov on 17.06.2017.
@@ -20,10 +21,13 @@ import static com.agromov.votemeal.config.ProjectConstants.VOTE_DEADLINE;
 @RequestMapping(value = VoteController.VOTE_URL)
 public class VoteController
 {
-    public static final String VOTE_URL = "/vote/";
+    public static final String VOTE_URL = "/v1/vote/";
 
     @Autowired
     private VoteService service;
+
+    @Autowired
+    private ProjectConstants projectConstants;
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -44,7 +48,7 @@ public class VoteController
 
     private void maybeTimeIsUp() throws VoteNotAcceptedException
     {
-        if (LocalTime.now().isAfter(VOTE_DEADLINE))
+        if (currentTime().isAfter(projectConstants.getVoteDeadline()))
 
             //todo need i18n
             throw new VoteNotAcceptedException(/*"time is up"*/);

@@ -36,8 +36,6 @@ public class VoteServiceImpl
     @Override
     public List<Vote> get(LocalDate date)
     {
-        // todo проверить дату на корректность
-        //if (date.isAfter(LocalDate.now()))
         return voteRepository.getAll(date);
     }
 
@@ -60,7 +58,7 @@ public class VoteServiceImpl
         {
             if (todayVoteHistory.getRestaurant().getId().equals(restaurantId))
             {
-                //todo need i18n
+                //todo i18n
                 throw new VoteNotAcceptedException(/*"already voted"*/);
             }
 

@@ -36,7 +36,9 @@ public class UserRepositoryImpl
     @Override
     public User update(User updated) throws EntityNotFoundException
     {
-        // todo см комментарии в UserRepositoryTest#getAndModifyUserAndPersistMustReflectThisOnDB()
+        /**
+         * todo см комментарии в {@link UserRepositoryTest#getAndModifyUserAndPersistMustReflectThisOnDB()}
+        */
         return repository.save(updated);
     }
 
