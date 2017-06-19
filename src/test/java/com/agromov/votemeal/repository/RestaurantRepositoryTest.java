@@ -59,11 +59,4 @@ public class RestaurantRepositoryTest
         MATCHER.assertCollectionEquals(Arrays.asList(SUBWAY, BENJAMIN, POTATO), repository.getRange(0, 3));
         expectedQueries(1);
     }
-
-    @Test
-    public void test() throws Exception
-    {
-        Restaurant restaurant = repository.testGet(6L);
-        assertEquals(Long.valueOf(6) , restaurant.getId());
-    }
 }

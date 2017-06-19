@@ -17,6 +17,4 @@ public interface RestaurantRepository
     List<Restaurant> getAll();
 
     Restaurant getWithLunches(Long id);
-
-    Restaurant testGet(long id);
 }

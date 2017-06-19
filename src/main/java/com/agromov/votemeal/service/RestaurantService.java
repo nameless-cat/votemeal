@@ -20,4 +20,6 @@ public interface RestaurantService
     Restaurant update(Restaurant restaurant) throws EntityNotFoundException;
 
     void addLunch(Long id, Lunch lunch) throws EntityNotFoundException;
+
+    void cacheEvict();
 }

@@ -33,15 +33,7 @@ public class ProjectConstants
 
     public LocalTime getVoteDeadline()
     {
-        Object deadline = projectSettings.get(VOTE_DEADLINE);
-
-        if (deadline == null)
-        {
-            return LocalTime.of(11, 0);
-        }
-
-        return (LocalTime) deadline;
+        return (projectSettings.get(VOTE_DEADLINE) == null) ? LocalTime.of(11, 0)
+                : (LocalTime) projectSettings.get(VOTE_DEADLINE);
     }
-
-
 }

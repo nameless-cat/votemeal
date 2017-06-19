@@ -4,6 +4,7 @@ import com.agromov.votemeal.LunchTestData;
 import com.agromov.votemeal.model.Lunch;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,7 +26,7 @@ public class LunchRepositoryTest
     @Test
     public void getLunchMustReturnCorrectObject() throws Exception
     {
-        MATCHER.assertEquals(GRILLE_GURME, repository.get(GRILLE_GURME.getId(), MCDONALDS_ID));
+        MATCHER.assertEquals(GRILLE_GURME, repository.get(MCDONALDS_ID, GRILLE_GURME.getId()));
         expectedQueries(2);
     }
 
@@ -44,20 +45,22 @@ public class LunchRepositoryTest
     }
 
     @Test
-    public void getAllLunchesOfInexistentCafeMustReturnEmptyList() throws Exception
+    public void getAllLunchesOfNonexistentCafeMustReturnEmptyList() throws Exception
     {
         MATCHER.assertCollectionEquals(Collections.emptyList(), repository.getAll(100));
         expectedQueries(1);
     }
 
+    @Transactional
     @Test
     public void deleteLunchMustReflectChangesInDB() throws Exception
     {
-        repository.delete(GRILLE_GURME.getId(), MCDONALDS_ID);
-        MATCHER.assertCollectionEquals(Arrays.asList(CHEESEBURGER), repository.getAll(MCDONALDS_ID));
+        repository.delete(MCDONALDS_ID, GRILLE_GURME.getId());
+        MATCHER.assertCollectionEquals(Collections.singletonList(CHEESEBURGER), repository.getAll(MCDONALDS_ID));
         expectedQueries(3);
     }
 
+    @Transactional
     @Test
     public void deleteLunchThatNotBelongsToCafeMustReturnZeroAsResult() throws Exception
     {
@@ -65,13 +68,15 @@ public class LunchRepositoryTest
         expectedQueries(1);
     }
 
+    @Transactional
     @Test
-    public void deleteLunchOfInexistentCafeMustReturnZeroAsResult() throws Exception
+    public void deleteLunchOfNonexistentCafeMustReturnZeroAsResult() throws Exception
     {
         assertEquals(NO_RESULT, repository.delete(ALPEN_SUB.getId(), 100));
         expectedQueries(1);
     }
 
+    @Transactional
     @Test
     public void saveLunchMustReflectChangesInDB() throws Exception
     {
@@ -82,6 +87,7 @@ public class LunchRepositoryTest
         expectedQueries(4);
     }
 
+    @Transactional
     @Test
     public void updateLunchMustReflectChangesInDB() throws Exception
     {

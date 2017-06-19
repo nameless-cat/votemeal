@@ -6,4 +6,6 @@ package com.agromov.votemeal.config;
 public interface ProjectProperties
 {
     String VOTE_DEADLINE = "app.vote_deadline";
+
+    String RESTAURANT_CACHE = "app.restaurant_cache";
 }

@@ -5,6 +5,8 @@ import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.repository.LunchRepository;
 import com.agromov.votemeal.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,18 +27,21 @@ public class RestaurantServiceImpl
     @Autowired
     private LunchRepository lunchRepository;
 
+    @Cacheable("restaurants")
     @Override
     public List<Restaurant> getAll()
     {
         return restaurantRepository.getAll();
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     @Override
     public Restaurant save(Restaurant restaurant)
     {
         return restaurantRepository.save(restaurant);
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     @Override
     public Restaurant update(Restaurant restaurant) throws EntityNotFoundException
     {
@@ -55,6 +60,7 @@ public class RestaurantServiceImpl
         }
     }
 
+    @Cacheable("restaurants")
     @Override
     public Restaurant get(Long id) throws EntityNotFoundException
     {
@@ -65,4 +71,8 @@ public class RestaurantServiceImpl
 
         return restaurant;
     }
+
+    @CacheEvict(value = "restaurants", allEntries = true)
+    @Override
+    public void cacheEvict() {}
 }

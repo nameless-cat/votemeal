@@ -2,6 +2,7 @@ package com.agromov.votemeal.repository;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 
@@ -14,6 +15,7 @@ import static org.junit.Assert.*;
 /**
  * Created by A.Gromov on 07.06.2017.
  */
+@Transactional
 public class VoteRepositoryTest
         extends AbstractRepositoryTest
 {
@@ -39,7 +41,7 @@ public class VoteRepositoryTest
     public void incrementVoteMustReflectChangesInDB() throws Exception
     {
         repository.increment(SUBWAY.getId());
-        assertEquals(13, repository.get(currentDate(), SUBWAY.getId()).getVotes());
+        assertEquals(2, repository.get(currentDate(), SUBWAY.getId()).getVotes());
     }
 
     @Test
@@ -55,10 +57,10 @@ public class VoteRepositoryTest
     }
 
     @Test
-    public void decrementVoteMustREflectChangesInDB() throws Exception
+    public void decrementVoteMustReflectChangesInDB() throws Exception
     {
         repository.decrement(SUBWAY.getId());
-        assertEquals(11, repository.get(currentDate(), SUBWAY.getId()).getVotes());
+        assertEquals(0, repository.get(currentDate(), SUBWAY.getId()).getVotes());
     }
 
     @Test

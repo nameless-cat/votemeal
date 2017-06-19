@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 /**
@@ -47,11 +46,5 @@ public class RestaurantRepositoryImpl
     public Restaurant getWithLunches(Long id)
     {
         return repository.findOneWithLunches(id);
-    }
-
-    @Override
-    public Restaurant testGet(long id)
-    {
-        return repository.findById(id);
     }
 }

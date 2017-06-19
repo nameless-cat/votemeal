@@ -55,7 +55,7 @@ public class UserRepositoryTest
     @Test
     public void getAllUsersMustReturnCorrectListOfUsersSortedByName() throws Exception
     {
-        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, MARIA, OLEG), repository.getAll());
+        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, MARIA, OLEG, USER), repository.getAll());
         /**
          * два запроса вместо ожидаемого одного. Возможно из-за того, что достается список пользователей, а не один.
          * toDO Попробовать доставать через жестко заданную sql query
@@ -70,10 +70,10 @@ public class UserRepositoryTest
     {
         User updated = UserTestData.getUpdated();
         repository.update(updated);
-        MATCHER.assertCollectionEquals(Arrays.asList(updated, ADMIN, MARIA), repository.getAll());
+        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, updated, OLEG, USER), repository.getAll());
         // слишком много запросов для сохранения изменений
         // todo попробовать через sql query
-        expectedQueries(5);
+        expectedQueries(6);
     }
 
     @Transactional
@@ -82,7 +82,7 @@ public class UserRepositoryTest
     {
         User created = UserTestData.getCreated();
         created.setId(repository.save(created).getId());
-        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, MARIA, created, OLEG), repository.getAll());
+        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, MARIA, created, OLEG, USER), repository.getAll());
         expectedQueries(5);
     }
 

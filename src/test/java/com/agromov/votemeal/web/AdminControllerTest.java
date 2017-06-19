@@ -12,6 +12,7 @@ import com.agromov.votemeal.service.VoteService;
 import com.agromov.votemeal.util.LunchBuilder;
 import com.agromov.votemeal.util.RestaurantBuilder;
 import com.agromov.votemeal.web.json.JsonUtil;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -58,12 +59,14 @@ public class AdminControllerTest
     @Autowired
     private LunchService lunchService;
 
-    @Autowired
-    private UserRepository userRepository;
-
     @PersistenceContext
     private EntityManager em;
 
+    @Before
+    public void setUp() throws Exception
+    {
+        restaurantService.cacheEvict();
+    }
 
     @Test
     public void getAllRestaurantsMustReturnListOrderedByName() throws Exception
