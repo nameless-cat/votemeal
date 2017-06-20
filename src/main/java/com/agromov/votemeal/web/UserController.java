@@ -73,6 +73,10 @@ public class UserController
         return service.getHistory(id);
     }
 
+    /**
+     * todo сделать через {@link ExceptionInfoHandler}
+     */
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public void catcher()
     {

@@ -24,7 +24,14 @@ public class UserBuilder
 
     public UserBuilder(User user)
     {
-        this.user = user;
+        this.user = new User();
+        this.user.setId(user.getId());
+        this.user.setName(user.getName());
+        this.user.setEmail(user.getEmail());
+        this.user.setPassword(user.getPassword());
+        this.user.setRegistered(user.getRegistered());
+        this.user.setRoles(user.getRoles());
+        this.user.setEnabled(user.isEnabled());
     }
 
     public UserBuilder withId(int id)

@@ -35,7 +35,7 @@ public class VoteController
             throws EntityNotFoundException, VoteNotAcceptedException
     {
         maybeTimeIsUp();
-        service.increment(id, Authorized.getId());
+        service.increment(id, Authorized.getUser().getId());
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -43,7 +43,7 @@ public class VoteController
     public void incrementVote() throws VoteNotAcceptedException
     {
         maybeTimeIsUp();
-        service.decrement(Authorized.getId());
+        service.decrement(Authorized.getUser().getId());
     }
 
     private void maybeTimeIsUp() throws VoteNotAcceptedException

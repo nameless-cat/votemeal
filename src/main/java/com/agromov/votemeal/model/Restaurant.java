@@ -2,8 +2,11 @@ package com.agromov.votemeal.model;
 
 import com.agromov.votemeal.web.ViewWhen;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +14,8 @@ import java.util.Set;
 /**
  * Created by A.Gromov on 22.05.2017.
  */
+//todo проверить работу кэша
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(name = "restaurants_unique_name_id_idx", columnNames = {"id", "name"})})
 public class Restaurant extends NamedEntity

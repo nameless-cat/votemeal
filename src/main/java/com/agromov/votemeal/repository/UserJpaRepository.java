@@ -33,4 +33,6 @@ public interface UserJpaRepository
     List<User> findAllByOrderByName();
 
     List<User> findAllByOrderByName(Pageable pageable);
+
+    User getByEmail(String email);
 }

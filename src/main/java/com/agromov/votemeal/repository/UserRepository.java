@@ -4,6 +4,7 @@ package com.agromov.votemeal.repository;
 import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.model.User;
 import com.agromov.votemeal.model.VoteHistory;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -27,4 +28,6 @@ public interface UserRepository
     List<VoteHistory> getHistory(Long userId);
 
     void refreshHistory(long userId, Restaurant restaurant);
+
+    User getByEmail(String email);
 }

@@ -38,9 +38,9 @@ public class ValidationUtils
 
     public static void checkUserIdConsistent(Long id)
     {
-        if (!id.equals(Authorized.getId()))
+        if (!id.equals(Authorized.getUser().getId()))
         {
-            LOG.debug("Requested user id({}) not match with authorized user id({})", id, Authorized.getId());
+            LOG.debug("Requested user id({}) not match with authorized user id({})", id, Authorized.getUser().getId());
             throw new AccessControlException("Access to user profile denied");
         }
     }

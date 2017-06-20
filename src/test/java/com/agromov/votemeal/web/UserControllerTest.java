@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import static com.agromov.votemeal.TestUtil.userHttpBasic;
 import static com.agromov.votemeal.UserTestData.*;
 import static com.agromov.votemeal.web.UserController.BASE_URL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -35,7 +36,8 @@ public class UserControllerTest
     @Test
     public void getUserProfileMustReturnDataOfAuthorizedUser() throws Exception
     {
-        mockMvc.perform(get(BASE_URL + PROFILE_URL + MARIA.getId()))
+        mockMvc.perform(get(BASE_URL + PROFILE_URL + MARIA.getId())
+                .with(userHttpBasic(MARIA)))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MATCHER.contentMatcher(MARIA))
@@ -45,7 +47,8 @@ public class UserControllerTest
     @Test
     public void attemptToAccessToAnotherUserProfileMustResults403Response() throws Exception
     {
-        mockMvc.perform(get(BASE_URL + PROFILE_URL + OLEG.getId()))
+        mockMvc.perform(get(BASE_URL + PROFILE_URL + OLEG.getId())
+                .with(userHttpBasic(MARIA)))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
@@ -57,6 +60,7 @@ public class UserControllerTest
         User updated = UserTestData.getUpdated();
 
         mockMvc.perform(put(BASE_URL + PROFILE_URL + MARIA_ID)
+                .with(userHttpBasic(MARIA))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
@@ -69,7 +73,8 @@ public class UserControllerTest
     @Test
     public void getUserHistoryMustReturnCorrectListOfVoteHistory() throws Exception
     {
-        mockMvc.perform(get(BASE_URL + PROFILE_URL + MARIA.getId() + "/history"))
+        mockMvc.perform(get(BASE_URL + PROFILE_URL + MARIA.getId() + "/history")
+                .with(userHttpBasic(MARIA)))
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(VOTE_MATCHER.contentListMatcher((MARIA_HISTORY)))
@@ -79,7 +84,8 @@ public class UserControllerTest
     @Test
     public void getOtherUserHistoryMustReturn403StatusCode() throws Exception
     {
-        mockMvc.perform(get(BASE_URL + PROFILE_URL + OLEG.getId() + "/history"))
+        mockMvc.perform(get(BASE_URL + PROFILE_URL + OLEG.getId() + "/history")
+                .with(userHttpBasic(MARIA)))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
@@ -115,6 +121,7 @@ public class UserControllerTest
         updated.setPassword("");
 
         mockMvc.perform(put(BASE_URL + PROFILE_URL + MARIA_ID)
+                .with(userHttpBasic(MARIA))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
@@ -128,6 +135,7 @@ public class UserControllerTest
         user.setEmail("user@gmail.com");
 
         mockMvc.perform(put(BASE_URL + PROFILE_URL + MARIA_ID)
+                .with(userHttpBasic(MARIA))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JsonUtil.writeValue(user)))
                 .andDo(print())

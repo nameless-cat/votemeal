@@ -5,7 +5,6 @@ import com.agromov.votemeal.RestaurantTestData;
 import com.agromov.votemeal.model.Lunch;
 import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.model.VoteHistory;
-import com.agromov.votemeal.repository.UserRepository;
 import com.agromov.votemeal.service.LunchService;
 import com.agromov.votemeal.service.RestaurantService;
 import com.agromov.votemeal.service.VoteService;
@@ -29,10 +28,11 @@ import java.util.List;
 import static com.agromov.votemeal.LunchTestData.CHEESEBURGER;
 import static com.agromov.votemeal.LunchTestData.GRILLE_GURME;
 import static com.agromov.votemeal.RestaurantTestData.*;
+import static com.agromov.votemeal.TestUtil.userHttpBasic;
+import static com.agromov.votemeal.UserTestData.ADMIN;
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
 import static com.agromov.votemeal.web.VoteTestData.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -71,7 +71,8 @@ public class AdminControllerTest
     @Test
     public void getAllRestaurantsMustReturnListOrderedByName() throws Exception
     {
-        mockMvc.perform(get(ADMIN_URL + RESTAURANTS_URL))
+        mockMvc.perform(get(ADMIN_URL + RESTAURANTS_URL)
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(RestaurantTestData.MATCHER.contentListMatcher(RESTAURANTS));
     }
@@ -83,6 +84,7 @@ public class AdminControllerTest
         Restaurant created = RestaurantTestData.getCreated();
 
         mockMvc.perform(post(ADMIN_URL + RESTAURANTS_URL)
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JsonUtil.writeValue(created)))
                 .andDo(print())
@@ -98,7 +100,8 @@ public class AdminControllerTest
     @Test
     public void getRestaurantByIdMustReturnCorrectObject() throws Exception
     {
-        mockMvc.perform(get(ADMIN_URL + RESTAURANTS_URL + SUBWAY.getId()))
+        mockMvc.perform(get(ADMIN_URL + RESTAURANTS_URL + SUBWAY.getId())
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(RestaurantTestData.MATCHER.contentMatcher(SUBWAY));
@@ -107,7 +110,8 @@ public class AdminControllerTest
     @Test
     public void getNonexistentRestaurantMustReturn404StatusCode() throws Exception
     {
-        mockMvc.perform(get(ADMIN_URL + RESTAURANTS_URL + NONEXISTENT_ID))
+        mockMvc.perform(get(ADMIN_URL + RESTAURANTS_URL + NONEXISTENT_ID)
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -122,6 +126,7 @@ public class AdminControllerTest
                 .build();
 
         mockMvc.perform(put(ADMIN_URL + RESTAURANTS_URL + updated.getId())
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
@@ -141,6 +146,7 @@ public class AdminControllerTest
                 .build();
 
         mockMvc.perform(put(ADMIN_URL + RESTAURANTS_URL + updated.getId())
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
@@ -150,7 +156,8 @@ public class AdminControllerTest
     @Test
     public void getVoteWithoutDateMustReturnCurrentVoteList() throws Exception
     {
-        mockMvc.perform(get(ADMIN_URL + VOTE_URL))
+        mockMvc.perform(get(ADMIN_URL + VOTE_URL)
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(VoteTestData.MATCHER.contentListMatcher(CHOCO_VOTE, SUBWAY_VOTE, BENJAMIN_VOTE));
@@ -161,7 +168,8 @@ public class AdminControllerTest
     @Test
     public void getVoteWithDateMustReturnVoteListOfThatDate() throws Exception
     {
-        mockMvc.perform(get(ADMIN_URL + VOTE_URL + LocalDate.parse("2014-05-20").toString()))
+        mockMvc.perform(get(ADMIN_URL + VOTE_URL + LocalDate.parse("2014-05-20").toString())
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(VoteTestData.MATCHER.contentListMatcher(POTATO_VOTE_PAST, MCDONALDS_VOTE_PAST));
@@ -174,6 +182,7 @@ public class AdminControllerTest
         List<Long> ids = Collections.singletonList(MCDONALDS_ID);
 
         mockMvc.perform(put(ADMIN_URL + VOTE_URL)
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JsonUtil.writeValue(ids)))
                 .andDo(print())
@@ -188,7 +197,8 @@ public class AdminControllerTest
     @Test
     public void deleteRestaurantFromCurrentVoteMustReflectChangesInDB() throws Exception
     {
-        mockMvc.perform(delete(ADMIN_URL + VOTE_URL + CHOCO.getId()))
+        mockMvc.perform(delete(ADMIN_URL + VOTE_URL + CHOCO.getId())
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isAccepted());
 
@@ -209,7 +219,8 @@ public class AdminControllerTest
     @Test
     public void deleteRestaurantThatNotInVoteMustReturn404StatusCode() throws Exception
     {
-        mockMvc.perform(delete(ADMIN_URL + VOTE_URL + MCDONALDS_ID))
+        mockMvc.perform(delete(ADMIN_URL + VOTE_URL + MCDONALDS_ID)
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -227,6 +238,7 @@ public class AdminControllerTest
                 .build();
 
         mockMvc.perform(post(ADMIN_URL + RESTAURANTS_URL + MCDONALDS_ID + LUNCHES_URL)
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JsonUtil.writeValue(created)))
                 .andDo(print())
@@ -252,6 +264,7 @@ public class AdminControllerTest
                 .build();
 
         mockMvc.perform(post(ADMIN_URL + RESTAURANTS_URL + NONEXISTENT_ID + LUNCHES_URL)
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JsonUtil.writeValue(created)))
                 .andDo(print())
@@ -261,7 +274,8 @@ public class AdminControllerTest
     @Test
     public void getLunchOfRestaurantMustReturnCorrectObject() throws Exception
     {
-        mockMvc.perform(get(ADMIN_URL + RESTAURANTS_URL + MCDONALDS_ID + LUNCHES_URL + GRILLE_GURME.getId()))
+        mockMvc.perform(get(ADMIN_URL + RESTAURANTS_URL + MCDONALDS_ID + LUNCHES_URL + GRILLE_GURME.getId())
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -275,6 +289,7 @@ public class AdminControllerTest
         Lunch updated = LunchTestData.getUpdated();
 
         mockMvc.perform(put(ADMIN_URL + RESTAURANTS_URL + MCDONALDS_ID + LUNCHES_URL + updated.getId())
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
@@ -287,8 +302,10 @@ public class AdminControllerTest
     public void putChangesToNonexistentLunchMustReturn400StatusCode() throws Exception
     {
         Lunch created = LunchTestData.getCreated();
+        created.setDescription("Описание на русском");
 
         mockMvc.perform(put(ADMIN_URL + RESTAURANTS_URL + MCDONALDS_ID + LUNCHES_URL + GRILLE_GURME.getId())
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JsonUtil.writeValue(created)))
                 .andDo(print())
@@ -299,7 +316,8 @@ public class AdminControllerTest
     @Test
     public void deleteLunchFromRestaurantMustReflectChangesIdDB() throws Exception
     {
-        mockMvc.perform(delete(ADMIN_URL + RESTAURANTS_URL + MCDONALDS_ID + LUNCHES_URL + GRILLE_GURME.getId()))
+        mockMvc.perform(delete(ADMIN_URL + RESTAURANTS_URL + MCDONALDS_ID + LUNCHES_URL + GRILLE_GURME.getId())
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -312,7 +330,8 @@ public class AdminControllerTest
     @Test
     public void deleteNonexistentLunchMustReturn404StatusCode() throws Exception
     {
-        mockMvc.perform(delete(ADMIN_URL + RESTAURANTS_URL + MCDONALDS_ID + LUNCHES_URL + NONEXISTENT_ID))
+        mockMvc.perform(delete(ADMIN_URL + RESTAURANTS_URL + MCDONALDS_ID + LUNCHES_URL + NONEXISTENT_ID)
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -321,7 +340,8 @@ public class AdminControllerTest
     @Test
     public void deleteLunchFromNonexistentRestaurantMustReturn404StatusCode() throws Exception
     {
-        mockMvc.perform(delete(ADMIN_URL + RESTAURANTS_URL + NONEXISTENT_ID + LUNCHES_URL + GRILLE_GURME.getId()))
+        mockMvc.perform(delete(ADMIN_URL + RESTAURANTS_URL + NONEXISTENT_ID + LUNCHES_URL + GRILLE_GURME.getId())
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -334,6 +354,7 @@ public class AdminControllerTest
                 .build();
 
         mockMvc.perform(post(ADMIN_URL + RESTAURANTS_URL)
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JsonUtil.writeValue(created)))
                 .andDo(print())
@@ -351,6 +372,7 @@ public class AdminControllerTest
                 .build();
 
         mockMvc.perform(post(ADMIN_URL + RESTAURANTS_URL + MCDONALDS_ID + LUNCHES_URL)
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JsonUtil.writeValue(created)))
                 .andDo(print())

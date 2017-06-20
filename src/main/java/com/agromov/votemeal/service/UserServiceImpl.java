@@ -3,7 +3,11 @@ package com.agromov.votemeal.service;
 import com.agromov.votemeal.model.User;
 import com.agromov.votemeal.model.VoteHistory;
 import com.agromov.votemeal.repository.UserRepository;
+import com.agromov.votemeal.util.Authorized;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +15,9 @@ import java.util.List;
 /**
  * Created by A.Gromov on 12.06.2017.
  */
-@Service
+@Service("userService")
 public class UserServiceImpl
-        implements UserService
+        implements UserService, UserDetailsService
 {
     @Autowired
     private UserRepository repository;
@@ -40,5 +44,17 @@ public class UserServiceImpl
     public List<VoteHistory> getHistory(Long id)
     {
         return repository.getHistory(id);
+    }
+
+    @Override
+    public Authorized loadUserByUsername(String email) throws UsernameNotFoundException
+    {
+        User user = repository.getByEmail(email);
+        if (user == null)
+        {
+            throw new UsernameNotFoundException("User with email " + email + " not present.");
+        }
+
+        return new Authorized(user);
     }
 }

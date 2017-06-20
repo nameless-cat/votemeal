@@ -8,11 +8,14 @@ import org.apache.commons.collections4.IterableUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 import static com.agromov.votemeal.RestaurantTestData.BENJAMIN;
 import static com.agromov.votemeal.RestaurantTestData.CHOCO;
 import static com.agromov.votemeal.RestaurantTestData.SUBWAY;
+import static com.agromov.votemeal.TestUtil.userHttpBasic;
+import static com.agromov.votemeal.UserTestData.MARIA;
 import static com.agromov.votemeal.UserTestData.MARIA_ID;
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
 import static com.agromov.votemeal.web.VoteController.VOTE_URL;
@@ -38,7 +41,8 @@ public class VoteControllerTest
     @Test
     public void postVoteMustIncrementCounterOfVotesOfRestaurant() throws Exception
     {
-        mockMvc.perform(post(VOTE_URL + BENJAMIN.getId()))
+        mockMvc.perform(post(VOTE_URL + BENJAMIN.getId())
+                .with(userHttpBasic(MARIA)))
                 .andDo(print())
                 .andExpect(status().isAccepted());
 
@@ -49,7 +53,8 @@ public class VoteControllerTest
     @Test
     public void postVoteMustRefreshVoteHistoryOfUser() throws Exception
     {
-        mockMvc.perform(post(VOTE_URL + SUBWAY.getId()))
+        mockMvc.perform(post(VOTE_URL + SUBWAY.getId())
+                .with(userHttpBasic(MARIA)))
                 .andDo(print())
                 .andExpect(status().isAccepted());
 
@@ -62,7 +67,8 @@ public class VoteControllerTest
     @Test
     public void revoteOnTheSameRestaurantMustNotIncrementVotes() throws Exception
     {
-        mockMvc.perform(post(VOTE_URL + CHOCO.getId()))
+        mockMvc.perform(post(VOTE_URL + CHOCO.getId())
+                .with(userHttpBasic(MARIA)))
                 .andDo(print())
                 .andExpect(status().isNotAcceptable());
 
@@ -78,7 +84,8 @@ public class VoteControllerTest
     @Test
     public void revoteOnTheDifferentRestaurantMustDeletePreviousVote() throws Exception
     {
-        mockMvc.perform(post(VOTE_URL + BENJAMIN.getId()))
+        mockMvc.perform(post(VOTE_URL + BENJAMIN.getId())
+                .with(userHttpBasic(MARIA)))
                 .andDo(print())
                 .andExpect(status().isAccepted());
 
@@ -95,7 +102,8 @@ public class VoteControllerTest
     @Test
     public void deleteVoteMustRemoveCurrentVoteOfUser() throws Exception
     {
-        mockMvc.perform(delete(VOTE_URL))
+        mockMvc.perform(delete(VOTE_URL)
+                .with(userHttpBasic(MARIA)))
                 .andDo(print())
                 .andExpect(status().isAccepted());
 

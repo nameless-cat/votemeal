@@ -18,8 +18,7 @@ public class Lunch extends NamedEntity
     @JsonIgnore
     private Restaurant restaurant;
 
-    @NotBlank
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "defaults ''")
     private String description = "";
 
     @Column(name = "enabled", columnDefinition = "defaults true")

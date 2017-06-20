@@ -82,4 +82,10 @@ public class UserRepositoryImpl
             historyRepository.save(new VoteHistory(date, restaurant, userId));
         }
     }
+
+    @Override
+    public User getByEmail(String email)
+    {
+        return repository.getByEmail(email);
+    }
 }
