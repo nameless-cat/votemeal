@@ -4,6 +4,7 @@ import com.agromov.votemeal.web.ViewWhen;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 /**
@@ -15,9 +16,11 @@ public class VoteHistory
         extends BaseEntity
 {
     @JsonView(ViewWhen.GetVoteHistory.class)
+    @NotNull
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
+    @NotNull
     @Column(name = "user_id")
     private Long userId;
 

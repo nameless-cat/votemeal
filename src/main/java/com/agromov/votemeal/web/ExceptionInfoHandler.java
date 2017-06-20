@@ -2,6 +2,7 @@ package com.agromov.votemeal.web;
 
 import com.agromov.votemeal.util.exception.VoteNotAcceptedException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,4 +33,8 @@ public class ExceptionInfoHandler
     @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(VoteNotAcceptedException.class)
     public void voteNotAcceptedHandle() {}
+
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public void bindingErrorsHandle() {}
 }

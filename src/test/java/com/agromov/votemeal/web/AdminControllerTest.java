@@ -325,4 +325,35 @@ public class AdminControllerTest
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
+
+    @Transactional
+    @Test
+    public void postRestaurantWithInvalidFieldsMustReturn422StatusCode() throws Exception
+    {
+        Restaurant created = new RestaurantBuilder()
+                .build();
+
+        mockMvc.perform(post(ADMIN_URL + RESTAURANTS_URL)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(JsonUtil.writeValue(created)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Transactional
+    @Test
+    public void postLunchWithInvalidFieldsMustReturn422StatusCode() throws Exception
+    {
+        Lunch created = new LunchBuilder()
+                .withName("Name")
+                .withDescription("")
+                .withPrice(1.00f)
+                .build();
+
+        mockMvc.perform(post(ADMIN_URL + RESTAURANTS_URL + MCDONALDS_ID + LUNCHES_URL)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(JsonUtil.writeValue(created)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
 }

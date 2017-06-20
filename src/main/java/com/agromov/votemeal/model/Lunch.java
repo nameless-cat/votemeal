@@ -1,6 +1,7 @@
 package com.agromov.votemeal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,12 +13,12 @@ import javax.validation.constraints.NotNull;
 @Table(name = "lunches", uniqueConstraints = {@UniqueConstraint(name = "lunches_unique_restaurant_name_idx", columnNames = {"restaurant_id", "name"})})
 public class Lunch extends NamedEntity
 {
-    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id")
     @JsonIgnore
     private Restaurant restaurant;
 
+    @NotBlank
     @Column(name = "description")
     private String description = "";
 

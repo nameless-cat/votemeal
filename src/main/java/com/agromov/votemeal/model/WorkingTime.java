@@ -2,6 +2,7 @@ package com.agromov.votemeal.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 
 /**
@@ -10,9 +11,11 @@ import java.time.LocalTime;
 @Embeddable
 public class WorkingTime
 {
+    @NotNull
     @Column(name = "work_from", nullable = false)
     private LocalTime workFrom;
 
+    @NotNull
     @Column(name = "work_until", nullable = false)
     private LocalTime workUntil;
 

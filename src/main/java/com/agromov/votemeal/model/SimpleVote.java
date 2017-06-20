@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -19,6 +21,7 @@ public class SimpleVote
     @EmbeddedId
     private SimpleVotePK pk;
 
+    @Min(0)
     @Column(name = "votes")
     private Integer votes;
 
@@ -37,9 +40,11 @@ public class SimpleVote
 
     public static class SimpleVotePK implements Serializable
     {
+        @NotNull
         @Column(name = "date", updatable = false)
         private LocalDate date;
 
+        @NotNull
         @Column(name = "restaurant_id")
         private Long restaurantId;
 

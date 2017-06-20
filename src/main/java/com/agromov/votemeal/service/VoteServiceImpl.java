@@ -42,9 +42,17 @@ public class VoteServiceImpl
     @Transactional
     @Override
     public void add(List<Long> restaurantIds)
+            throws IllegalArgumentException
     {
         // todo может можно сделать это одной операцией за одно обращение к базе?
-        restaurantIds.forEach(voteRepository::addToVote);
+        restaurantIds.forEach(id ->  {
+            if (restaurantRepository.get(id) == null)
+            {
+                //todo i18n
+                throw new IllegalArgumentException();
+            }
+            voteRepository.addToVote(id);
+        });
     }
 
     @Transactional

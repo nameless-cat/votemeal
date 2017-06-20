@@ -5,12 +5,15 @@ import com.agromov.votemeal.model.VoteHistory;
 import com.agromov.votemeal.service.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.security.AccessControlException;
 import java.util.List;
@@ -38,11 +41,27 @@ public class UserController
     }
 
     @PutMapping(value = "/profile/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<User> updateUserProfile(@PathVariable("id") Long id, @RequestBody User user)
+    public ResponseEntity<User> updateUserProfile(@PathVariable("id") Long id, @Valid @RequestBody User user)
     {
+        //todo если user придет с id == null то ValidationUtils#checkUserIdConsistent(user.getId()) упадет
         checkUserIdConsistent(id);
         checkUserIdConsistent(user.getId());
         return new ResponseEntity<User>(service.update(user), HttpStatus.ACCEPTED);
+    }
+
+    @JsonView(ViewWhen.SendUser.class)
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<User> registerUser(@Valid @RequestBody User user)
+            throws IllegalArgumentException
+    {
+        checkForNew(user);
+        User saved = service.save(user);
+
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/profile" + "/{id}")
+                .buildAndExpand(saved.getId()).toUri();
+
+        return ResponseEntity.created(uriOfNewResource).body(saved);
     }
 
     @JsonView(ViewWhen.GetVoteHistory.class)
@@ -54,18 +73,9 @@ public class UserController
         return service.getHistory(id);
     }
 
-    @JsonView(ViewWhen.SendUser.class)
-    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<User> registerUser(@RequestBody User user)
-            throws IllegalArgumentException
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public void catcher()
     {
-        checkForNew(user);
-        User saved = service.save(user);
-
-        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/profile" + "/{id}")
-                .buildAndExpand(saved.getId()).toUri();
-
-        return ResponseEntity.created(uriOfNewResource).body(saved);
+        System.out.println("email duplicate");
     }
 }

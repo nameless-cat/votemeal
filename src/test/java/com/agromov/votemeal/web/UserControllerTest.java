@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import static com.agromov.votemeal.UserTestData.*;
 import static com.agromov.votemeal.web.UserController.BASE_URL;
@@ -102,5 +103,34 @@ public class UserControllerTest
         User created = service.get(25L);
         assertEquals(user.getEmail(), created.getEmail());
         assertEquals(user.getName(), created.getName());
+    }
+
+    @Transactional
+    @Test
+    public void putUpdatedUserWithInvalidFieldsMustReturn422StatusCode() throws Exception
+    {
+        User updated = UserTestData.getUpdated();
+        updated.setName("");
+        updated.setEmail("email");
+        updated.setPassword("");
+
+        mockMvc.perform(put(BASE_URL + PROFILE_URL + MARIA_ID)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(JsonUtil.writeValue(updated)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    public void tryToSaveUserWithDuplicatedEmailMustReturn409StatusCode() throws Exception
+    {
+        User user = UserTestData.getUpdated();
+        user.setEmail("user@gmail.com");
+
+        mockMvc.perform(put(BASE_URL + PROFILE_URL + MARIA_ID)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(JsonUtil.writeValue(user)))
+                .andDo(print())
+                .andExpect(status().isConflict());
     }
 }

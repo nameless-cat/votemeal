@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
@@ -57,7 +58,7 @@ public class AdminController
     }
 
     @PostMapping(value = "restaurants", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Restaurant> createRestaurant(@RequestBody Restaurant restaurant)
+    public ResponseEntity<Restaurant> createRestaurant(@Valid @RequestBody Restaurant restaurant)
             throws IllegalArgumentException
     {
         checkForNew(restaurant);
@@ -73,7 +74,7 @@ public class AdminController
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping(value = "restaurants/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public void updateRestaurant(@PathVariable long id, @RequestBody Restaurant restaurant)
+    public void updateRestaurant(@PathVariable long id, @Valid @RequestBody Restaurant restaurant)
             throws EntityNotFoundException, IllegalArgumentException
     {
         ValidationUtils.checkIdConsistence(restaurant, id);
@@ -101,6 +102,7 @@ public class AdminController
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping(value = "vote", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public void addRestaurantsToCurrentVote(@RequestBody List<Long> restaurantIds)
+            throws IllegalArgumentException
     {
         voteService.add(restaurantIds);
     }
@@ -115,7 +117,7 @@ public class AdminController
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "restaurants/{id}/lunches", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public void addLunchToRestaurantMenu(@PathVariable Long id, @RequestBody Lunch lunch)
+    public void addLunchToRestaurantMenu(@PathVariable Long id, @Valid @RequestBody Lunch lunch)
             throws EntityNotFoundException
     {
         checkForNew(lunch);
@@ -132,7 +134,7 @@ public class AdminController
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping(value = "restaurants/{id}/lunches/{lunchId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public void putLunch(@PathVariable Long id, @PathVariable Long lunchId, @RequestBody Lunch lunch)
+    public void putLunch(@PathVariable Long id, @PathVariable Long lunchId, @Valid @RequestBody Lunch lunch)
             throws EntityNotFoundException, IllegalArgumentException
     {
         checkIdConsistence(lunch, lunchId);

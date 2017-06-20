@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -21,9 +23,12 @@ import java.util.*;
 public class User extends NamedEntity
 {
     @JsonView(ViewWhen.SendUser.class)
+    @Email
+    @NotBlank
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @NotBlank
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -32,7 +37,7 @@ public class User extends NamedEntity
     private LocalDateTime registered;
 
     @JsonView(ViewWhen.SendUser.class)
-    @Column(name = "enabled", nullable = false)
+    @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
     private boolean enabled;
 
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -42,19 +47,6 @@ public class User extends NamedEntity
     @Column(name = "role")
     @BatchSize(size = 200)
     private Set<Role> roles = new HashSet<>();
-
-    @OneToMany
-    @MapKeyColumn(name = "date")
-//    @CollectionTable(name = "vote_history", joinColumns = @JoinColumn(name = "user_id"))
-    @JoinTable(
-            name = "vote_history",
-            joinColumns = @JoinColumn(name = "restaurant_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    @ElementCollection(fetch = FetchType.LAZY)
-    @BatchSize(size = 200)
-    @JsonIgnore
-    private Map<LocalDate, Restaurant> voteHistory = new HashMap<>();
 
     public User()
     {}

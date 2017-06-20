@@ -3,6 +3,8 @@ package com.agromov.votemeal.model;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -19,6 +21,7 @@ public class Vote
     @EmbeddedId
     private VotePK pk;
 
+    @Min(0)
     @Column(name = "votes", nullable = false)
     private Integer votes;
 
@@ -28,6 +31,7 @@ public class Vote
     public static class VotePK implements Serializable
     {
 
+        @NotNull
         @Column(name = "date", updatable = false)
         private LocalDate date;
 

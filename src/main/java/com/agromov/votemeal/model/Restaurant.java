@@ -4,6 +4,7 @@ import com.agromov.votemeal.web.ViewWhen;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,8 +19,10 @@ public class Restaurant extends NamedEntity
     private boolean closed;
 
     @JsonView(ViewWhen.GetVoteHistory.class)
+    @NotNull
     private Address address;
 
+    @NotNull
     private WorkingTime workingTime;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
