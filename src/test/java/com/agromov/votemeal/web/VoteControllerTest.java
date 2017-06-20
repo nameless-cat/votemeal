@@ -3,7 +3,6 @@ package com.agromov.votemeal.web;
 import com.agromov.votemeal.model.Vote;
 import com.agromov.votemeal.repository.UserRepository;
 import com.agromov.votemeal.repository.VoteRepository;
-import com.agromov.votemeal.config.ProjectConstants;
 import org.apache.commons.collections4.IterableUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

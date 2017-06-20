@@ -17,19 +17,16 @@ import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
 @Entity
 @Table(name = "votes")
 public class SimpleVote
+    extends BaseVote
 {
     @EmbeddedId
     private SimpleVotePK pk;
-
-    @Min(0)
-    @Column(name = "votes")
-    private Integer votes;
 
     public SimpleVote()
     {
         this.pk = new SimpleVotePK();
         this.pk.date = currentDate();
-        this.votes = 0;
+        setVotes(0);;
     }
 
     public SimpleVote(long restaurantId)
@@ -75,6 +72,26 @@ public class SimpleVote
         {
             this.restaurantId = restaurantId;
         }
+
+        @Override
+        public boolean equals(Object o)
+        {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            SimpleVotePK that = (SimpleVotePK) o;
+
+            if (getDate() != null ? !getDate().equals(that.getDate()) : that.getDate() != null) return false;
+            return getRestaurantId() != null ? getRestaurantId().equals(that.getRestaurantId()) : that.getRestaurantId() == null;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int result = getDate() != null ? getDate().hashCode() : 0;
+            result = 31 * result + (getRestaurantId() != null ? getRestaurantId().hashCode() : 0);
+            return result;
+        }
     }
 
     public SimpleVotePK getPk()
@@ -85,15 +102,5 @@ public class SimpleVote
     public void setPk(SimpleVotePK pk)
     {
         this.pk = pk;
-    }
-
-    public Integer getVotes()
-    {
-        return votes;
-    }
-
-    public void setVotes(Integer votes)
-    {
-        this.votes = votes;
     }
 }

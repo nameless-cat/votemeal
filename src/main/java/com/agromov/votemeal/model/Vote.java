@@ -17,20 +17,14 @@ import static com.agromov.votemeal.util.MessageUtils.REQUIRE_NOT_NULL;
 @Entity
 @Table(name = "votes")
 public class Vote
+    extends BaseVote
 {
     @EmbeddedId
     private VotePK pk;
 
-    @Min(0)
-    @Column(name = "votes", nullable = false)
-    private Integer votes;
-
-
-
     @Embeddable
     public static class VotePK implements Serializable
     {
-
         @NotNull
         @Column(name = "date", updatable = false)
         private LocalDate date;
@@ -78,16 +72,14 @@ public class Vote
             result = 31 * result + (restaurant != null ? restaurant.hashCode() : 0);
             return result;
         }
-
     }
 
     public Vote()
     {
         this.pk = new VotePK();
         this.pk.setDate(LocalDate.now());
-        this.votes = 0;
+        setVotes(0);
     }
-
 
     public Vote(LocalDate date, Restaurant restaurant, int votes)
     {
@@ -97,7 +89,7 @@ public class Vote
         this.pk = new VotePK();
         this.pk.setDate(date);
         this.pk.setRestaurant(restaurant);
-        this.votes = votes;
+        setVotes(votes);
     }
 
     public Restaurant getRestaurant()
@@ -120,16 +112,6 @@ public class Vote
         this.pk = pk;
     }
 
-    public int getVotes()
-    {
-        return votes;
-    }
-
-    public void setVotes(Integer votes)
-    {
-        this.votes = votes;
-    }
-
     public LocalDate getDate()
     {
         return this.pk.getDate();
@@ -146,54 +128,7 @@ public class Vote
         return "Vote{" +
                 "date='" + pk.getDate() + "'" +
                 "restaurant='" + pk.getRestaurant().getName() + "'" +
-                ", votes='" + votes + "'" +
+                ", votes='" + getVotes() + "'" +
                 '}';
     }
-
-    /*public Vote()
-    {
-        this.date = LocalDate.now();
-    }
-
-    public LocalDate getDate()
-    {
-        return date;
-    }
-
-    public void setDate(LocalDate date)
-    {
-        Objects.requireNonNull(date);
-        this.date = date;
-    }
-
-    public void setVotesForToday(List<Restaurant> restaurants)
-    {
-        Objects.requireNonNull(restaurants);
-        votesForToday = new LinkedHashMap<>();
-        restaurants.forEach(r -> votesForToday.put(r, 0));
-    }
-
-    public Map<Restaurant, Integer> getVotes()
-    {
-        return votesForToday;
-    }
-
-    public void addVote(Restaurant restaurant)
-    {
-        Objects.requireNonNull(restaurant);
-    }
-
-    public void removeVote(Restaurant restaurant)
-    {
-        Objects.requireNonNull(restaurant);
-        Integer votes = votesForToday.get(restaurant.getId());
-        Objects.requireNonNull(votes);
-
-        if (votes > 0)
-        {
-            votesForToday.put(restaurant, votes - 1);
-        }
-    }*/
-
-
 }
