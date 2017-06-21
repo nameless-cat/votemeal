@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
+import static com.agromov.votemeal.util.UserUtils.prepareToSave;
 
 /**
  * Created by A.Gromov on 22.05.2017.
@@ -30,7 +31,7 @@ public class UserRepositoryImpl
     @Override
     public User save(User user)
     {
-        return repository.save(user);
+        return repository.save(prepareToSave(user));
     }
 
     @Override
@@ -39,7 +40,7 @@ public class UserRepositoryImpl
         /**
          * todo см комментарии в {@link UserRepositoryTest#getAndModifyUserAndPersistMustReflectThisOnDB()}
         */
-        return repository.save(updated);
+        return repository.save(prepareToSave(updated));
     }
 
     @Override

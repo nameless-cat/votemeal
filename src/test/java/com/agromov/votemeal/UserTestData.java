@@ -2,10 +2,12 @@ package com.agromov.votemeal;
 
 import com.agromov.votemeal.model.VoteHistory;
 import com.agromov.votemeal.util.DateTimeUtil;
+import com.agromov.votemeal.util.PasswordUtils;
 import com.agromov.votemeal.util.UserBuilder;
 import com.agromov.votemeal.matchers.ModelMatcher;
 import com.agromov.votemeal.model.Role;
 import com.agromov.votemeal.model.User;
+import org.slf4j.Logger;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,12 +18,15 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.agromov.votemeal.RestaurantTestData.*;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Created by A.Gromov on 23.05.2017.
  */
 public class UserTestData
 {
+    private static final Logger LOG = getLogger(UserTestData.class);
+
     public static final User ADMIN = new UserBuilder()
             .withId(1)
             .withName("Admin")
@@ -75,7 +80,7 @@ public class UserTestData
 
     public static final ModelMatcher<User> MATCHER = ModelMatcher.of(User.class,
             (expected, actual) -> expected == actual ||
-                    (Objects.equals(expected.getPassword(), actual.getPassword())
+                    (comparePassword(expected.getPassword(), actual.getPassword())
                             && Objects.equals(expected.getId(), actual.getId())
                             && Objects.equals(expected.getName(), actual.getName())
                             && Objects.equals(expected.getEmail(), actual.getEmail())
@@ -85,6 +90,18 @@ public class UserTestData
                     )
     );
 
+    private static boolean comparePassword(String rawOrEncodedPassword, String password)
+    {
+        if (PasswordUtils.isEncoded(rawOrEncodedPassword))
+        {
+            return rawOrEncodedPassword.equals(password);
+        } else if (!PasswordUtils.isMatch(rawOrEncodedPassword, password))
+        {
+            LOG.error("Password " + password + " doesn't match encoded " + password);
+            return false;
+        }
+        return true;
+    }
     public static User getUpdated()
     {
         return new UserBuilder(MARIA).withEmail("masha@mail.ru").build();

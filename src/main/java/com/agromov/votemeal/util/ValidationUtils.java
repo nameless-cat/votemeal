@@ -1,8 +1,7 @@
 package com.agromov.votemeal.util;
 
 import com.agromov.votemeal.model.BaseEntity;
-import com.agromov.votemeal.model.Restaurant;
-import com.agromov.votemeal.web.UserController;
+import com.agromov.votemeal.web.Authorized;
 import org.slf4j.Logger;
 
 import java.security.AccessControlException;
@@ -21,6 +20,15 @@ public class ValidationUtils
     public static void checkForNew(BaseEntity entity)
     {
         if (!entity.isNew())
+        {
+            //todo i18n
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public static void checkForIdPresent(BaseEntity entity)
+    {
+        if (entity.isNew())
         {
             //todo i18n
             throw new IllegalArgumentException();

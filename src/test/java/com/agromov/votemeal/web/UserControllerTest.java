@@ -8,6 +8,7 @@ import com.agromov.votemeal.web.json.JsonUtil;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
@@ -53,7 +54,6 @@ public class UserControllerTest
                 .andExpect(status().isForbidden());
     }
 
-    @Transactional
     @Test
     public void putChangesOfUserProfileMustReflectChangesInDBAndReturn202Status() throws Exception
     {
@@ -90,7 +90,6 @@ public class UserControllerTest
                 .andExpect(status().isForbidden());
     }
 
-    @Transactional
     @Test
     public void registerNewUserMustRefleChangesInDB() throws Exception
     {
@@ -106,12 +105,11 @@ public class UserControllerTest
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        User created = service.get(25L);
+        User created = service.get(LAST_CREATED_ID++);
         assertEquals(user.getEmail(), created.getEmail());
         assertEquals(user.getName(), created.getName());
     }
 
-    @Transactional
     @Test
     public void putUpdatedUserWithInvalidFieldsMustReturn422StatusCode() throws Exception
     {
@@ -128,6 +126,7 @@ public class UserControllerTest
                 .andExpect(status().isUnprocessableEntity());
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     @Test
     public void tryToSaveUserWithDuplicatedEmailMustReturn409StatusCode() throws Exception
     {

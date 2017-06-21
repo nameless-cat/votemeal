@@ -1,6 +1,5 @@
 package com.agromov.votemeal.web;
 
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,7 +17,6 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 /**
  * Created by A.Gromov on 23.05.2017.
  */
-@Ignore
 @ContextConfiguration({
         "classpath:spring/spring-app-test.xml",
         "classpath:spring/spring-mvc.xml",
@@ -26,7 +24,8 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 })
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-public abstract class AbstractControllerTest
+@Transactional
+abstract public class AbstractControllerTest
 {
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
 
@@ -36,7 +35,7 @@ public abstract class AbstractControllerTest
         CHARACTER_ENCODING_FILTER.setForceEncoding(true);
     }
 
-    protected static final long LAST_CREATED_ID = 25;
+    protected static long LAST_CREATED_ID = 25;
 
     protected MockMvc mockMvc;
 

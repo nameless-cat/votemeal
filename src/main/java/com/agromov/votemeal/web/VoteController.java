@@ -2,7 +2,6 @@ package com.agromov.votemeal.web;
 
 import com.agromov.votemeal.config.ProjectConstants;
 import com.agromov.votemeal.service.VoteService;
-import com.agromov.votemeal.util.Authorized;
 import com.agromov.votemeal.util.exception.VoteNotAcceptedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalTime;
 
 import static com.agromov.votemeal.util.DateTimeUtil.currentTime;
 

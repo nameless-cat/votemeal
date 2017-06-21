@@ -43,7 +43,8 @@ public class UserController
     @PutMapping(value = "/profile/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<User> updateUserProfile(@PathVariable("id") Long id, @Valid @RequestBody User user)
     {
-        //todo если user придет с id == null то ValidationUtils#checkUserIdConsistent(user.getId()) упадет
+        //todo нужно проверить старый пароль при сохранении нового. -> несколько полей пароля -> UserTo
+        checkForIdPresent(user);
         checkUserIdConsistent(id);
         checkUserIdConsistent(user.getId());
         return new ResponseEntity<User>(service.update(user), HttpStatus.ACCEPTED);
@@ -54,6 +55,7 @@ public class UserController
     public ResponseEntity<User> registerUser(@Valid @RequestBody User user)
             throws IllegalArgumentException
     {
+        //todo несколько полей пароля -> UserTo
         checkForNew(user);
         User saved = service.save(user);
 

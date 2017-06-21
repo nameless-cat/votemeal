@@ -1,4 +1,4 @@
-package com.agromov.votemeal.util;
+package com.agromov.votemeal.web;
 
 import com.agromov.votemeal.model.User;
 import org.springframework.security.core.Authentication;

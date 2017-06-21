@@ -25,7 +25,6 @@ public class UserRepositoryTest
     public void getUserMustReturnCorrectObject() throws Exception
     {
         MATCHER.assertEquals(MARIA, repository.get(MARIA_ID));
-        expectedQueries(1);
     }
 
     @Test
@@ -41,7 +40,6 @@ public class UserRepositoryTest
         repository.delete(OLEG_ID);
         MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, MARIA, USER), repository.getAll());
         assertTrue(repository.getHistory(OLEG_ID).isEmpty());
-        expectedQueries(5);
     }
 
     @Transactional
@@ -49,7 +47,6 @@ public class UserRepositoryTest
     public void deleteInexistentUserMustReturnZero() throws Exception
     {
         Assert.assertEquals(0, repository.delete(100));
-        expectedQueries(2);
     }
 
     @Test
@@ -60,11 +57,8 @@ public class UserRepositoryTest
          * два запроса вместо ожидаемого одного. Возможно из-за того, что достается список пользователей, а не один.
          * toDO Попробовать доставать через жестко заданную sql query
          */
-//        expectedQueries(1);
-        expectedQueries(2);
     }
 
-    @Transactional
     @Test
     public void getAndModifyUserAndPersistMustReflectThisOnDB() throws Exception
     {
@@ -73,20 +67,16 @@ public class UserRepositoryTest
         MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, updated, OLEG, USER), repository.getAll());
         // слишком много запросов для сохранения изменений
         // todo попробовать через sql query
-        expectedQueries(6);
     }
 
-    @Transactional
     @Test
     public void saveUserMustPersistItToDB() throws Exception
     {
         User created = UserTestData.getCreated();
         created.setId(repository.save(created).getId());
         MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, MARIA, created, OLEG, USER), repository.getAll());
-        expectedQueries(5);
     }
 
-    @Transactional
     @Test
     public void getListUserWithLimitAndOffsetInCorrectOrder() throws Exception
     {
@@ -94,6 +84,5 @@ public class UserRepositoryTest
         created.setId(repository.save(created).getId());
         MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, MARIA, created), repository.getRange(0, 3));
         // todo попробовать sql query
-        expectedQueries(5);
     }
 }

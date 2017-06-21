@@ -27,56 +27,45 @@ public class LunchRepositoryTest
     public void getLunchMustReturnCorrectObject() throws Exception
     {
         MATCHER.assertEquals(GRILLE_GURME, repository.get(MCDONALDS_ID, GRILLE_GURME.getId()));
-        expectedQueries(2);
     }
 
     @Test
     public void getLunchThatNotBelongsToCafeMustReturnNull() throws Exception
     {
         assertEquals(null, repository.get(SMOKED_POTATO.getId(), MCDONALDS_ID));
-        expectedQueries(1);
     }
 
     @Test
     public void getAllLunchesOfCafeMustReturnCorrectListOfObjects() throws Exception
     {
         MATCHER.assertCollectionEquals(Arrays.asList(GRILLE_GURME, CHEESEBURGER), repository.getAll(MCDONALDS_ID));
-        expectedQueries(2);
     }
 
     @Test
     public void getAllLunchesOfNonexistentCafeMustReturnEmptyList() throws Exception
     {
         MATCHER.assertCollectionEquals(Collections.emptyList(), repository.getAll(100));
-        expectedQueries(1);
     }
 
-    @Transactional
     @Test
     public void deleteLunchMustReflectChangesInDB() throws Exception
     {
         repository.delete(MCDONALDS_ID, GRILLE_GURME.getId());
         MATCHER.assertCollectionEquals(Collections.singletonList(CHEESEBURGER), repository.getAll(MCDONALDS_ID));
-        expectedQueries(3);
     }
 
-    @Transactional
     @Test
     public void deleteLunchThatNotBelongsToCafeMustReturnZeroAsResult() throws Exception
     {
         assertEquals(NO_RESULT, repository.delete(ALPEN_SUB.getId(), MCDONALDS_ID));
-        expectedQueries(1);
     }
 
-    @Transactional
     @Test
     public void deleteLunchOfNonexistentCafeMustReturnZeroAsResult() throws Exception
     {
         assertEquals(NO_RESULT, repository.delete(ALPEN_SUB.getId(), 100));
-        expectedQueries(1);
     }
 
-    @Transactional
     @Test
     public void saveLunchMustReflectChangesInDB() throws Exception
     {
@@ -84,16 +73,13 @@ public class LunchRepositoryTest
         created.setRestaurant(MCDONALDS);
         created.setId(repository.save(MCDONALDS_ID, created).getId());
         MATCHER.assertCollectionEquals(Arrays.asList(created, GRILLE_GURME, CHEESEBURGER), repository.getAll(MCDONALDS_ID));
-        expectedQueries(4);
     }
 
-    @Transactional
     @Test
     public void updateLunchMustReflectChangesInDB() throws Exception
     {
         Lunch updated = LunchTestData.getUpdated();
         repository.save(MCDONALDS_ID, updated);
         MATCHER.assertCollectionEquals(Arrays.asList(updated, CHEESEBURGER), repository.getAll(MCDONALDS_ID));
-        expectedQueries(4);
     }
 }

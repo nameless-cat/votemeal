@@ -7,10 +7,10 @@ DELETE FROM USERS;
 ALTER SEQUENCE global_seq RESTART WITH 1;
 
 INSERT INTO USERS (NAME, EMAIL, PASSWORD, REGISTERED) VALUES
-  ('Admin', 'admin@gmail.com', 'admin', '2015-01-01 00:00:00'),
-  ('Maria', 'maria@yandex.ru', 'password', '2015-04-23 17:15:02'),
-  ('Oleg', 'oleg@yandex.ru', 'psswd', '2015-05-15 14:15:00'),
-  ('User', 'user@gmail.com', 'user1234', '2016-01-01 00:00:00');
+  ('Admin', 'admin@gmail.com', '$2a$10$srsHIKm25IaGQL1wzYq2J.Wfp6FdcAV7rPjmFcg6A9w6CDl2mZtl6', '2015-01-01 00:00:00'),
+  ('Maria', 'maria@yandex.ru', '$2a$10$BEhirOeCymBORjnULE2UW.mjiXydyEYY6O3hdC6jGBZ5.lhM5.k6e', '2015-04-23 17:15:02'),
+  ('Oleg', 'oleg@yandex.ru', '$2a$10$L73oV.zNLNDWKbqLjG59YuubQpLi3hyUg6ex0Q5lFhpAlrw8OKIKq', '2015-05-15 14:15:00'),
+  ('User', 'user@gmail.com', '$2a$10$tyTQDJMtNOdqaOLlNdZU4OtF0fIPeoLG3oZwcmwAm1Zw8OVcmGmBS', '2016-01-01 00:00:00');
 
 INSERT INTO USER_ROLES (role, user_id) VALUES
   ('ROLE_ADMIN', 1),

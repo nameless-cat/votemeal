@@ -24,21 +24,18 @@ public class RestaurantRepositoryTest
     public void getCafeMustReturnCorrectObject() throws Exception
     {
         MATCHER.assertEquals(MCDONALDS, repository.get(MCDONALDS_ID));
-        expectedQueries(1);
     }
 
     @Test
-    public void getInexistentCafeMustReturnNull() throws Exception
+    public void getNonexistentCafeMustReturnNull() throws Exception
     {
         MATCHER.assertEquals(null, repository.get(-1));
-        expectedQueries(1);
     }
 
     @Test
     public void getAllCafesMustReturnListOfCafesSortedByName() throws Exception
     {
         MATCHER.assertCollectionEquals(RESTAURANTS, repository.getAll());
-        expectedQueries(1);
     }
 
     @Test
@@ -49,14 +46,11 @@ public class RestaurantRepositoryTest
 
         MATCHER.assertCollectionEquals(Arrays.asList(created, SUBWAY, BENJAMIN, POTATO, MCDONALDS, CHOCO),
                 repository.getAll());
-
-        expectedQueries(3);
     }
 
     @Test
     public void getListCafeInRangeMustReturnCorrectResult() throws Exception
     {
         MATCHER.assertCollectionEquals(Arrays.asList(SUBWAY, BENJAMIN, POTATO), repository.getRange(0, 3));
-        expectedQueries(1);
     }
 }

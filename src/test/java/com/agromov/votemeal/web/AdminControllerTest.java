@@ -11,10 +11,13 @@ import com.agromov.votemeal.service.VoteService;
 import com.agromov.votemeal.util.LunchBuilder;
 import com.agromov.votemeal.util.RestaurantBuilder;
 import com.agromov.votemeal.web.json.JsonUtil;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -66,6 +69,15 @@ public class AdminControllerTest
     public void setUp() throws Exception
     {
         restaurantService.cacheEvict();
+        clear2ndLevelHibernateCache();
+
+    }
+
+    private void clear2ndLevelHibernateCache()
+    {
+        Session s = (Session) em.getDelegate();
+        SessionFactory sf = s.getSessionFactory();
+        sf.getCache().evictAllRegions();
     }
 
     @Test
@@ -77,7 +89,7 @@ public class AdminControllerTest
                 .andExpect(RestaurantTestData.MATCHER.contentListMatcher(RESTAURANTS));
     }
 
-    @Transactional
+
     @Test
     public void postNewRestaurantMustReflectChangesInDB() throws Exception
     {
@@ -89,7 +101,7 @@ public class AdminControllerTest
                 .content(JsonUtil.writeValue(created)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(redirectedUrl("http://localhost" + ADMIN_URL + RESTAURANTS_URL + LAST_CREATED_ID));
+                .andExpect(redirectedUrl("http://localhost" + ADMIN_URL + RESTAURANTS_URL + LAST_CREATED_ID++));
 
         List<Restaurant> restaurants = new ArrayList<>(RESTAURANTS);
         restaurants.add(0, created);
@@ -116,7 +128,8 @@ public class AdminControllerTest
                 .andExpect(status().isNotFound());
     }
 
-    @Transactional
+    //без Propagation.NEVER данные сохраняются на протяжении всей цепочки тестов
+    @Transactional(propagation = Propagation.NEVER)
     @Test
     public void putRestaurantChangesMustReflectThatInDB() throws Exception
     {
@@ -135,7 +148,7 @@ public class AdminControllerTest
         RestaurantTestData.MATCHER.assertEquals(updated, restaurantService.get(updated.getId()));
     }
 
-    @Transactional
+
     @Test
     public void putChangesOfNonexistentRestaurantMustReturn404StatusCode() throws Exception
     {
@@ -175,7 +188,6 @@ public class AdminControllerTest
                 .andExpect(VoteTestData.MATCHER.contentListMatcher(POTATO_VOTE_PAST, MCDONALDS_VOTE_PAST));
     }
 
-    @Transactional
     @Test
     public void putRestaurantsToCurrentVoteMustReflectChangesInDB() throws Exception
     {
@@ -193,7 +205,7 @@ public class AdminControllerTest
                 voteService.get(currentDate()));
     }
 
-    @Transactional
+
     @Test
     public void deleteRestaurantFromCurrentVoteMustReflectChangesInDB() throws Exception
     {
@@ -215,7 +227,7 @@ public class AdminControllerTest
         assertEquals(0, finded);
     }
 
-    @Transactional
+
     @Test
     public void deleteRestaurantThatNotInVoteMustReturn404StatusCode() throws Exception
     {
@@ -225,7 +237,7 @@ public class AdminControllerTest
                 .andExpect(status().isNotFound());
     }
 
-    @Transactional
+
     @Test
     public void postLunchToRestaurantMustReflectChangesInDB() throws Exception
     {
@@ -244,7 +256,7 @@ public class AdminControllerTest
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        created.setId(LAST_CREATED_ID);
+        created.setId(LAST_CREATED_ID++);
         created.setRestaurant(MCDONALDS);
 
         em.flush();
@@ -253,6 +265,7 @@ public class AdminControllerTest
                 created,
                 restaurantService.get(MCDONALDS_ID).getLunches().stream().filter(l -> l.getName().equals(name)).findFirst().get());
     }
+
 
     @Test
     public void postLunchToNonexistentRestaurantMustReturn404StatusCode() throws Exception
@@ -282,7 +295,7 @@ public class AdminControllerTest
                 .andExpect(LunchTestData.MATCHER.contentMatcher(GRILLE_GURME));
     }
 
-    @Transactional
+
     @Test
     public void putChangesToLunchMustReflectThatInDB() throws Exception
     {
@@ -312,7 +325,6 @@ public class AdminControllerTest
                 .andExpect(status().isBadRequest());
     }
 
-    @Transactional
     @Test
     public void deleteLunchFromRestaurantMustReflectChangesIdDB() throws Exception
     {
@@ -326,7 +338,6 @@ public class AdminControllerTest
                 restaurantService.get(MCDONALDS_ID).getLunches());
     }
 
-    @Transactional
     @Test
     public void deleteNonexistentLunchMustReturn404StatusCode() throws Exception
     {
@@ -336,7 +347,6 @@ public class AdminControllerTest
                 .andExpect(status().isNotFound());
     }
 
-    @Transactional
     @Test
     public void deleteLunchFromNonexistentRestaurantMustReturn404StatusCode() throws Exception
     {
@@ -346,7 +356,6 @@ public class AdminControllerTest
                 .andExpect(status().isNotFound());
     }
 
-    @Transactional
     @Test
     public void postRestaurantWithInvalidFieldsMustReturn422StatusCode() throws Exception
     {
@@ -361,7 +370,6 @@ public class AdminControllerTest
                 .andExpect(status().isUnprocessableEntity());
     }
 
-    @Transactional
     @Test
     public void postLunchWithInvalidFieldsMustReturn422StatusCode() throws Exception
     {

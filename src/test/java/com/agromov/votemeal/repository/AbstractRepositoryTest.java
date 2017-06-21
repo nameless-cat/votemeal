@@ -17,10 +17,10 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * Created by A.Gromov on 23.05.2017.
  */
-@Ignore
 @ContextConfiguration("classpath:spring/spring-db-test.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class AbstractRepositoryTest
+@Transactional
+abstract public class AbstractRepositoryTest
 {
     public final Logger log = getLogger(getClass());
 

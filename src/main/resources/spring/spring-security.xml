@@ -14,8 +14,11 @@
         <csrf disabled="true"/>
     </http>
 
+    <beans:bean class="com.agromov.votemeal.util.PasswordUtils" id="passwordEncoder" factory-method="getPasswordEncoder"/>
+
     <authentication-manager>
         <authentication-provider user-service-ref="userService">
+            <password-encoder ref="passwordEncoder"/>
         </authentication-provider>
     </authentication-manager>
 </beans:beans>
