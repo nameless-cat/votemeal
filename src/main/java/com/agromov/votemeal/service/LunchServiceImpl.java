@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -49,6 +50,12 @@ public class LunchServiceImpl
         {
             throw new EntityNotFoundException();
         }
+    }
+
+    @Override
+    public List<Lunch> getAll(long restaurantId) throws EntityNotFoundException
+    {
+        return repository.getAll(restaurantId);
     }
 
     @Override

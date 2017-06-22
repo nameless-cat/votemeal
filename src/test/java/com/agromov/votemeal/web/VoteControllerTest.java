@@ -6,7 +6,6 @@ import com.agromov.votemeal.repository.VoteRepository;
 import org.apache.commons.collections4.IterableUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,9 +16,9 @@ import static com.agromov.votemeal.TestUtil.userHttpBasic;
 import static com.agromov.votemeal.UserTestData.MARIA;
 import static com.agromov.votemeal.UserTestData.MARIA_ID;
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
-import static com.agromov.votemeal.web.VoteController.VOTE_URL;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,13 +29,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class VoteControllerTest
         extends AbstractControllerTest
 {
+    private static final String VOTE_URL = VoteController.VOTE_URL + "/";
+
     @Autowired
     private VoteRepository voteRepository;
 
     @Autowired
     private UserRepository userRepository;
 
-    @Transactional
     @Test
     public void postVoteMustIncrementCounterOfVotesOfRestaurant() throws Exception
     {
@@ -48,7 +48,6 @@ public class VoteControllerTest
         assertEquals(1, voteRepository.get(currentDate(), BENJAMIN.getId()).getVotes());
     }
 
-    @Transactional
     @Test
     public void postVoteMustRefreshVoteHistoryOfUser() throws Exception
     {
@@ -62,7 +61,6 @@ public class VoteControllerTest
                 vh -> vh.getDate().equals(currentDate())));
     }
 
-    @Transactional
     @Test
     public void revoteOnTheSameRestaurantMustNotIncrementVotes() throws Exception
     {
@@ -79,7 +77,6 @@ public class VoteControllerTest
                 .getVotes());
     }
 
-    @Transactional
     @Test
     public void revoteOnTheDifferentRestaurantMustDeletePreviousVote() throws Exception
     {
@@ -97,7 +94,6 @@ public class VoteControllerTest
                 .getVotes());
     }
 
-    @Transactional
     @Test
     public void deleteVoteMustRemoveCurrentVoteOfUser() throws Exception
     {
@@ -111,5 +107,14 @@ public class VoteControllerTest
                 .findFirst()
                 .get()
                 .getVotes());
+    }
+
+    @Test
+    public void getCurrentVoteMustReturnRestaurantsWithLunches() throws Exception
+    {
+        mockMvc.perform(get(VOTE_URL)
+                .with(userHttpBasic(MARIA)))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }

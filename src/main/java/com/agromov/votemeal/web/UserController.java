@@ -32,7 +32,7 @@ public class UserController
     @Autowired
     private UserService service;
 
-    //todo пользователю отдается поле с ролью. Подумать, нужно ли оставить так как есть или отдавать только в определенных ситуациях
+    @JsonView(ViewWhen.SendUser.class)
     @GetMapping(value = "/profile/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public User getUserProfile(@PathVariable("id") Long id)
     {
@@ -40,6 +40,7 @@ public class UserController
         return service.get(id);
     }
 
+    @JsonView(ViewWhen.SendUser.class)
     @PutMapping(value = "/profile/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<User> updateUserProfile(@PathVariable("id") Long id, @Valid @RequestBody User user)
     {

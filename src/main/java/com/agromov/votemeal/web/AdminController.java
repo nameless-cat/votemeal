@@ -126,6 +126,13 @@ public class AdminController
         lunchService.save(id, lunch);
     }
 
+    @GetMapping(value = "restaurants/{id}/lunches", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<Lunch> getLunches(@PathVariable Long id)
+            throws EntityNotFoundException
+    {
+        return lunchService.getAll(id);
+    }
+
     @GetMapping(value = "restaurants/{id}/lunches/{lunchId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Lunch getLunch(@PathVariable Long id, @PathVariable Long lunchId)
             throws EntityNotFoundException

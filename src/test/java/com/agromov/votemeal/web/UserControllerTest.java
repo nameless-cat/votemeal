@@ -10,16 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import static com.agromov.votemeal.TestUtil.userHttpBasic;
 import static com.agromov.votemeal.UserTestData.*;
 import static com.agromov.votemeal.web.UserController.BASE_URL;
+import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.junit.Assert.*;
 
@@ -41,7 +42,11 @@ public class UserControllerTest
                 .with(userHttpBasic(MARIA)))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MATCHER.contentMatcher(MARIA))
+                .andExpect(jsonPath("$.id", is(2)))
+                .andExpect(jsonPath("$.name", is("Maria")))
+                .andExpect(jsonPath("$.email", is("maria@yandex.ru")))
+                .andExpect(jsonPath("$.enabled", is(true)))
+                .andExpect(jsonPath("$.registered", is("2015-04-23T17:15:02")))
                 .andExpect(status().isOk());
     }
 
