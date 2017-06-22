@@ -95,7 +95,7 @@ public class UserControllerTest
     }
 
     @Test
-    public void registerNewUserMustRefleChangesInDB() throws Exception
+    public void registerNewUserMustReflectChangesInDB() throws Exception
     {
         User user = new UserBuilder()
                 .withEmail("new.user@yandex.ru")
