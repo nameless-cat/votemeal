@@ -6,4 +6,8 @@ package com.agromov.votemeal.util.exception;
 public class VoteNotAcceptedException
         extends Exception
 {
+    public VoteNotAcceptedException(String message)
+    {
+        super(message);
+    }
 }

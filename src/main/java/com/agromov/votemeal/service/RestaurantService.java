@@ -2,8 +2,8 @@ package com.agromov.votemeal.service;
 
 import com.agromov.votemeal.model.Lunch;
 import com.agromov.votemeal.model.Restaurant;
+import com.agromov.votemeal.util.exception.NotFoundException;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 /**
@@ -13,13 +13,13 @@ public interface RestaurantService
 {
     List<Restaurant> getAll();
 
-    Restaurant get(Long id) throws EntityNotFoundException;
+    Restaurant get(Long id) throws NotFoundException;
 
     Restaurant save(Restaurant restaurant);
 
-    Restaurant update(Restaurant restaurant) throws EntityNotFoundException;
+    Restaurant update(Restaurant restaurant) throws NotFoundException;
 
-    void addLunch(Long id, Lunch lunch) throws EntityNotFoundException;
+    void addLunch(Long id, Lunch lunch) throws NotFoundException;
 
     void cacheEvict();
 }

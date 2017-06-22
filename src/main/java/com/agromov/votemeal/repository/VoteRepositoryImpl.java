@@ -2,6 +2,7 @@ package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.model.SimpleVote;
 import com.agromov.votemeal.model.Vote;
+import com.agromov.votemeal.util.exception.BadArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -43,7 +44,7 @@ public class VoteRepositoryImpl
     }
 
     @Override
-    public boolean decrement(long restaurantId) throws IllegalArgumentException
+    public boolean decrement(long restaurantId) throws BadArgumentException
     {
         SimpleVote vote = simpleRepository.findOne(new SimpleVote.SimpleVotePK(currentDate(), restaurantId));
 
@@ -51,7 +52,7 @@ public class VoteRepositoryImpl
             return false;
 
         if (vote.getVotes() < 1)
-            throw new IllegalArgumentException("Decrement operation forbidden. Initial value less than 1.");
+            throw new BadArgumentException();
 
         vote.setVotes(vote.getVotes() - 1);
 

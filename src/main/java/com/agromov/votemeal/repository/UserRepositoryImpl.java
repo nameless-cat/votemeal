@@ -3,6 +3,7 @@ package com.agromov.votemeal.repository;
 import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.model.User;
 import com.agromov.votemeal.model.VoteHistory;
+import com.agromov.votemeal.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
@@ -35,24 +36,43 @@ public class UserRepositoryImpl
     }
 
     @Override
-    public User update(User updated) throws EntityNotFoundException
+    public User update(User updated) throws NotFoundException
     {
         /**
          * todo см комментарии в {@link UserRepositoryTest#getAndModifyUserAndPersistMustReflectThisOnDB()}
         */
-        return repository.save(prepareToSave(updated));
+        try
+        {
+            return repository.save(prepareToSave(updated));
+        } catch (EntityNotFoundException e)
+        {
+            throw new NotFoundException();
+        }
     }
 
     @Override
-    public int delete(long id) throws EntityNotFoundException
+    public int delete(long id) throws NotFoundException
     {
-        return repository.delete(id);
+        try
+        {
+            return repository.delete(id);
+
+        } catch (EntityNotFoundException e)
+        {
+            throw new NotFoundException();
+        }
     }
 
     @Override
-    public User get(long id) throws EntityNotFoundException
+    public User get(long id) throws NotFoundException
     {
-        return repository.findOne(id);
+        try
+        {
+            return repository.findOne(id);
+        } catch (EntityNotFoundException e)
+        {
+            throw new NotFoundException();
+        }
     }
 
     @Override

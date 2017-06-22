@@ -5,16 +5,16 @@ import com.agromov.votemeal.model.Lunch;
 import com.agromov.votemeal.model.Vote;
 import com.agromov.votemeal.service.LunchService;
 import com.agromov.votemeal.service.VoteService;
+import com.agromov.votemeal.util.exception.NotFoundException;
 import com.agromov.votemeal.util.exception.VoteNotAcceptedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
-
 import java.util.List;
 
+import static com.agromov.votemeal.config.LocalizationCodes.TIME_IS_UP;
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
 import static com.agromov.votemeal.util.DateTimeUtil.currentTime;
 
@@ -37,16 +37,16 @@ public class VoteController
     private ProjectConstants projectConstants;
 
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @PostMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/{id}")
     public void incrementVote(@PathVariable Long id)
-            throws EntityNotFoundException, VoteNotAcceptedException
+            throws NotFoundException, VoteNotAcceptedException
     {
         maybeTimeIsUp();
         voteService.increment(id, Authorized.getUser().getId());
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @DeleteMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping
     public void incrementVote() throws VoteNotAcceptedException
     {
         maybeTimeIsUp();
@@ -61,7 +61,7 @@ public class VoteController
 
     @GetMapping(value = "/restaurant/{id}/lunches", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Lunch> getLunches(@PathVariable Long id)
-            throws EntityNotFoundException
+            throws NotFoundException
     {
         return lunchService.getAll(id);
     }
@@ -69,9 +69,6 @@ public class VoteController
     private void maybeTimeIsUp() throws VoteNotAcceptedException
     {
         if (currentTime().isAfter(projectConstants.getVoteDeadline()))
-
-            //todo need i18n
-            throw new VoteNotAcceptedException(/*"time is up"*/);
-
+            throw new VoteNotAcceptedException(TIME_IS_UP);
     }
 }

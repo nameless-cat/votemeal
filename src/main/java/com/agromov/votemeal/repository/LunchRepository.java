@@ -2,7 +2,6 @@ package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.model.Lunch;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static com.agromov.votemeal.util.ClassUtils.NOT_IMPLEMENTED;

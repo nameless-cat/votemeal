@@ -1,8 +1,8 @@
 package com.agromov.votemeal.service;
 
 import com.agromov.votemeal.model.Lunch;
+import com.agromov.votemeal.util.exception.NotFoundException;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 /**
@@ -10,13 +10,13 @@ import java.util.List;
  */
 public interface LunchService
 {
-    Lunch get(long restaurantId, long lunchId) throws EntityNotFoundException;
+    Lunch get(long restaurantId, long lunchId) throws NotFoundException;
 
-    Lunch save (long restaurantId, Lunch lunch) throws EntityNotFoundException;
+    Lunch save (long restaurantId, Lunch lunch) throws NotFoundException;
 
-    void update(long restaurantId, Lunch lunch) throws EntityNotFoundException;
+    void update(long restaurantId, Lunch lunch) throws NotFoundException;
 
-    void delete(long restaurantId, long lunchId) throws EntityNotFoundException;
+    void delete(long restaurantId, long lunchId) throws NotFoundException;
 
-    List<Lunch> getAll(long restaurantId) throws EntityNotFoundException;
+    List<Lunch> getAll(long restaurantId) throws NotFoundException;
 }

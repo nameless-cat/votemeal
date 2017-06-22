@@ -177,7 +177,6 @@ public class AdminControllerTest
     }
 
 
-    //todo не проходит если запускать все вместе. Только по-отдельности
     @Test
     public void getVoteWithDateMustReturnVoteListOfThatDate() throws Exception
     {
@@ -205,6 +204,18 @@ public class AdminControllerTest
                 voteService.get(currentDate()));
     }
 
+    @Test
+    public void putRestaurantsWithNonexistedIdsToCurrentVoteMustReturn400StatusCode() throws Exception
+    {
+        List<Long> ids = Arrays.asList(MCDONALDS_ID, NONEXISTENT_ID);
+
+        mockMvc.perform(put(ADMIN_URL + VOTE_URL)
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(JsonUtil.writeValue(ids)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     public void deleteRestaurantFromCurrentVoteMustReflectChangesInDB() throws Exception

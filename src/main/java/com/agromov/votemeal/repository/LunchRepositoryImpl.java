@@ -2,13 +2,12 @@ package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.model.Lunch;
 import com.agromov.votemeal.model.Restaurant;
+import com.agromov.votemeal.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -25,9 +24,15 @@ public class LunchRepositoryImpl
     private RestaurantJpaRepository restaurantJpaRepository;
 
     @Override
-    public Lunch get( long restaurantId, long id) throws EntityNotFoundException
+    public Lunch get( long restaurantId, long id) throws NotFoundException
     {
-        return repository.findByRestaurantIdAndId(restaurantId, id );
+        try
+        {
+            return repository.findByRestaurantIdAndId(restaurantId, id );
+        } catch (EntityNotFoundException e)
+        {
+            throw new NotFoundException();
+        }
     }
 
     @Override
@@ -45,11 +50,12 @@ public class LunchRepositoryImpl
     @Transactional
     @Override
     public Lunch save(long restaurantId, Lunch lunch)
+            throws NotFoundException
     {
         Restaurant restaurant = restaurantJpaRepository.findOne(restaurantId);
         if (restaurant == null)
         {
-            throw new EntityNotFoundException();
+            throw new NotFoundException();
         }
         lunch.setRestaurant(restaurant);
         return repository.save(lunch);

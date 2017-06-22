@@ -2,10 +2,11 @@ package com.agromov.votemeal.service;
 
 import com.agromov.votemeal.model.Lunch;
 import com.agromov.votemeal.repository.LunchRepository;
+import com.agromov.votemeal.repository.RestaurantRepository;
+import com.agromov.votemeal.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,52 +18,60 @@ public class LunchServiceImpl
         implements LunchService
 {
     @Autowired
-    private LunchRepository repository;
+    private LunchRepository lunchRepository;
+
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
     @Override
-    public Lunch get(long restaurantId, long lunchId) throws EntityNotFoundException
+    public Lunch get(long restaurantId, long lunchId) throws NotFoundException
     {
-        Lunch lunch = repository.get(restaurantId, lunchId);
+        Lunch lunch = lunchRepository.get(restaurantId, lunchId);
 
         if (lunch == null)
         {
-            throw new EntityNotFoundException();
+            throw new NotFoundException();
         }
 
         return lunch;
     }
 
     @Override
-    public Lunch save(long restaurantId, Lunch lunch) throws EntityNotFoundException
+    public Lunch save(long restaurantId, Lunch lunch) throws NotFoundException
     {
-        Lunch saved = repository.save(restaurantId, lunch);
+        Lunch saved = lunchRepository.save(restaurantId, lunch);
 
         if (saved == null)
-            throw new EntityNotFoundException();
+            throw new NotFoundException();
 
         return saved;
     }
 
     @Override
-    public void delete(long restaurantId, long lunchId) throws EntityNotFoundException
+    public void delete(long restaurantId, long lunchId) throws NotFoundException
     {
-        if (repository.delete(restaurantId, lunchId) == 0)
+        if (lunchRepository.delete(restaurantId, lunchId) == 0)
         {
-            throw new EntityNotFoundException();
+            throw new NotFoundException();
         }
     }
 
     @Override
-    public List<Lunch> getAll(long restaurantId) throws EntityNotFoundException
+    public List<Lunch> getAll(long restaurantId) throws NotFoundException
     {
-        return repository.getAll(restaurantId);
+        if (restaurantRepository.get(restaurantId) == null)
+        {
+            throw new NotFoundException();
+        }
+
+        return lunchRepository.getAll(restaurantId);
     }
 
     @Override
-    public void update(long restaurantId, Lunch lunch) throws EntityNotFoundException
+    public void update(long restaurantId, Lunch lunch) throws NotFoundException
     {
         Objects.requireNonNull(lunch.getId());
         get(restaurantId, lunch.getId());
-        repository.save(restaurantId, lunch);
+        lunchRepository.save(restaurantId, lunch);
     }
 }

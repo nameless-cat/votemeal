@@ -7,21 +7,20 @@ import com.agromov.votemeal.service.LunchService;
 import com.agromov.votemeal.service.RestaurantService;
 import com.agromov.votemeal.service.VoteService;
 import com.agromov.votemeal.util.ValidationUtils;
+import com.agromov.votemeal.util.exception.BadArgumentException;
+import com.agromov.votemeal.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
 import static com.agromov.votemeal.util.ValidationUtils.checkForNew;
@@ -53,14 +52,14 @@ public class AdminController
 
     @GetMapping(value = "restaurants/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Restaurant getRestaurant(@PathVariable("id") Long id)
-            throws EntityNotFoundException
+            throws NotFoundException
     {
         return restaurantService.get(id);
     }
 
     @PostMapping(value = "restaurants", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Restaurant> createRestaurant(@Valid @RequestBody Restaurant restaurant)
-            throws IllegalArgumentException
+            throws BadArgumentException
     {
         checkForNew(restaurant);
 
@@ -76,7 +75,7 @@ public class AdminController
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping(value = "restaurants/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public void updateRestaurant(@PathVariable long id, @Valid @RequestBody Restaurant restaurant)
-            throws EntityNotFoundException, IllegalArgumentException
+            throws NotFoundException, BadArgumentException
     {
         ValidationUtils.checkIdConsistence(restaurant, id);
 
@@ -85,14 +84,13 @@ public class AdminController
 
     @GetMapping(value = {"vote/{date}", "vote"}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Vote> getVoteAtDate(@PathVariable(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date)
-            throws IllegalArgumentException
+            throws BadArgumentException
     {
         if (date != null)
         {
             if (date.isAfter(currentDate()))
             {
-                //todo i18n
-                throw new IllegalArgumentException();
+                throw new BadArgumentException();
             }
 
             return voteService.get(date);
@@ -103,7 +101,7 @@ public class AdminController
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping(value = "vote", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public void addRestaurantsToCurrentVote(@RequestBody List<Long> restaurantIds)
-            throws IllegalArgumentException
+            throws BadArgumentException
     {
         voteService.add(restaurantIds);
     }
@@ -111,7 +109,7 @@ public class AdminController
     @ResponseStatus(HttpStatus.ACCEPTED)
     @DeleteMapping(value = "vote/{id}")
     public void removeRestaurantFromCurrentVote(@PathVariable("id") Long restaurantId)
-            throws EntityNotFoundException
+            throws NotFoundException
     {
         voteService.delete(restaurantId);
     }
@@ -119,7 +117,7 @@ public class AdminController
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "restaurants/{id}/lunches", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public void addLunchToRestaurantMenu(@PathVariable Long id, @Valid @RequestBody Lunch lunch)
-            throws EntityNotFoundException
+            throws NotFoundException
     {
         checkForNew(lunch);
 
@@ -128,14 +126,14 @@ public class AdminController
 
     @GetMapping(value = "restaurants/{id}/lunches", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Lunch> getLunches(@PathVariable Long id)
-            throws EntityNotFoundException
+            throws NotFoundException
     {
         return lunchService.getAll(id);
     }
 
     @GetMapping(value = "restaurants/{id}/lunches/{lunchId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Lunch getLunch(@PathVariable Long id, @PathVariable Long lunchId)
-            throws EntityNotFoundException
+            throws NotFoundException
     {
         return lunchService.get(id, lunchId);
     }
@@ -143,7 +141,7 @@ public class AdminController
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping(value = "restaurants/{id}/lunches/{lunchId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public void putLunch(@PathVariable Long id, @PathVariable Long lunchId, @Valid @RequestBody Lunch lunch)
-            throws EntityNotFoundException, IllegalArgumentException
+            throws NotFoundException, BadArgumentException
     {
         checkIdConsistence(lunch, lunchId);
 
@@ -152,7 +150,7 @@ public class AdminController
 
     @DeleteMapping(value = "restaurants/{id}/lunches/{lunchId}")
     public void deleteLunch(@PathVariable Long id, @PathVariable Long lunchId)
-            throws EntityNotFoundException
+            throws NotFoundException
     {
         lunchService.delete(id, lunchId);
     }

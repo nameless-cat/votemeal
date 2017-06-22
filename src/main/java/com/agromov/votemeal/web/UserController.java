@@ -3,6 +3,7 @@ package com.agromov.votemeal.web;
 import com.agromov.votemeal.model.User;
 import com.agromov.votemeal.model.VoteHistory;
 import com.agromov.votemeal.service.UserService;
+import com.agromov.votemeal.util.exception.BadArgumentException;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -54,7 +55,7 @@ public class UserController
     @JsonView(ViewWhen.SendUser.class)
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<User> registerUser(@Valid @RequestBody User user)
-            throws IllegalArgumentException
+            throws BadArgumentException
     {
         //todo несколько полей пароля -> UserTo
         checkForNew(user);

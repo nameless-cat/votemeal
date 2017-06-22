@@ -6,15 +6,19 @@ import com.agromov.votemeal.model.VoteHistory;
 import com.agromov.votemeal.repository.RestaurantRepository;
 import com.agromov.votemeal.repository.UserRepository;
 import com.agromov.votemeal.repository.VoteRepository;
+import com.agromov.votemeal.util.exception.BadArgumentException;
+import com.agromov.votemeal.util.exception.NotFoundException;
 import com.agromov.votemeal.util.exception.VoteNotAcceptedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.agromov.votemeal.config.LocalizationCodes.BAD_ARGUMENT_IN_REQUEST;
+import static com.agromov.votemeal.config.LocalizationCodes.NOT_VOTED_YET;
+import static com.agromov.votemeal.config.LocalizationCodes.VOTED_ALREADY;
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
 
 /**
@@ -42,14 +46,13 @@ public class VoteServiceImpl
     @Transactional
     @Override
     public void add(List<Long> restaurantIds)
-            throws IllegalArgumentException
+            throws BadArgumentException
     {
         // todo может можно сделать это одной операцией за одно обращение к базе?
         restaurantIds.forEach(id ->  {
             if (restaurantRepository.get(id) == null)
             {
-                //todo i18n
-                throw new IllegalArgumentException();
+                throw new BadArgumentException();
             }
             voteRepository.addToVote(id);
         });
@@ -58,7 +61,7 @@ public class VoteServiceImpl
     @Transactional
     @Override
     public void increment(long restaurantId, long userId)
-            throws EntityNotFoundException, VoteNotAcceptedException
+            throws NotFoundException, VoteNotAcceptedException
     {
         VoteHistory todayVoteHistory = getTodayVote(userId);
 
@@ -66,8 +69,7 @@ public class VoteServiceImpl
         {
             if (todayVoteHistory.getRestaurant().getId().equals(restaurantId))
             {
-                //todo i18n
-                throw new VoteNotAcceptedException(/*"already voted"*/);
+                throw new VoteNotAcceptedException(VOTED_ALREADY);
             }
 
             voteRepository.decrement(todayVoteHistory.getRestaurant().getId());
@@ -89,15 +91,15 @@ public class VoteServiceImpl
             voteRepository.decrement(restaurant.getId());
             userRepository.refreshHistory(userId, null);
         } else
-            throw new VoteNotAcceptedException(/*not voted yet for today*/);
+            throw new VoteNotAcceptedException(NOT_VOTED_YET);
     }
 
     @Override
-    public void delete(long restaurantId) throws EntityNotFoundException
+    public void delete(long restaurantId) throws NotFoundException
     {
         if (voteRepository.removeFromVote(restaurantId) == 0)
         {
-            throw new EntityNotFoundException();
+            throw new NotFoundException();
         }
     }
 

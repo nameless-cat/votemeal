@@ -2,6 +2,7 @@ package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.model.SimpleVote;
 import com.agromov.votemeal.model.Vote;
+import com.agromov.votemeal.util.exception.BadArgumentException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,7 +18,7 @@ public interface VoteRepository
 
     boolean increment(long restaurantId);
 
-    boolean decrement(long restaurantId) throws IllegalArgumentException;
+    boolean decrement(long restaurantId) throws BadArgumentException;
 
     List<Vote> getAll(LocalDate date);
 

@@ -1,5 +1,6 @@
 package com.agromov.votemeal.repository;
 
+import com.agromov.votemeal.util.exception.BadArgumentException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +51,7 @@ public class VoteRepositoryTest
         assertFalse(repository.increment(MCDONALDS.getId()));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = BadArgumentException.class)
     public void decrementVoteOfZeroMustThrowException() throws Exception
     {
         repository.decrement(BENJAMIN.getId());
