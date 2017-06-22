@@ -6,7 +6,6 @@ import com.agromov.votemeal.model.Vote;
 import com.agromov.votemeal.service.LunchService;
 import com.agromov.votemeal.service.RestaurantService;
 import com.agromov.votemeal.service.VoteService;
-import com.agromov.votemeal.util.ValidationUtils;
 import com.agromov.votemeal.util.exception.BadArgumentException;
 import com.agromov.votemeal.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
