@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.agromov.votemeal.config.LocalizationCodes.BAD_ARGUMENT_IN_REQUEST;
 import static com.agromov.votemeal.config.LocalizationCodes.NOT_VOTED_YET;
 import static com.agromov.votemeal.config.LocalizationCodes.VOTED_ALREADY;
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;

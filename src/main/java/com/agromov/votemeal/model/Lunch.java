@@ -1,10 +1,8 @@
 package com.agromov.votemeal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 /**
  * Created by A.Gromov on 22.05.2017.

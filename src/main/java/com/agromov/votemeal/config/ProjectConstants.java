@@ -1,7 +1,5 @@
 package com.agromov.votemeal.config;
 
-import org.springframework.context.annotation.Bean;
-
 import java.time.LocalTime;
 import java.util.Map;
 

@@ -4,7 +4,6 @@ package com.agromov.votemeal.repository;
 import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.model.User;
 import com.agromov.votemeal.model.VoteHistory;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 

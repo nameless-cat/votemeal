@@ -1,7 +1,6 @@
 package com.agromov.votemeal.model;
 
 import com.agromov.votemeal.web.ViewWhen;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
@@ -11,7 +10,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 

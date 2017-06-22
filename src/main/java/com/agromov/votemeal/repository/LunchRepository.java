@@ -4,8 +4,6 @@ import com.agromov.votemeal.model.Lunch;
 
 import java.util.List;
 
-import static com.agromov.votemeal.util.ClassUtils.NOT_IMPLEMENTED;
-
 /**
  * Created by A.Gromov on 31.05.2017.
  */

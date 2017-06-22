@@ -1,6 +1,5 @@
 package com.agromov.votemeal.web;
 
-import com.agromov.votemeal.UserTestData;
 import com.agromov.votemeal.model.User;
 import com.agromov.votemeal.service.UserService;
 import com.agromov.votemeal.util.UserBuilder;
@@ -62,7 +61,7 @@ public class UserControllerTest
     @Test
     public void putChangesOfUserProfileMustReflectChangesInDBAndReturn202Status() throws Exception
     {
-        User updated = UserTestData.getUpdated();
+        User updated = getUpdated();
 
         mockMvc.perform(put(BASE_URL + PROFILE_URL + MARIA_ID)
                 .with(userHttpBasic(MARIA))
@@ -118,7 +117,7 @@ public class UserControllerTest
     @Test
     public void putUpdatedUserWithInvalidFieldsMustReturn422StatusCode() throws Exception
     {
-        User updated = UserTestData.getUpdated();
+        User updated = getUpdated();
         updated.setName("");
         updated.setEmail("email");
         updated.setPassword("");
@@ -135,7 +134,7 @@ public class UserControllerTest
     @Test
     public void tryToSaveUserWithDuplicatedEmailMustReturn409StatusCode() throws Exception
     {
-        User user = UserTestData.getUpdated();
+        User user = getUpdated();
         user.setEmail("user@gmail.com");
 
         mockMvc.perform(put(BASE_URL + PROFILE_URL + MARIA_ID)

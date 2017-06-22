@@ -77,7 +77,7 @@ public class AdminController
     public void updateRestaurant(@PathVariable long id, @Valid @RequestBody Restaurant restaurant)
             throws NotFoundException, BadArgumentException
     {
-        ValidationUtils.checkIdConsistence(restaurant, id);
+        checkIdConsistence(restaurant, id);
 
         restaurantService.update(restaurant);
     }

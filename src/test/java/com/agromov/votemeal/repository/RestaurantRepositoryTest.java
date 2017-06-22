@@ -2,14 +2,12 @@ package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.RestaurantTestData;
 import com.agromov.votemeal.model.Restaurant;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 
 import static com.agromov.votemeal.RestaurantTestData.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by A.Gromov on 30.05.2017.

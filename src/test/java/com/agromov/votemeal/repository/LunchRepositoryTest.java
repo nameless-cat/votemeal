@@ -4,7 +4,6 @@ import com.agromov.votemeal.LunchTestData;
 import com.agromov.votemeal.model.Lunch;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -69,7 +68,7 @@ public class LunchRepositoryTest
     @Test
     public void saveLunchMustReflectChangesInDB() throws Exception
     {
-        Lunch created = LunchTestData.getCreated();
+        Lunch created = getCreated();
         created.setRestaurant(MCDONALDS);
         created.setId(repository.save(MCDONALDS_ID, created).getId());
         MATCHER.assertCollectionEquals(Arrays.asList(created, GRILLE_GURME, CHEESEBURGER), repository.getAll(MCDONALDS_ID));
@@ -78,7 +77,7 @@ public class LunchRepositoryTest
     @Test
     public void updateLunchMustReflectChangesInDB() throws Exception
     {
-        Lunch updated = LunchTestData.getUpdated();
+        Lunch updated = getUpdated();
         repository.save(MCDONALDS_ID, updated);
         MATCHER.assertCollectionEquals(Arrays.asList(updated, CHEESEBURGER), repository.getAll(MCDONALDS_ID));
     }

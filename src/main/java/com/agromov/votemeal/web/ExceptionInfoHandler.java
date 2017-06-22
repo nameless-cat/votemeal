@@ -1,6 +1,5 @@
 package com.agromov.votemeal.web;
 
-import com.agromov.votemeal.util.ValidationUtils;
 import com.agromov.votemeal.util.exception.BadArgumentException;
 import com.agromov.votemeal.util.exception.ErrorInfo;
 import com.agromov.votemeal.util.exception.NotFoundException;

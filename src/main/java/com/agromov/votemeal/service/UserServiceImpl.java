@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.agromov.votemeal.util.UserUtils.prepareToSave;
 
 /**
  * Created by A.Gromov on 12.06.2017.

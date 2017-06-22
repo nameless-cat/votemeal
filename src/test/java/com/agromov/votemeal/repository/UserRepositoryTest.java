@@ -1,6 +1,5 @@
 package com.agromov.votemeal.repository;
 
-import com.agromov.votemeal.UserTestData;
 import com.agromov.votemeal.model.User;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,7 +27,7 @@ public class UserRepositoryTest
     }
 
     @Test
-    public void getInexistentUserMustReturnNull() throws Exception
+    public void getNonexistentUserMustReturnNull() throws Exception
     {
         Assert.assertEquals(null,repository.get(100));
     }
@@ -44,7 +43,7 @@ public class UserRepositoryTest
 
     @Transactional
     @Test
-    public void deleteInexistentUserMustReturnZero() throws Exception
+    public void deleteNonexistentUserMustReturnZero() throws Exception
     {
         Assert.assertEquals(0, repository.delete(100));
     }
@@ -62,7 +61,7 @@ public class UserRepositoryTest
     @Test
     public void getAndModifyUserAndPersistMustReflectThisOnDB() throws Exception
     {
-        User updated = UserTestData.getUpdated();
+        User updated = getUpdated();
         repository.update(updated);
         MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, updated, OLEG, USER), repository.getAll());
         // слишком много запросов для сохранения изменений
@@ -72,7 +71,7 @@ public class UserRepositoryTest
     @Test
     public void saveUserMustPersistItToDB() throws Exception
     {
-        User created = UserTestData.getCreated();
+        User created = getCreated();
         created.setId(repository.save(created).getId());
         MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, MARIA, created, OLEG, USER), repository.getAll());
     }
@@ -80,7 +79,7 @@ public class UserRepositoryTest
     @Test
     public void getListUserWithLimitAndOffsetInCorrectOrder() throws Exception
     {
-        User created = UserTestData.getCreated();
+        User created = getCreated();
         created.setId(repository.save(created).getId());
         MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, MARIA, created), repository.getRange(0, 3));
         // todo попробовать sql query
