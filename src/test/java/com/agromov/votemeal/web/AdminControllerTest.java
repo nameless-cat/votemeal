@@ -101,7 +101,7 @@ public class AdminControllerTest
                 .content(JsonUtil.writeValue(created)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(redirectedUrl("http://localhost" + ADMIN_URL + RESTAURANTS_URL + LAST_CREATED_ID++));
+                .andExpect(redirectedUrl("http://localhost" + ADMIN_URL + RESTAURANTS_URL + LAST_CREATED_ID.getAndIncrement()));
 
         List<Restaurant> restaurants = new ArrayList<>(RESTAURANTS);
         restaurants.add(0, created);
@@ -267,7 +267,7 @@ public class AdminControllerTest
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        created.setId(LAST_CREATED_ID++);
+        created.setId(LAST_CREATED_ID.getAndIncrement());
         created.setRestaurant(MCDONALDS);
 
         em.flush();

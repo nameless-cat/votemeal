@@ -109,7 +109,7 @@ public class UserControllerTest
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        User created = service.get(LAST_CREATED_ID++);
+        User created = service.get(LAST_CREATED_ID.getAndIncrement());
         assertEquals(user.getEmail(), created.getEmail());
         assertEquals(user.getName(), created.getName());
     }

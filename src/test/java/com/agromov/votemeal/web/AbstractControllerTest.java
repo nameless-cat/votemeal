@@ -12,6 +12,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import javax.annotation.PostConstruct;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 /**
@@ -35,7 +37,7 @@ abstract public class AbstractControllerTest
         CHARACTER_ENCODING_FILTER.setForceEncoding(true);
     }
 
-    protected static long LAST_CREATED_ID = 25;
+    protected static AtomicLong LAST_CREATED_ID = new AtomicLong(25);
 
     protected MockMvc mockMvc;
 
