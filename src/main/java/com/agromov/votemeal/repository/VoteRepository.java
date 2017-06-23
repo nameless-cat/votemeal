@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface VoteRepository
 {
-    SimpleVote addToVote(long restaurantId);
+    void addToVote(List<Long> restaurantId) throws Exception;
 
     int removeFromVote(long restaurantId);
 

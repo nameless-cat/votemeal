@@ -45,16 +45,28 @@ public class VoteServiceImpl
     @Transactional
     @Override
     public void add(List<Long> restaurantIds)
-            throws BadArgumentException
+            throws Exception
     {
-        // todo может можно сделать это одной операцией за одно обращение к базе?
-        restaurantIds.forEach(id ->  {
-            if (restaurantRepository.get(id) == null)
+        if (!isRestaurantsExisted(restaurantIds))
+        {
+            throw new BadArgumentException();
+        }
+
+        voteRepository.addToVote(restaurantIds);
+    }
+
+    private boolean isRestaurantsExisted(List<Long> restaurantIds)
+    {
+        List<Restaurant> all = restaurantRepository.getAll();
+
+        for (Long id : restaurantIds)
+        {
+            if (all.stream().noneMatch(r -> r.getId().equals(id)))
             {
-                throw new BadArgumentException();
+                return false;
             }
-            voteRepository.addToVote(id);
-        });
+        }
+        return true;
     }
 
     @Transactional

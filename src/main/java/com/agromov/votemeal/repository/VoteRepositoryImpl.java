@@ -2,6 +2,7 @@ package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.model.SimpleVote;
 import com.agromov.votemeal.model.Vote;
+import com.agromov.votemeal.util.JpaUtils;
 import com.agromov.votemeal.util.exception.BadArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,10 +26,19 @@ public class VoteRepositoryImpl
     @Autowired
     private SimpleVoteRepository simpleRepository;
 
+    @Autowired
+    private JpaUtils jpaUtils;
+
     @Override
-    public SimpleVote addToVote(long restaurantId)
+    public void addToVote(List<Long> restaurantIds) throws Exception
     {
-        return simpleRepository.save(new SimpleVote(restaurantId));
+        try
+        {
+            jpaUtils.batchInsert(SimpleVote.class, restaurantIds);
+        } catch (IllegalAccessException | InstantiationException e)
+        {
+            throw new Exception();
+        }
     }
 
     @Override

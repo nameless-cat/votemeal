@@ -16,7 +16,6 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 public class ValidationUtils
 {
-    //todo сделать передачу класса в логгер динамической
     private static final Logger LOG = getLogger(ValidationUtils.class);
 
     public static void checkForNew(BaseEntity entity)

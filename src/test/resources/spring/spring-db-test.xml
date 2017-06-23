@@ -77,4 +77,6 @@
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
           p:entityManagerFactory-ref="entityManagerFactory"/>
 
+    <bean id="jpaUtils" class="com.agromov.votemeal.util.JpaUtils"/>
+
 </beans>

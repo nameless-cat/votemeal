@@ -33,4 +33,9 @@ public class ProjectConstants
     {
         return (LocalTime) projectSettings.computeIfAbsent(VOTE_DEADLINE, s -> LocalTime.of(11, 0));
     }
+
+    public int getBatchSize()
+    {
+        return (int) projectSettings.computeIfAbsent(JPA_BATCH_SIZE, s -> 10);
+    }
 }

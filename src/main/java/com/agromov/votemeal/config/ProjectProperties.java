@@ -7,5 +7,5 @@ public interface ProjectProperties
 {
     String VOTE_DEADLINE = "app.vote_deadline";
 
-    String RESTAURANT_CACHE = "app.restaurant_cache";
+    String JPA_BATCH_SIZE = "jpa.batch_size";
 }

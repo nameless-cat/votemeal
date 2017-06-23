@@ -1,5 +1,7 @@
 package com.agromov.votemeal.model;
 
+import com.agromov.votemeal.util.JpaUtils;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -16,8 +18,10 @@ import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
 @Entity
 @Table(name = "votes")
 public class SimpleVote
-    extends BaseVote
+        extends BaseVote
+        implements JpaUtils.BatchUpdatable<Long, SimpleVote>
 {
+    @SuppressWarnings("JpaAttributeTypeInspection")
     @EmbeddedId
     private SimpleVotePK pk;
 
@@ -34,7 +38,8 @@ public class SimpleVote
         this.pk.restaurantId = restaurantId;
     }
 
-    public static class SimpleVotePK implements Serializable
+    public static class SimpleVotePK
+            implements Serializable
     {
         @NotNull
         @Column(name = "date", updatable = false)
@@ -44,7 +49,9 @@ public class SimpleVote
         @Column(name = "restaurant_id")
         private Long restaurantId;
 
-        public SimpleVotePK() {}
+        public SimpleVotePK()
+        {
+        }
 
         public SimpleVotePK(LocalDate date, Long restaurantId)
         {
@@ -91,6 +98,13 @@ public class SimpleVote
             result = 31 * result + (getRestaurantId() != null ? getRestaurantId().hashCode() : 0);
             return result;
         }
+    }
+
+    @Override
+    public SimpleVote setArgument(Long argument)
+    {
+        this.pk.restaurantId = argument;
+        return this;
     }
 
     public SimpleVotePK getPk()

@@ -16,7 +16,9 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * Created by A.Gromov on 23.05.2017.
  */
-@ContextConfiguration("classpath:spring/spring-db-test.xml")
+@ContextConfiguration({
+        "classpath:spring/spring-db-test.xml",
+        "classpath:spring/spring-app-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 abstract public class AbstractRepositoryTest

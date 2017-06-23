@@ -3,9 +3,11 @@ package com.agromov.votemeal.repository;
 import com.agromov.votemeal.util.exception.BadArgumentException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static com.agromov.votemeal.RestaurantTestData.*;
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
@@ -26,7 +28,7 @@ public class VoteRepositoryTest
     @Test
     public void addRestaurantToVoteMustReflectChangesInDB() throws Exception
     {
-        repository.addToVote(MCDONALDS.getId());
+        repository.addToVote(Collections.singletonList(MCDONALDS_ID));
         MATCHER.assertCollectionEquals(Arrays.asList(CHOCO_VOTE, SUBWAY_VOTE, BENJAMIN_VOTE, MCDONALDS_VOTE), repository.getAll(currentDate()));
         // todo слишком много запросов в базу, BatchSize в Vote не помог
     }

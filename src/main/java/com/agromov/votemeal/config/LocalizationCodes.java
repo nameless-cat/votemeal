@@ -16,4 +16,8 @@ public interface LocalizationCodes
     String ACCESS_TO_PROFILE_DENIED = "error.accessToUserProfileDenied";
 
     String ENTITY_NOT_FOUND = "error.entityNotFound";
+
+    String EMAIL_EXISTS = "error.emailExists";
+
+    String INTERNAL_ERROR = "error.internalServerError";
 }

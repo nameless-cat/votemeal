@@ -15,7 +15,7 @@ public interface VoteService
 {
     List<Vote> get(LocalDate date);
 
-    void add(List<Long> restaurantIds) throws BadArgumentException;
+    void add(List<Long> restaurantIds) throws Exception;
 
     void delete(long restaurantId) throws NotFoundException;
 

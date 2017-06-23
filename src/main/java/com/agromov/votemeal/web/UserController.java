@@ -4,6 +4,7 @@ import com.agromov.votemeal.model.User;
 import com.agromov.votemeal.model.VoteHistory;
 import com.agromov.votemeal.service.UserService;
 import com.agromov.votemeal.util.exception.BadArgumentException;
+import com.agromov.votemeal.util.exception.ErrorInfo;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -13,12 +14,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.security.AccessControlException;
 import java.util.List;
 
+import static com.agromov.votemeal.config.LocalizationCodes.EMAIL_EXISTS;
 import static com.agromov.votemeal.util.ValidationUtils.*;
+import static com.agromov.votemeal.web.ExceptionInfoHandler.logAndGetErrorInfo;
 
 /**
  * Created by A.Gromov on 12.06.2017.
@@ -31,6 +35,9 @@ public class UserController
 
     @Autowired
     private UserService service;
+
+    @Autowired
+    private MessageUtils messageUtils;
 
     @JsonView(ViewWhen.SendUser.class)
     @GetMapping(value = "/profile/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -76,13 +83,10 @@ public class UserController
         return service.getHistory(id);
     }
 
-    /**
-     * todo сделать через {@link ExceptionInfoHandler}
-     */
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public void catcher()
+    public ErrorInfo catcher(HttpServletRequest request)
     {
-        System.out.println("email duplicate");
+        return logAndGetErrorInfo(request, "DuplicateDataException", messageUtils.getMessage(EMAIL_EXISTS));
     }
 }

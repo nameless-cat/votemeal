@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.AccessControlException;
 import java.util.Arrays;
 
+import static com.agromov.votemeal.config.LocalizationCodes.INTERNAL_ERROR;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -68,8 +69,10 @@ public class ExceptionInfoHandler
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = Exception.class)
-    public void exceptionHandle()
+    public ErrorInfo exceptionHandle(HttpServletRequest request, Exception e)
     {
+        LOG.warn("{} exception at request {}: {}", e.getCause(), request.getRequestURL(), e.getMessage());
+        return new ErrorInfo(request.getRequestURL(), "ServerException", messageUtils.getMessage(INTERNAL_ERROR));
     }
 
     private ErrorInfo logAndGetValidationErrorInfo(HttpServletRequest req, BindingResult result)
@@ -81,7 +84,7 @@ public class ExceptionInfoHandler
         return logAndGetErrorInfo(req, "ValidationException", details);
     }
 
-    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, String cause, String... details) {
+    public static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, String cause, String... details) {
         LOG.warn("{} exception at request {}: {}", cause, req.getRequestURL(), Arrays.toString(details));
         return new ErrorInfo(req.getRequestURL(), cause, details);
     }

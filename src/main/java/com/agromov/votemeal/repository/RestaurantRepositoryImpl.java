@@ -32,7 +32,6 @@ public class RestaurantRepositoryImpl
     @Override
     public Restaurant save(Restaurant restaurant)
     {
-        //todo Assert.notNull проверять все сущности перед сохранением во всех репозиториях
         return repository.save(restaurant);
     }
 

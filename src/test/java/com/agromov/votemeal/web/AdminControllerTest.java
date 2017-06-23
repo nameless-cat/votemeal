@@ -190,7 +190,7 @@ public class AdminControllerTest
     @Test
     public void putRestaurantsToCurrentVoteMustReflectChangesInDB() throws Exception
     {
-        List<Long> ids = Collections.singletonList(MCDONALDS_ID);
+        List<Long> ids = Arrays.asList(MCDONALDS.getId(), POTATO.getId());
 
         mockMvc.perform(put(ADMIN_URL + VOTE_URL)
                 .with(userHttpBasic(ADMIN))
@@ -200,12 +200,12 @@ public class AdminControllerTest
                 .andExpect(status().isAccepted());
 
         VoteTestData.MATCHER.assertCollectionEquals(
-                Arrays.asList(CHOCO_VOTE, SUBWAY_VOTE, BENJAMIN_VOTE, MCDONALDS_VOTE),
+                Arrays.asList(CHOCO_VOTE, SUBWAY_VOTE, BENJAMIN_VOTE, POTATO_VOTE, MCDONALDS_VOTE),
                 voteService.get(currentDate()));
     }
 
     @Test
-    public void putRestaurantsWithNonexistedIdsToCurrentVoteMustReturn400StatusCode() throws Exception
+    public void putRestaurantsWithNonexistentIdsToCurrentVoteMustReturn400StatusCode() throws Exception
     {
         List<Long> ids = Arrays.asList(MCDONALDS_ID, NONEXISTENT_ID);
 
@@ -229,13 +229,13 @@ public class AdminControllerTest
                 Arrays.asList(SUBWAY_VOTE, BENJAMIN_VOTE),
                 voteService.get(currentDate()));
 
-        int finded = em.createQuery("SELECT vh FROM VoteHistory vh WHERE vh.date=?1 AND vh.restaurant.id=?2", VoteHistory.class)
+        int found = em.createQuery("SELECT vh FROM VoteHistory vh WHERE vh.date=?1 AND vh.restaurant.id=?2", VoteHistory.class)
                 .setParameter(1, currentDate())
                 .setParameter(2, CHOCO.getId())
                 .getResultList()
                 .size();
 
-        assertEquals(0, finded);
+        assertEquals(0, found);
     }
 
 

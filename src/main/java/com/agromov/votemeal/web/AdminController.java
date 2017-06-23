@@ -100,7 +100,7 @@ public class AdminController
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping(value = "vote", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public void addRestaurantsToCurrentVote(@RequestBody List<Long> restaurantIds)
-            throws BadArgumentException
+            throws Exception
     {
         voteService.add(restaurantIds);
     }

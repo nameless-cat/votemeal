@@ -30,6 +30,7 @@ public class VoteTestData
     public static final Vote MCDONALDS_VOTE_PAST = new Vote(TEST_DATE, MCDONALDS, 0);
 
     public static final Vote MCDONALDS_VOTE = new Vote(currentDate(), MCDONALDS, 0);
+    public static final Vote POTATO_VOTE = new Vote(currentDate(), POTATO, 0);
     public static final Vote CHOCO_VOTE = new Vote(currentDate(), CHOCO, 2);
     public static final Vote BENJAMIN_VOTE = new Vote(currentDate(), BENJAMIN, 0);
     public static final Vote SUBWAY_VOTE = new Vote(currentDate(), SUBWAY, 1);
