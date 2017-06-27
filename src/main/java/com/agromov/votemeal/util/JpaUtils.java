@@ -14,7 +14,6 @@ import java.util.List;
  */
 public class JpaUtils
 {
-    //todo попробовать @PersistenceContext
     @Autowired
     private EntityManager em;
 

@@ -51,7 +51,6 @@ public class UserController
     @PutMapping(value = "/profile/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<User> updateUserProfile(@PathVariable("id") Long id, @Valid @RequestBody User user)
     {
-        //todo нужно проверить старый пароль при сохранении нового. -> несколько полей пароля -> UserTo
         checkForIdPresent(user);
         checkUserIdConsistent(id);
         checkUserIdConsistent(user.getId());
@@ -63,7 +62,6 @@ public class UserController
     public ResponseEntity<User> registerUser(@Valid @RequestBody User user)
             throws BadArgumentException
     {
-        //todo несколько полей пароля -> UserTo
         checkForNew(user);
         User saved = service.save(user);
 

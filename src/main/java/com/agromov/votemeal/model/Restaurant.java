@@ -15,7 +15,6 @@ import java.util.Set;
 /**
  * Created by A.Gromov on 22.05.2017.
  */
-//todo проверить работу кэша
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(name = "restaurants_unique_name_id_idx", columnNames = {"id", "name"})})

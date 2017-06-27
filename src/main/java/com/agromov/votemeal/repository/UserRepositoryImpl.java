@@ -38,9 +38,6 @@ public class UserRepositoryImpl
     @Override
     public User update(User updated) throws NotFoundException
     {
-        /**
-         * todo см комментарии в {@link UserRepositoryTest#getAndModifyUserAndPersistMustReflectThisOnDB()}
-        */
         try
         {
             return repository.save(prepareToSave(updated));

@@ -30,7 +30,6 @@ public class VoteRepositoryTest
     {
         repository.addToVote(Collections.singletonList(MCDONALDS_ID));
         MATCHER.assertCollectionEquals(Arrays.asList(CHOCO_VOTE, SUBWAY_VOTE, BENJAMIN_VOTE, MCDONALDS_VOTE), repository.getAll(currentDate()));
-        // todo слишком много запросов в базу, BatchSize в Vote не помог
     }
 
     @Test
