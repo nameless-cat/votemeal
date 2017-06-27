@@ -54,7 +54,3 @@ INSERT INTO VOTE_HISTORY (RESTAURANT_ID, USER_ID, DATE) VALUES
   (7, 2, current_date),
   (7, 3, current_date),
   (9, 4, current_date);
-
--- INSERT INTO VOTES (DATE) VALUES
---   ('2014-05-20'),
---   (current_date);

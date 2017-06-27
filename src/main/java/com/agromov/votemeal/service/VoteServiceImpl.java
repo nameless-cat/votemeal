@@ -47,6 +47,8 @@ public class VoteServiceImpl
     public void add(List<Long> restaurantIds)
             throws Exception
     {
+        //todo нужна проверка на то, что ресторан уже есть в списке голосования
+        //нужно перехватить DataIntegrityViolationException в контроллере
         if (!isRestaurantsExisted(restaurantIds))
         {
             throw new BadArgumentException();
