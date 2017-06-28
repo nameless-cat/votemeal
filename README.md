@@ -42,3 +42,12 @@ Each restaurant provides new menu each day.
 |            | `one lunch` | `get: /admin/restaurants/CAFE_ID/lunches/LUNCH_ID`| *Show one menu row* |
 |            | `edit lunch`| `put: /admin/restaurants/CAFE_ID/lunches/LUNCH_ID`| *Edit one menu row* |
 |            | `delete lunch` | `delete: /admin/restaurants/CAFE_ID/lunches/LUNCH_ID` | *Delete one menu row* |
+|            | `shift deadline` | `post: /admin/deadline` | *Change current vote deadline time* |
+
+#### Some curl commands
+
+- `curl -u maria@yandex.ru:password http://localhost:8080/v1/vote/8 -X POST` 								*post a vote*
+- `curl -u maria@yandex.ru:password http://localhost:8080/v1/vote` 											*show restaurant list for vote*
+- `curl -u maria@yandex.ru:password http://localhost:8080/v1/vote/restaurant/7/lunches`  					*show restaurant menu*
+- `curl -u maria@yandex.ru:password http://localhost:8080/v1/vote -X DELETE`								*remove a vote*
+- `curl -u admin@gmail.com:admin http://localhost:8080/v1/admin/deadline -X POST --data="time=14:00"` 		*shift vote deadline*

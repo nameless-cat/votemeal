@@ -1,6 +1,7 @@
 package com.agromov.votemeal.config;
 
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.agromov.votemeal.config.ProjectProperties.*;
@@ -12,7 +13,9 @@ public class ProjectConstants
 {
     private Map<String, Object> projectSettings;
 
-    public ProjectConstants() {}
+    public ProjectConstants() {
+        projectSettings = new HashMap<>();
+    }
 
     public ProjectConstants(Map<String, Object> projectSettings)
     {
@@ -37,5 +40,10 @@ public class ProjectConstants
     public int getBatchSize()
     {
         return (int) projectSettings.computeIfAbsent(JPA_BATCH_SIZE, s -> 10);
+    }
+
+    public void setParam(String param, Object value)
+    {
+        projectSettings.put(param, value);
     }
 }

@@ -1,5 +1,6 @@
 package com.agromov.votemeal.web;
 
+import com.agromov.votemeal.config.ProjectConstants;
 import com.agromov.votemeal.model.Lunch;
 import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.model.Vote;
@@ -19,8 +20,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
+import static com.agromov.votemeal.config.ProjectProperties.VOTE_DEADLINE;
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
 import static com.agromov.votemeal.util.ValidationUtils.checkForNew;
 import static com.agromov.votemeal.util.ValidationUtils.checkIdConsistence;
@@ -42,6 +45,9 @@ public class AdminController
 
     @Autowired
     private LunchService lunchService;
+
+    @Autowired
+    private ProjectConstants projectConstants;
 
     @GetMapping(value = "restaurants", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Restaurant> getRestaurants()
@@ -152,5 +158,11 @@ public class AdminController
             throws NotFoundException
     {
         lunchService.delete(id, lunchId);
+    }
+
+    @PostMapping(value = "deadline")
+    public void changeDeadLine(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime time)
+    {
+        projectConstants.setParam(VOTE_DEADLINE, time);
     }
 }
