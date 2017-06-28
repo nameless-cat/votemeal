@@ -3,6 +3,7 @@ package com.agromov.votemeal.config;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.agromov.votemeal.config.ProjectProperties.*;
 
@@ -14,7 +15,7 @@ public class ProjectConstants
     private Map<String, Object> projectSettings;
 
     public ProjectConstants() {
-        projectSettings = new HashMap<>();
+        projectSettings = new ConcurrentHashMap<>();
     }
 
     public ProjectConstants(Map<String, Object> projectSettings)
