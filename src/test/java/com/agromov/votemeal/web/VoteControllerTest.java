@@ -45,7 +45,7 @@ public class VoteControllerTest
                 .andDo(print())
                 .andExpect(status().isAccepted());
 
-        assertEquals(1, voteRepository.get(currentDate(), BENJAMIN.getId()).getVotes());
+        assertEquals(1,(int) voteRepository.get(currentDate(), BENJAMIN.getId()).getVotes());
     }
 
     @Test
@@ -69,7 +69,7 @@ public class VoteControllerTest
                 .andDo(print())
                 .andExpect(status().isNotAcceptable());
 
-        assertEquals(2, voteRepository.getAll(currentDate())
+        assertEquals(2, (int) voteRepository.getAll(currentDate())
                 .stream()
                 .filter(v -> v.getRestaurant().equals(CHOCO))
                 .findFirst()
@@ -87,7 +87,7 @@ public class VoteControllerTest
 
         List<Vote> votes = voteRepository.getAll(currentDate());
 
-        assertEquals(1, votes.stream()
+        assertEquals(1, (int) votes.stream()
                 .filter(v -> v.getRestaurant().equals(CHOCO))
                 .findFirst()
                 .get()
@@ -102,7 +102,7 @@ public class VoteControllerTest
                 .andDo(print())
                 .andExpect(status().isAccepted());
 
-        assertEquals(1, voteRepository.getAll(currentDate()).stream()
+        assertEquals(1, (int) voteRepository.getAll(currentDate()).stream()
                 .filter(v -> v.getRestaurant().equals(CHOCO))
                 .findFirst()
                 .get()

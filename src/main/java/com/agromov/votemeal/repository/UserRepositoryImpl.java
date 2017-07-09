@@ -2,6 +2,7 @@ package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.model.User;
+import com.agromov.votemeal.model.Vote;
 import com.agromov.votemeal.model.VoteHistory;
 import com.agromov.votemeal.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDate;
 import java.util.List;
 
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
@@ -91,14 +91,15 @@ public class UserRepositoryImpl
     }
 
     @Override
-    public void refreshHistory(long userId, Restaurant restaurant)
+    public void addToCurrentHistory(long userId, Restaurant restaurant, Vote vote)
     {
-        LocalDate date = currentDate();
-        historyRepository.delete(userId, date);
-        if (restaurant != null)
-        {
-            historyRepository.save(new VoteHistory(date, restaurant, userId));
-        }
+        historyRepository.save(new VoteHistory(currentDate(), restaurant, userId, vote));
+    }
+
+    @Override
+    public void deleteFromCurrentHistory(Long userId)
+    {
+        historyRepository.delete(userId, currentDate());
     }
 
     @Override

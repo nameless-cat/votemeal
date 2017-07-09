@@ -47,7 +47,7 @@ public class VoteController
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @DeleteMapping
-    public void incrementVote() throws VoteNotAcceptedException
+    public void deleteVote() throws VoteNotAcceptedException
     {
         maybeTimeIsUp();
         voteService.decrement(Authorized.getUser().getId());

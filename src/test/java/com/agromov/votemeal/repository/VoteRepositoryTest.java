@@ -28,7 +28,7 @@ public class VoteRepositoryTest
     @Test
     public void addRestaurantToVoteMustReflectChangesInDB() throws Exception
     {
-        repository.addToVote(Collections.singletonList(MCDONALDS_ID));
+        repository.addToVote(Collections.singletonList(MCDONALDS));
         MATCHER.assertCollectionEquals(Arrays.asList(CHOCO_VOTE, SUBWAY_VOTE, BENJAMIN_VOTE, MCDONALDS_VOTE), repository.getAll(currentDate()));
     }
 
@@ -43,7 +43,7 @@ public class VoteRepositoryTest
     public void incrementVoteMustReflectChangesInDB() throws Exception
     {
         repository.increment(SUBWAY.getId());
-        assertEquals(2, repository.get(currentDate(), SUBWAY.getId()).getVotes());
+        assertEquals(2, (int) repository.get(currentDate(), SUBWAY.getId()).getVotes());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class VoteRepositoryTest
     public void decrementVoteMustReflectChangesInDB() throws Exception
     {
         repository.decrement(SUBWAY.getId());
-        assertEquals(0, repository.get(currentDate(), SUBWAY.getId()).getVotes());
+        assertEquals(0, (int) repository.get(currentDate(), SUBWAY.getId()).getVotes());
     }
 
     @Test

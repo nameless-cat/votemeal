@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.agromov.votemeal.RestaurantTestData.*;
+import static com.agromov.votemeal.web.VoteTestData.CHOCO_VOTE;
+import static com.agromov.votemeal.web.VoteTestData.POTATO_VOTE_PAST;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -65,8 +67,8 @@ public class UserTestData
     public static final long ADMIN_ID = ADMIN.getId();
 
     public static final List<VoteHistory> MARIA_HISTORY  = new ArrayList<>(Arrays.asList(
-            new VoteHistory(LocalDate.now(), CHOCO, MARIA_ID),
-            new VoteHistory(LocalDate.parse("2014-05-20"), POTATO, MARIA_ID)
+            new VoteHistory(LocalDate.now(), CHOCO, MARIA_ID, CHOCO_VOTE),
+            new VoteHistory(LocalDate.parse("2014-05-20"), POTATO, MARIA_ID, POTATO_VOTE_PAST)
     ));
 
     public static final ModelMatcher<VoteHistory> VOTE_MATCHER = ModelMatcher.of(VoteHistory.class,

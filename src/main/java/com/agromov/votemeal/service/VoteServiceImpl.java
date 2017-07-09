@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.agromov.votemeal.config.LocalizationCodes.NOT_VOTED_YET;
 import static com.agromov.votemeal.config.LocalizationCodes.VOTED_ALREADY;
@@ -44,24 +46,26 @@ public class VoteServiceImpl
 
     @Transactional
     @Override
-    public void add(List<Long> restaurantIds)
+    public void add(Set<Long> restaurantIds)
             throws Exception
     {
-        if (!isRestaurantsExisted(restaurantIds))
+        List<Restaurant> all = restaurantRepository.getAll();
+
+        if (!isRestaurantsExisted(restaurantIds, all))
         {
             throw new BadArgumentException();
         }
 
-        voteRepository.addToVote(restaurantIds);
+        voteRepository.addToVote(all.stream()
+                .filter(restaurant -> restaurantIds.contains(restaurant.getId()))
+                .collect(Collectors.toList()));
     }
 
-    private boolean isRestaurantsExisted(List<Long> restaurantIds)
+    private boolean isRestaurantsExisted(Set<Long> restaurantIds, List<Restaurant> restaurants)
     {
-        List<Restaurant> all = restaurantRepository.getAll();
-
         for (Long id : restaurantIds)
         {
-            if (all.stream().noneMatch(r -> r.getId().equals(id)))
+            if (restaurants.stream().noneMatch(r -> r.getId().equals(id)))
             {
                 return false;
             }
@@ -84,10 +88,11 @@ public class VoteServiceImpl
             }
 
             voteRepository.decrement(todayVoteHistory.getRestaurant().getId());
+            userRepository.deleteFromCurrentHistory(userId);
         }
 
         voteRepository.increment(restaurantId);
-        userRepository.refreshHistory(userId, restaurantRepository.get(restaurantId));
+        userRepository.addToCurrentHistory(userId, restaurantRepository.get(restaurantId), voteRepository.get(currentDate(), restaurantId));
     }
 
     @Transactional
@@ -100,7 +105,7 @@ public class VoteServiceImpl
         {
             Restaurant restaurant = todayVoteHistory.getRestaurant();
             voteRepository.decrement(restaurant.getId());
-            userRepository.refreshHistory(userId, null);
+            userRepository.deleteFromCurrentHistory(userId);
         } else
             throw new VoteNotAcceptedException(NOT_VOTED_YET);
     }

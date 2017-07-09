@@ -3,6 +3,7 @@ package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.model.User;
+import com.agromov.votemeal.model.Vote;
 import com.agromov.votemeal.model.VoteHistory;
 
 import java.util.List;
@@ -26,7 +27,9 @@ public interface UserRepository
 
     List<VoteHistory> getHistory(Long userId);
 
-    void refreshHistory(long userId, Restaurant restaurant);
+    void addToCurrentHistory(long userId, Restaurant restaurant, Vote vote);
+
+    void deleteFromCurrentHistory(Long userId);
 
     User getByEmail(String email);
 }

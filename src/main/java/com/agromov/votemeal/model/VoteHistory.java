@@ -25,19 +25,23 @@ public class VoteHistory
     private Long userId;
 
     @JsonView(ViewWhen.GetVoteHistory.class)
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Vote vote;
 
     public VoteHistory()
     {
     }
 
-    public VoteHistory(LocalDate date, Restaurant restaurant, Long userId)
+    public VoteHistory(LocalDate date, Restaurant restaurant, Long userId, Vote vote)
     {
         this.date = date;
         this.restaurant = restaurant;
         this.userId = userId;
+        this.vote = vote;
     }
 
     public LocalDate getDate()
@@ -68,6 +72,16 @@ public class VoteHistory
     public void setUserId(Long userId)
     {
         this.userId = userId;
+    }
+
+    public Vote getVote()
+    {
+        return vote;
+    }
+
+    public void setVote(Vote vote)
+    {
+        this.vote = vote;
     }
 
     @Override

@@ -22,6 +22,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 import static com.agromov.votemeal.config.ProjectProperties.VOTE_DEADLINE;
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
@@ -105,7 +106,7 @@ public class AdminController
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping(value = "vote", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public void addRestaurantsToCurrentVote(@RequestBody List<Long> restaurantIds)
+    public void addRestaurantsToCurrentVote(@RequestBody Set<Long> restaurantIds)
             throws Exception
     {
         voteService.add(restaurantIds);

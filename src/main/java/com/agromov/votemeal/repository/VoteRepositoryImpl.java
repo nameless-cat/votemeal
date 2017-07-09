@@ -1,6 +1,6 @@
 package com.agromov.votemeal.repository;
 
-import com.agromov.votemeal.model.SimpleVote;
+import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.model.Vote;
 import com.agromov.votemeal.util.JpaUtils;
 import com.agromov.votemeal.util.exception.BadArgumentException;
@@ -24,17 +24,14 @@ public class VoteRepositoryImpl
     private VoteJpaRepository voteRepository;
 
     @Autowired
-    private SimpleVoteRepository simpleRepository;
-
-    @Autowired
     private JpaUtils jpaUtils;
 
     @Override
-    public void addToVote(List<Long> restaurantIds) throws Exception
+    public void addToVote(List<Restaurant> restaurants) throws Exception
     {
         try
         {
-            jpaUtils.batchInsert(SimpleVote.class, restaurantIds);
+            jpaUtils.batchInsert(Vote.class, restaurants);
         } catch (IllegalAccessException | InstantiationException e)
         {
             throw new Exception();
@@ -44,19 +41,19 @@ public class VoteRepositoryImpl
     @Override
     public int removeFromVote(long restaurantId)
     {
-        return simpleRepository.remove(restaurantId, currentDate());
+        return voteRepository.remove(restaurantId, currentDate());
     }
 
     @Override
     public boolean increment(long restaurantId)
     {
-        return simpleRepository.increment(currentDate(), restaurantId) != 0;
+        return voteRepository.increment(currentDate(), restaurantId) != 0;
     }
 
     @Override
     public boolean decrement(long restaurantId) throws BadArgumentException
     {
-        SimpleVote vote = simpleRepository.findOne(new SimpleVote.SimpleVotePK(currentDate(), restaurantId));
+        Vote vote = voteRepository.find(currentDate(), restaurantId);
 
         if (vote == null)
             return false;
@@ -66,7 +63,7 @@ public class VoteRepositoryImpl
 
         vote.setVotes(vote.getVotes() - 1);
 
-        return simpleRepository.save(vote) != null;
+        return voteRepository.save(vote) != null;
     }
 
     @Override
@@ -74,7 +71,7 @@ public class VoteRepositoryImpl
     {
         return voteRepository.findByDate(date)
                 .stream()
-                .sorted((o1, o2) -> (o1.getVotes() == o2.getVotes()) ?
+                .sorted((o1, o2) -> (o1.getVotes().equals(o2.getVotes())) ?
                         o1.getRestaurant().getName().compareTo(o2.getRestaurant().getName())
                         : Integer.compare(o2.getVotes(), o1.getVotes()))
                 .collect(Collectors.toList());

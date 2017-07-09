@@ -1,6 +1,6 @@
 package com.agromov.votemeal.repository;
 
-import com.agromov.votemeal.model.SimpleVote;
+import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.model.Vote;
 import com.agromov.votemeal.util.exception.BadArgumentException;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface VoteRepository
 {
-    void addToVote(List<Long> restaurantId) throws Exception;
+    void addToVote(List<Restaurant> restaurants) throws Exception;
 
     int removeFromVote(long restaurantId);
 

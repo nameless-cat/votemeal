@@ -199,6 +199,9 @@ public class AdminControllerTest
                 .andDo(print())
                 .andExpect(status().isAccepted());
 
+        LAST_CREATED_ID.getAndIncrement();
+        LAST_CREATED_ID.getAndIncrement();
+
         VoteTestData.MATCHER.assertCollectionEquals(
                 Arrays.asList(CHOCO_VOTE, SUBWAY_VOTE, BENJAMIN_VOTE, POTATO_VOTE, MCDONALDS_VOTE),
                 voteService.get(currentDate()));
