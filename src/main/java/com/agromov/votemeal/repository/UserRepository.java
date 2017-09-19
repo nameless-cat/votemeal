@@ -25,11 +25,5 @@ public interface UserRepository
 
     User update(User updated);
 
-    List<VoteHistory> getHistory(Long userId);
-
-    void addToCurrentHistory(long userId, Restaurant restaurant, Vote vote);
-
-    void deleteFromCurrentHistory(Long userId);
-
     User getByEmail(String email);
 }

@@ -2,25 +2,23 @@ package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.model.Vote;
+import com.agromov.votemeal.model.VoteHistory;
 import com.agromov.votemeal.util.exception.BadArgumentException;
 
+import com.agromov.votemeal.util.exception.NotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 
 /**
  * Created by A.Gromov on 07.06.2017.
  */
-public interface VoteRepository
-{
-    void addToVote(List<Restaurant> restaurants) throws Exception;
+public interface VoteRepository {
 
-    int removeFromVote(long restaurantId);
+  void save(VoteHistory voteHistory);
 
-    boolean increment(long restaurantId);
+  int delete(Long userId);
 
-    boolean decrement(long restaurantId) throws BadArgumentException;
+  List<VoteHistory> getUserHistory(Long userId);
 
-    List<Vote> getAll(LocalDate date);
-
-    Vote get(LocalDate date, long restaurantId);
+  List<VoteHistory> getHistory(LocalDate date);
 }

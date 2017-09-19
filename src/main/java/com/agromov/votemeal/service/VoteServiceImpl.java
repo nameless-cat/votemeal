@@ -9,16 +9,15 @@ import com.agromov.votemeal.repository.VoteRepository;
 import com.agromov.votemeal.util.exception.BadArgumentException;
 import com.agromov.votemeal.util.exception.NotFoundException;
 import com.agromov.votemeal.util.exception.VoteNotAcceptedException;
+import java.time.LocalDate;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import static com.agromov.votemeal.config.LocalizationCodes.NOT_VOTED_YET;
 import static com.agromov.votemeal.config.LocalizationCodes.VOTED_ALREADY;
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
 
@@ -27,104 +26,58 @@ import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
  */
 @Service
 public class VoteServiceImpl
-        implements VoteService
-{
-    @Autowired
-    private VoteRepository voteRepository;
+    implements VoteService {
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired
+  private VoteRepository voteRepository;
 
-    @Autowired
-    private RestaurantRepository restaurantRepository;
+  @Autowired
+  private RestaurantRepository restaurantRepository;
 
-    @Override
-    public List<Vote> get(LocalDate date)
-    {
-        return voteRepository.getAll(date);
+  @Transactional
+  @Override
+  public void vote(long restaurantId, long userId)
+      throws NotFoundException, VoteNotAcceptedException {
+
+    Restaurant restaurant = restaurantRepository.get(restaurantId);
+
+    if (restaurant == null) {
+      throw new NotFoundException(/*todo сообщение о ненайденном ресторане*/);
     }
 
-    @Transactional
-    @Override
-    public void add(Set<Long> restaurantIds)
-            throws Exception
-    {
-        List<Restaurant> all = restaurantRepository.getAll();
+    VoteHistory todayVote = getTodayVote(userId);
 
-        if (!isRestaurantsExisted(restaurantIds, all))
-        {
-            throw new BadArgumentException();
-        }
+    if (todayVote == null) {
 
-        voteRepository.addToVote(all.stream()
-                .filter(restaurant -> restaurantIds.contains(restaurant.getId()))
-                .collect(Collectors.toList()));
+      todayVote = new VoteHistory(currentDate(), restaurant, userId);
+      voteRepository.save(todayVote);
+
+    } else {
+      todayVote.setRestaurant(restaurant);
     }
+  }
 
-    private boolean isRestaurantsExisted(Set<Long> restaurantIds, List<Restaurant> restaurants)
-    {
-        for (Long id : restaurantIds)
-        {
-            if (restaurants.stream().noneMatch(r -> r.getId().equals(id)))
-            {
-                return false;
-            }
-        }
-        return true;
+  @Override
+  public void unVote(long userId) throws NotFoundException {
+    if (voteRepository.delete(userId) == 0) {
+      throw new NotFoundException(/*todo сообщение о ненайденном голосовании*/);
     }
+  }
 
-    @Transactional
-    @Override
-    public void increment(long restaurantId, long userId)
-            throws NotFoundException, VoteNotAcceptedException
-    {
-        VoteHistory todayVoteHistory = getTodayVote(userId);
+  @Override
+  public List<Vote> getByDate(LocalDate date) {
+    return voteRepository.getHistory(date).stream()
+        .collect(Collectors.groupingBy(VoteHistory::getRestaurant))
+        .entrySet().stream()
+        .map(entry -> new Vote(date, entry.getKey(), entry.getValue().size()))
+        .collect(Collectors.toList());
+  }
 
-        if (todayVoteHistory != null)
-        {
-            if (todayVoteHistory.getRestaurant().getId().equals(restaurantId))
-            {
-                throw new VoteNotAcceptedException(VOTED_ALREADY);
-            }
-
-            voteRepository.decrement(todayVoteHistory.getRestaurant().getId());
-            userRepository.deleteFromCurrentHistory(userId);
-        }
-
-        voteRepository.increment(restaurantId);
-        userRepository.addToCurrentHistory(userId, restaurantRepository.get(restaurantId), voteRepository.get(currentDate(), restaurantId));
-    }
-
-    @Transactional
-    @Override
-    public void decrement(Long userId) throws VoteNotAcceptedException
-    {
-        VoteHistory todayVoteHistory = getTodayVote(userId);
-
-        if (todayVoteHistory != null)
-        {
-            Restaurant restaurant = todayVoteHistory.getRestaurant();
-            voteRepository.decrement(restaurant.getId());
-            userRepository.deleteFromCurrentHistory(userId);
-        } else
-            throw new VoteNotAcceptedException(NOT_VOTED_YET);
-    }
-
-    @Override
-    public void delete(long restaurantId) throws NotFoundException
-    {
-        if (voteRepository.removeFromVote(restaurantId) == 0)
-        {
-            throw new NotFoundException();
-        }
-    }
-
-    private VoteHistory getTodayVote(long userId)
-    {
-        return userRepository.getHistory(userId)
-                .stream()
-                .filter(vh -> vh.getDate().equals(currentDate()))
-                .findAny()
-                .orElse(null);
-    }
+  private VoteHistory getTodayVote(long userId) {
+    return voteRepository.getUserHistory(userId)
+        .stream()
+        .filter(vh -> vh.getDate().equals(currentDate()))
+        .findAny()
+        .orElse(null);
+  }
 }

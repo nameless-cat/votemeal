@@ -2,6 +2,9 @@ package com.agromov.votemeal.model;
 
 import com.agromov.votemeal.web.ViewWhen;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 
@@ -15,117 +18,54 @@ import java.util.Set;
 /**
  * Created by A.Gromov on 22.05.2017.
  */
+@EqualsAndHashCode(of = {"closed", "address", "workingTime"}, callSuper = true)
+@Setter
+@Getter
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
-@Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(name = "restaurants_unique_name_id_idx", columnNames = {"id", "name"})})
-public class Restaurant extends NamedEntity
-{
-    @Column(name = "closed", nullable = false, columnDefinition = "default false")
-    private boolean closed;
+@Table(name = "restaurants", uniqueConstraints = {
+    @UniqueConstraint(name = "restaurants_unique_name_id_idx", columnNames = {"id", "name"})})
+public class Restaurant extends NamedEntity {
 
-    @JsonView(ViewWhen.GetVoteHistory.class)
-    @NotNull
-    private Address address;
+  @Column(name = "closed", nullable = false, columnDefinition = "default false")
+  private boolean closed;
 
-    @NotNull
-    private WorkingTime workingTime;
+  @Column(name = "for_vote", columnDefinition = "default false")
+  private boolean forVote;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    private Set<Lunch> lunches = new HashSet<>();
+  @JsonView(ViewWhen.GetVoteHistory.class)
+  @NotNull
+  private Address address;
 
-    public Restaurant(long id, String name, Address address, WorkingTime workingTime, Set<Lunch> lunches)
-    {
-        super(id, name);
-        this.address = address;
-        this.workingTime = workingTime;
-        this.lunches = lunches;
-    }
+  @NotNull
+  private WorkingTime workingTime;
 
-    public Restaurant(Restaurant restaurant)
-    {
-        this(restaurant.getId(), restaurant.getName(), restaurant.getAddress(), restaurant.getWorkingTime(), restaurant.getLunches());
-    }
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+  private Set<Lunch> lunches = new HashSet<>();
 
-    public Restaurant(){}
+  public Restaurant(long id, String name, Address address, WorkingTime workingTime,
+      Set<Lunch> lunches) {
+    super(id, name);
+    this.address = address;
+    this.workingTime = workingTime;
+    this.lunches = lunches;
+  }
 
-    public void addLunch(Lunch lunch)
-    {
-        lunch.setRestaurant(this);
-        lunches.add(lunch);
-    }
+  public Restaurant(Restaurant restaurant) {
+    this(restaurant.getId(), restaurant.getName(), restaurant.getAddress(),
+        restaurant.getWorkingTime(), restaurant.getLunches());
+  }
 
-    public boolean isClosed()
-    {
-        return closed;
-    }
+  public Restaurant() {
+  }
 
-    public void setClosed(boolean closed)
-    {
-        this.closed = closed;
-    }
-
-    public Address getAddress()
-    {
-        return address;
-    }
-
-    public void setAddress(Address address)
-    {
-        this.address = address;
-    }
-
-    public WorkingTime getWorkingTime()
-    {
-        return workingTime;
-    }
-
-    public void setWorkingTime(WorkingTime workingTime)
-    {
-        this.workingTime = workingTime;
-    }
-
-    public Set<Lunch> getLunches()
-    {
-        return lunches;
-    }
-
-    public void setLunches(Set<Lunch> lunches)
-    {
-        this.lunches = lunches;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "Restaurant{" +
-                "id='" + getId() + '\'' +
-                "name='" + getName() + '\'' +
-                "address={" + address + '}' +
-                ", workingTime={" + workingTime + '}' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        Restaurant that = (Restaurant) o;
-
-        if (isClosed() != that.isClosed()) return false;
-        if (getAddress() != null ? !getAddress().equals(that.getAddress()) : that.getAddress() != null) return false;
-        return getWorkingTime() != null ? getWorkingTime().equals(that.getWorkingTime()) : that.getWorkingTime() == null;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = super.hashCode();
-        result = 31 * result + (isClosed() ? 1 : 0);
-        result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
-        result = 31 * result + (getWorkingTime() != null ? getWorkingTime().hashCode() : 0);
-        return result;
-    }
+  @Override
+  public String toString() {
+    return "Restaurant{" +
+        "id='" + getId() + '\'' +
+        "name='" + getName() + '\'' +
+        "address={" + address + '}' +
+        ", workingTime={" + workingTime + '}' +
+        '}';
+  }
 }

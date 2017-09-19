@@ -1,73 +1,58 @@
 package com.agromov.votemeal.repository;
 
-import com.agromov.votemeal.util.exception.BadArgumentException;
+import static com.agromov.votemeal.RestaurantTestData.MCDONALDS;
+import static com.agromov.votemeal.UserTestData.ADMIN_ID;
+import static com.agromov.votemeal.UserTestData.MARIA_HISTORY;
+import static com.agromov.votemeal.UserTestData.MARIA_ID;
+import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
+import static com.agromov.votemeal.web.VoteTestData.CURRENT_VOTE_HISTORY;
+import static org.junit.Assert.assertEquals;
+
+import com.agromov.votemeal.model.VoteHistory;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Arrays;
-import java.util.Collections;
-
-import static com.agromov.votemeal.RestaurantTestData.*;
-import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
-import static com.agromov.votemeal.web.VoteTestData.*;
-import static com.agromov.votemeal.web.VoteTestData.MATCHER;
-import static org.junit.Assert.*;
 
 /**
  * Created by A.Gromov on 07.06.2017.
  */
-@Transactional
 public class VoteRepositoryTest
-        extends AbstractRepositoryTest
-{
-    @Autowired
-    private VoteRepository repository;
+    extends AbstractRepositoryTest {
 
-    @Test
-    public void addRestaurantToVoteMustReflectChangesInDB() throws Exception
-    {
-        repository.addToVote(Collections.singletonList(MCDONALDS));
-        MATCHER.assertCollectionEquals(Arrays.asList(CHOCO_VOTE, SUBWAY_VOTE, BENJAMIN_VOTE, MCDONALDS_VOTE), repository.getAll(currentDate()));
-    }
+  @Autowired
+  private VoteRepository repository;
 
-    @Test
-    public void removeRestaurantFromVoteMustReflectChangesInDB() throws Exception
-    {
-        repository.removeFromVote(SUBWAY.getId());
-        MATCHER.assertCollectionEquals(Arrays.asList(CHOCO_VOTE, BENJAMIN_VOTE), repository.getAll(currentDate()));
-    }
+  @Test
+  public void testGetUserHistory() throws Exception {
+    List<VoteHistory> userHistory = repository.getUserHistory(MARIA_ID);
+    assertEquals(MARIA_HISTORY, userHistory);
+  }
 
-    @Test
-    public void incrementVoteMustReflectChangesInDB() throws Exception
-    {
-        repository.increment(SUBWAY.getId());
-        assertEquals(2, (int) repository.get(currentDate(), SUBWAY.getId()).getVotes());
-    }
+  @Test
+  public void testGetHistory() throws Exception {
+    List<VoteHistory> history = repository.getHistory(currentDate());
+    assertEquals(CURRENT_VOTE_HISTORY, history);
+  }
 
-    @Test
-    public void incrementVoteOfCafeThatNotInVoteForTodayMustReturnFalse() throws Exception
-    {
-        assertFalse(repository.increment(MCDONALDS.getId()));
-    }
+  @Test
+  public void testDelete() throws Exception {
+    repository.delete(MARIA_ID);
+    List<VoteHistory> currentVotes = new ArrayList<>(CURRENT_VOTE_HISTORY);
+    currentVotes.remove(2);
+    assertEquals(currentVotes, repository.getHistory(currentDate()));
+  }
 
-    @Test(expected = BadArgumentException.class)
-    public void decrementVoteOfZeroMustThrowException() throws Exception
-    {
-        repository.decrement(BENJAMIN.getId());
-    }
+  @Test
+  public void testSave() throws Exception {
+    VoteHistory vh = new VoteHistory(currentDate(), MCDONALDS, ADMIN_ID);
+    repository.save(vh);
+    List<VoteHistory> currentVotes = new ArrayList<>(CURRENT_VOTE_HISTORY);
+    currentVotes.add(vh);
+    currentVotes.sort(Comparator.comparing((VoteHistory his) -> his.getRestaurant().getName())
+        .thenComparing(VoteHistory::getUserId, (o1, o2) -> o1 > o2 ? -1 : 1));
 
-    @Test
-    public void decrementVoteMustReflectChangesInDB() throws Exception
-    {
-        repository.decrement(SUBWAY.getId());
-        assertEquals(0, (int) repository.get(currentDate(), SUBWAY.getId()).getVotes());
-    }
-
-    @Test
-    public void decrementVoteOfCafeThatNotInVoteForTodayMustReturnFalse() throws Exception
-    {
-        assertFalse(repository.decrement(MCDONALDS.getId()));
-    }
+    assertEquals(currentVotes, repository.getHistory(currentDate()));
+  }
 }

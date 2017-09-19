@@ -2,6 +2,9 @@ package com.agromov.votemeal.model;
 
 import com.agromov.votemeal.web.ViewWhen;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Column;
@@ -10,51 +13,22 @@ import javax.persistence.MappedSuperclass;
 /**
  * Created by A.Gromov on 24.05.2017.
  */
+@EqualsAndHashCode(of = "name", callSuper = true)
+@Getter
+@Setter
 @MappedSuperclass
-public class NamedEntity extends BaseEntity
-{
-    @JsonView({ViewWhen.GetVoteHistory.class, ViewWhen.SendUser.class})
-    @NotBlank
-    @Column(name = "name", nullable = false)
-    private String name;
+public class NamedEntity extends BaseEntity {
 
-    NamedEntity(long id, String name)
-    {
-        super(id);
-        this.name = name;
-    }
+  @JsonView({ViewWhen.GetVoteHistory.class, ViewWhen.SendUser.class})
+  @NotBlank
+  @Column(name = "name", nullable = false)
+  private String name;
 
-    NamedEntity()
-    {
-    }
+  NamedEntity(long id, String name) {
+    super(id);
+    this.name = name;
+  }
 
-    public String getName()
-    {
-        return name;
-    }
+  NamedEntity() {}
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        NamedEntity that = (NamedEntity) o;
-
-        return getName() != null ? getName().equals(that.getName()) : that.getName() == null;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = super.hashCode();
-        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
-        return result;
-    }
 }

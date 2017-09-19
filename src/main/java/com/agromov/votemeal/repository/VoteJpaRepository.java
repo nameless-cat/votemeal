@@ -1,6 +1,7 @@
 package com.agromov.votemeal.repository;
 
 import com.agromov.votemeal.model.Vote;
+import com.agromov.votemeal.model.VoteHistory;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,22 +16,16 @@ import java.util.List;
  * Created by A.Gromov on 07.06.2017.
  */
 @Transactional(readOnly = true)
-public interface VoteJpaRepository extends JpaRepository<Vote, Long>
+public interface VoteJpaRepository extends JpaRepository<VoteHistory, VoteHistory.Key>//todo изменить ключ
 {
-    @Query("SELECT v FROM Vote v WHERE v.date=:date AND v.restaurant.id=:id")
-    Vote find(@Param("date") LocalDate date, @Param("id") long id);
+  @Transactional
+  @Modifying
+  @Query("DELETE FROM VoteHistory v WHERE v.key.userId=:userId AND v.key.date=:date")
+  int deleteFromHistory(@Param("userId") Long userId, @Param("date") LocalDate date);
 
-    @EntityGraph(attributePaths = "restaurant")
-    @Query("SELECT v FROM Vote v WHERE v.date=:date")
-    List<Vote> findByDate(@Param("date") LocalDate date);
+  @Query("SELECT v FROM VoteHistory v WHERE v.key.userId=:userId")
+  List<VoteHistory> getVoteHistoryByUserId(@Param("userId") Long userId);
 
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM Vote v WHERE v.restaurant.id=:id AND v.date=:date")
-    int remove(@Param("id") long restaurantId, @Param("date") LocalDate date);
-
-    @Transactional
-    @Modifying
-    @Query("UPDATE Vote v SET v.votes=v.votes + 1 WHERE v.date=:date AND v.restaurant.id=:id")
-    int increment(@Param("date") LocalDate date, @Param("id") long restaurantId);
+  @Query("SELECT v FROM VoteHistory v WHERE v.key.date=:date")
+  List<VoteHistory> getVoteHistoryByDate(@Param("date") LocalDate date);
 }

@@ -3,6 +3,7 @@ package com.agromov.votemeal.service;
 import com.agromov.votemeal.model.User;
 import com.agromov.votemeal.model.VoteHistory;
 import com.agromov.votemeal.repository.UserRepository;
+import com.agromov.votemeal.repository.VoteRepository;
 import com.agromov.votemeal.web.Authorized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,44 +18,42 @@ import java.util.List;
  */
 @Service("userService")
 public class UserServiceImpl
-        implements UserService, UserDetailsService
-{
-    @Autowired
-    private UserRepository repository;
+    implements UserService, UserDetailsService {
 
-    @Override
-    public User get(Long id)
-    {
-        return repository.get(id);
+  @Autowired
+  private UserRepository repository;
+
+  @Autowired
+  private VoteRepository voteRepository;
+
+  @Override
+
+  public User get(Long id) {
+    return repository.get(id);
+  }
+
+  @Override
+  public User save(User user) {
+    return repository.save(user);
+  }
+
+  @Override
+  public User update(User user) {
+    return repository.update(user);
+  }
+
+  @Override
+  public List<VoteHistory> getHistory(Long userId) {
+    return voteRepository.getUserHistory(userId);
+  }
+
+  @Override
+  public Authorized loadUserByUsername(String email) throws UsernameNotFoundException {
+    User user = repository.getByEmail(email);
+    if (user == null) {
+      throw new UsernameNotFoundException("User with email " + email + " not present.");
     }
 
-    @Override
-    public User save(User user)
-    {
-        return repository.save(user);
-    }
-
-    @Override
-    public User update(User user)
-    {
-        return repository.update(user);
-    }
-
-    @Override
-    public List<VoteHistory> getHistory(Long id)
-    {
-        return repository.getHistory(id);
-    }
-
-    @Override
-    public Authorized loadUserByUsername(String email) throws UsernameNotFoundException
-    {
-        User user = repository.getByEmail(email);
-        if (user == null)
-        {
-            throw new UsernameNotFoundException("User with email " + email + " not present.");
-        }
-
-        return new Authorized(user);
-    }
+    return new Authorized(user);
+  }
 }

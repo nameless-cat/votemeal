@@ -204,7 +204,7 @@ public class AdminControllerTest
 
         VoteTestData.MATCHER.assertCollectionEquals(
                 Arrays.asList(CHOCO_VOTE, SUBWAY_VOTE, BENJAMIN_VOTE, POTATO_VOTE, MCDONALDS_VOTE),
-                voteService.get(currentDate()));
+                voteService.getByDate(currentDate()));
     }
 
     @Test
@@ -230,7 +230,7 @@ public class AdminControllerTest
 
         VoteTestData.MATCHER.assertCollectionEquals(
                 Arrays.asList(SUBWAY_VOTE, BENJAMIN_VOTE),
-                voteService.get(currentDate()));
+                voteService.getByDate(currentDate()));
 
         int found = em.createQuery("SELECT vh FROM VoteHistory vh WHERE vh.date=?1 AND vh.restaurant.id=?2", VoteHistory.class)
                 .setParameter(1, currentDate())

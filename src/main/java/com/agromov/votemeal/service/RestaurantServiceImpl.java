@@ -5,6 +5,7 @@ import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.repository.LunchRepository;
 import com.agromov.votemeal.repository.RestaurantRepository;
 import com.agromov.votemeal.util.exception.NotFoundException;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,60 +20,73 @@ import java.util.Objects;
  */
 @Service
 public class RestaurantServiceImpl
-        implements RestaurantService
-{
-    @Autowired
-    private RestaurantRepository restaurantRepository;
+    implements RestaurantService {
 
-    @Autowired
-    private LunchRepository lunchRepository;
+  @Autowired
+  private RestaurantRepository restaurantRepository;
 
-    @Cacheable("restaurants")
-    @Override
-    public List<Restaurant> getAll()
-    {
-        return restaurantRepository.getAll();
+  @Autowired
+  private LunchRepository lunchRepository;
+
+  @Cacheable("restaurants")
+  @Override
+  public List<Restaurant> getAll() {
+    return restaurantRepository.getAll();
+  }
+
+  @CacheEvict(value = "restaurants", allEntries = true)
+  @Override
+  public Restaurant save(Restaurant restaurant) {
+    return restaurantRepository.save(restaurant);
+  }
+
+  @CacheEvict(value = "restaurants", allEntries = true)
+  @Override
+  public Restaurant update(Restaurant restaurant) throws NotFoundException {
+    Objects.requireNonNull(restaurant.getId());
+    get(restaurant.getId());
+    return restaurantRepository.save(restaurant);
+  }
+
+  @Transactional
+  @Override
+  public void addLunch(Long id, Lunch lunch) throws NotFoundException {
+    if (lunchRepository.save(id, lunch) == null) {
+      throw new NotFoundException();
+    }
+  }
+
+  @Cacheable("restaurants")
+  @Override
+  public Restaurant get(Long id) throws NotFoundException {
+    Restaurant restaurant = restaurantRepository.getWithLunches(id);
+
+    if (restaurant == null) {
+      throw new NotFoundException();
     }
 
-    @CacheEvict(value = "restaurants", allEntries = true)
-    @Override
-    public Restaurant save(Restaurant restaurant)
-    {
-        return restaurantRepository.save(restaurant);
-    }
+    return restaurant;
+  }
 
-    @CacheEvict(value = "restaurants", allEntries = true)
-    @Override
-    public Restaurant update(Restaurant restaurant) throws NotFoundException
-    {
-        Objects.requireNonNull(restaurant.getId());
-        get(restaurant.getId());
-        return restaurantRepository.save(restaurant);
-    }
+  @CacheEvict(value = "restaurants", allEntries = true)
+  @Override
+  public void cacheEvict() {
+  }
 
-    @Transactional
-    @Override
-    public void addLunch(Long id, Lunch lunch) throws NotFoundException
-    {
-        if (lunchRepository.save(id, lunch) == null)
-        {
-            throw new NotFoundException();
-        }
-    }
+  @Override
+  public void addToVote(Set<Long> restaurantIds) throws Exception {
+    restaurantRepository.addToVote(restaurantIds);
+  }
 
-    @Cacheable("restaurants")
-    @Override
-    public Restaurant get(Long id) throws NotFoundException
-    {
-        Restaurant restaurant = restaurantRepository.getWithLunches(id);
+  @Override
+  public void deleteFromVote(Set<Long> restaurantIds) throws NotFoundException {
+    restaurantRepository.removeFromVote(restaurantIds);
+  }
 
-        if (restaurant == null)
-            throw new NotFoundException();
+  @Override
+  public List<Restaurant> getVoteList() {
+    return restaurantRepository.getForVote();
+  }
 
-        return restaurant;
-    }
 
-    @CacheEvict(value = "restaurants", allEntries = true)
-    @Override
-    public void cacheEvict() {}
 }

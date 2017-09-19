@@ -1,4 +1,5 @@
 DELETE FROM VOTE_HISTORY;
+DELETE FROM VOTES;
 DELETE FROM LUNCHES;
 DELETE FROM RESTAURANTS;
 DELETE FROM USER_ROLES;
@@ -40,9 +41,16 @@ INSERT INTO LUNCHES (NAME, PRICE, RESTAURANT_ID, DESCRIPTION) VALUES
   ('Сабвэй Клаб', 120, 9,
    'Соблазнительное сочетание ростбифа, ветчины и индейки, свежие овощи по Вашему выбору на свежевыпеченном хлебе');
 
-INSERT INTO VOTE_HISTORY (RESTAURANT_ID, USER_ID, DATE) VALUES
-  (6, 2, '2014-05-20'),
-  (6, 3, '2014-05-20'),
-  (7, 2, current_date),
-  (7, 3, current_date),
-  (9, 4, current_date);
+INSERT INTO VOTES (DATE, RESTAURANT_ID, VOTES) VALUES
+  ('2014-05-20', 5, 0),
+  ('2014-05-20', 6, 2),
+  (current_date, 7, 2),
+  (current_date, 8, 0),
+  (current_date, 9, 1);
+
+INSERT INTO VOTE_HISTORY (RESTAURANT_ID, USER_ID, DATE, VOTE_ID) VALUES
+  (6, 2, '2014-05-20', 21),
+  (6, 3, '2014-05-20', 21),
+  (7, 2, current_date, 22),
+  (7, 3, current_date, 22),
+  (9, 4, current_date, 24);
