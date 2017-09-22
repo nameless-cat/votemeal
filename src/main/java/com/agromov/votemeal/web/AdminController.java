@@ -1,28 +1,5 @@
 package com.agromov.votemeal.web;
 
-import com.agromov.votemeal.config.ProjectConstants;
-import com.agromov.votemeal.model.Lunch;
-import com.agromov.votemeal.model.Restaurant;
-import com.agromov.votemeal.model.Vote;
-import com.agromov.votemeal.service.LunchService;
-import com.agromov.votemeal.service.RestaurantService;
-import com.agromov.votemeal.service.VoteService;
-import com.agromov.votemeal.util.exception.BadArgumentException;
-import com.agromov.votemeal.util.exception.NotFoundException;
-import java.util.HashSet;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Set;
-
 import static com.agromov.votemeal.config.ProjectProperties.VOTE_DEADLINE;
 import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
 import static com.agromov.votemeal.util.ValidationUtils.checkForNew;
@@ -30,6 +7,36 @@ import static com.agromov.votemeal.util.ValidationUtils.checkIdConsistence;
 import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+
+import com.agromov.votemeal.config.ProjectConstants;
+import com.agromov.votemeal.model.Lunch;
+import com.agromov.votemeal.model.Restaurant;
+import com.agromov.votemeal.service.LunchService;
+import com.agromov.votemeal.service.RestaurantService;
+import com.agromov.votemeal.service.VoteService;
+import com.agromov.votemeal.util.exception.BadArgumentException;
+import com.agromov.votemeal.util.exception.NotFoundException;
+import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
  * Created by A.Gromov on 14.06.2017.
@@ -60,6 +67,7 @@ public class AdminController {
   @GetMapping(value = "restaurants/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
   public Restaurant getRestaurant(@PathVariable("id") Long id)
       throws NotFoundException {
+
     return restaurantService.get(id);
   }
 
@@ -68,6 +76,7 @@ public class AdminController {
       produces = APPLICATION_JSON_UTF8_VALUE)
   public ResponseEntity<Restaurant> createRestaurant(@Valid @RequestBody Restaurant restaurant)
       throws BadArgumentException {
+
     checkForNew(restaurant);
 
     Restaurant saved = restaurantService.save(restaurant);
@@ -83,24 +92,24 @@ public class AdminController {
   @PutMapping(value = "restaurants/{id}", consumes = APPLICATION_JSON_UTF8_VALUE)
   public void updateRestaurant(@PathVariable long id, @Valid @RequestBody Restaurant restaurant)
       throws NotFoundException, BadArgumentException {
-    checkIdConsistence(restaurant, id);
 
+    checkIdConsistence(restaurant, id);
     restaurantService.update(restaurant);
   }
 
   @GetMapping(value = {"vote/{date}", "vote"}, produces = APPLICATION_JSON_UTF8_VALUE)
-  public List<Vote> getVoteAtDate(
+  public List<Restaurant> getVoteAtDate(
       @PathVariable(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date)
       throws BadArgumentException {
 
     if (date != null) {
       if (date.isAfter(currentDate())) {
-        throw new BadArgumentException();
+        throw new BadArgumentException(/*todo дата из будущего не допустима*/);
       }
 
-      return voteService.getByDate(date);
+      return voteService.getVote(date);
     } else {
-      return voteService.getByDate(currentDate());
+      return voteService.getVote();
     }
   }
 
@@ -108,6 +117,7 @@ public class AdminController {
   @PutMapping(value = "vote", consumes = APPLICATION_JSON_UTF8_VALUE)
   public void addSetToCurrentVote(@RequestBody Set<Long> restaurantIds)
       throws Exception {
+
     restaurantService.addToVote(restaurantIds);
   }
 
@@ -132,20 +142,22 @@ public class AdminController {
   @PostMapping(value = "restaurants/{id}/lunches", consumes = APPLICATION_JSON_UTF8_VALUE)
   public void addLunchToRestaurantMenu(@PathVariable Long id, @Valid @RequestBody Lunch lunch)
       throws NotFoundException {
-    checkForNew(lunch);
 
+    checkForNew(lunch);
     lunchService.save(id, lunch);
   }
 
   @GetMapping(value = "restaurants/{id}/lunches", produces = APPLICATION_JSON_UTF8_VALUE)
   public List<Lunch> getLunches(@PathVariable Long id)
       throws NotFoundException {
+
     return lunchService.getAll(id);
   }
 
   @GetMapping(value = "restaurants/{id}/lunches/{lunchId}", produces = APPLICATION_JSON_UTF8_VALUE)
   public Lunch getLunch(@PathVariable Long id, @PathVariable Long lunchId)
       throws NotFoundException {
+
     return lunchService.get(id, lunchId);
   }
 
@@ -154,20 +166,22 @@ public class AdminController {
   public void putLunch(@PathVariable Long id, @PathVariable Long lunchId,
       @Valid @RequestBody Lunch lunch)
       throws NotFoundException, BadArgumentException {
-    checkIdConsistence(lunch, lunchId);
 
+    checkIdConsistence(lunch, lunchId);
     lunchService.update(id, lunch);
   }
 
   @DeleteMapping(value = "restaurants/{id}/lunches/{lunchId}")
   public void deleteLunch(@PathVariable Long id, @PathVariable Long lunchId)
       throws NotFoundException {
+
     lunchService.delete(id, lunchId);
   }
 
   @PostMapping(value = "deadline")
   public void changeDeadLine(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime time) {
+
     projectConstants.setParam(VOTE_DEADLINE, time);
   }
 }

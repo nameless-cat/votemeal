@@ -1,24 +1,27 @@
 package com.agromov.votemeal.web;
 
+import static com.agromov.votemeal.config.LocalizationCodes.TIME_IS_UP;
+import static com.agromov.votemeal.util.DateTimeUtil.currentTime;
+import static org.springframework.http.HttpStatus.ACCEPTED;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+
 import com.agromov.votemeal.config.ProjectConstants;
 import com.agromov.votemeal.model.Lunch;
 import com.agromov.votemeal.model.Restaurant;
-import com.agromov.votemeal.model.Vote;
 import com.agromov.votemeal.service.LunchService;
 import com.agromov.votemeal.service.RestaurantService;
 import com.agromov.votemeal.service.VoteService;
 import com.agromov.votemeal.util.exception.NotFoundException;
 import com.agromov.votemeal.util.exception.VoteNotAcceptedException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
-import static com.agromov.votemeal.config.LocalizationCodes.TIME_IS_UP;
-import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
-import static com.agromov.votemeal.util.DateTimeUtil.currentTime;
-import static org.springframework.http.HttpStatus.ACCEPTED;
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by A.Gromov on 17.06.2017.

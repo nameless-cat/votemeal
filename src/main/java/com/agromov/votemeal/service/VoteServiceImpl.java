@@ -1,25 +1,21 @@
 package com.agromov.votemeal.service;
 
+import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
+
 import com.agromov.votemeal.model.Restaurant;
-import com.agromov.votemeal.model.Vote;
 import com.agromov.votemeal.model.VoteHistory;
 import com.agromov.votemeal.repository.RestaurantRepository;
-import com.agromov.votemeal.repository.UserRepository;
 import com.agromov.votemeal.repository.VoteRepository;
-import com.agromov.votemeal.util.exception.BadArgumentException;
 import com.agromov.votemeal.util.exception.NotFoundException;
 import com.agromov.votemeal.util.exception.VoteNotAcceptedException;
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Set;
-
-import static com.agromov.votemeal.config.LocalizationCodes.VOTED_ALREADY;
-import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
 
 /**
  * Created by A.Gromov on 14.06.2017.
@@ -54,7 +50,9 @@ public class VoteServiceImpl
 
     } else {
       todayVote.setRestaurant(restaurant);
+      voteRepository.update(todayVote);
     }
+
   }
 
   @Override
@@ -65,12 +63,18 @@ public class VoteServiceImpl
   }
 
   @Override
-  public List<Vote> getByDate(LocalDate date) {
+  public List<Restaurant> getVote(LocalDate date) {
     return voteRepository.getHistory(date).stream()
-        .collect(Collectors.groupingBy(VoteHistory::getRestaurant))
+        .collect(Collectors.groupingBy(VoteHistory::getRestaurant, Collectors.toList()))
         .entrySet().stream()
-        .map(entry -> new Vote(date, entry.getKey(), entry.getValue().size()))
+        .map(Entry::getKey)
+        .sorted(Comparator.comparing(Restaurant::getName))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Restaurant> getVote() {
+    return restaurantRepository.getForVote();
   }
 
   private VoteHistory getTodayVote(long userId) {

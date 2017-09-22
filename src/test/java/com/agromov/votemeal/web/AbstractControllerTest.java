@@ -37,7 +37,7 @@ abstract public class AbstractControllerTest
         CHARACTER_ENCODING_FILTER.setForceEncoding(true);
     }
 
-    protected static AtomicLong LAST_CREATED_ID = new AtomicLong(30);
+    protected static AtomicLong LAST_CREATED_ID = new AtomicLong(20);
 
     protected MockMvc mockMvc;
 

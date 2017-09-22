@@ -45,4 +45,12 @@ public class VoteRepositoryImpl
             .thenComparing(VoteHistory::getUserId, (o1, o2) -> o1 > o2 ? -1 : 1))
         .collect(Collectors.toList());
   }
+
+  @Override
+  public void update(VoteHistory voteHistory) {
+    voteRepository.update(
+        voteHistory.getRestaurant(),
+        voteHistory.getUserId(),
+        voteHistory.getDate());
+  }
 }

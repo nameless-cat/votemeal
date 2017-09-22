@@ -1,7 +1,9 @@
 package com.agromov.votemeal.repository;
 
+import com.agromov.votemeal.model.NamedEntity;
 import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.util.exception.NotFoundException;
+import java.util.Comparator;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,13 +59,18 @@ public class RestaurantRepositoryImpl
 
   @Override
   public List<Restaurant> getForVote() {
-    return getAll().stream()
-        .filter(Restaurant::isForVote)
-        .collect(Collectors.toList());
+    return repository.findAllWithActiveVote();
   }
 
   private void setVoteFlag(Set<Long> restaurantIds, boolean flag) {
     List<Restaurant> restaurants = getAll();
+
+    // для исключение из голосования нужен список только тех, что учавствуют в голосовании
+    if (!flag) {
+      restaurants = restaurants.stream()
+          .filter(Restaurant::isForVote)
+          .collect(Collectors.toList());
+    }
 
     if (!isRestaurantsExisted(restaurantIds, restaurants)) {
       throw new NotFoundException(/*todo рестран не найден*/);
