@@ -73,7 +73,7 @@ public class RestaurantRepositoryImpl
     }
 
     if (!isRestaurantsExisted(restaurantIds, restaurants)) {
-      throw new NotFoundException(/*todo рестран не найден*/);
+      throw new NotFoundException();
     }
 
     restaurants.stream()

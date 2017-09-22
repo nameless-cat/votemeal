@@ -1,29 +1,25 @@
 package com.agromov.votemeal.repository;
 
 
-import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.model.User;
-import com.agromov.votemeal.model.Vote;
-import com.agromov.votemeal.model.VoteHistory;
-
 import java.util.List;
 
 /**
  * Created by A.Gromov on 30.05.2017.
  */
-public interface UserRepository
-{
-    int delete(long id);
+public interface UserRepository {
 
-    List<User> getRange(int offset, int limit);
+  int delete(long id);
 
-    User save(User object);
+  List<User> getRange(int offset, int limit);
 
-    User get(long id);
+  User save(User object);
 
-    List<User> getAll();
+  User get(long id);
 
-    User update(User updated);
+  List<User> getAll();
 
-    User getByEmail(String email);
+  User update(User updated);
+
+  User getByEmail(String email);
 }

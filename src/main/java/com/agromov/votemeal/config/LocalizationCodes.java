@@ -3,21 +3,21 @@ package com.agromov.votemeal.config;
 /**
  * Created by A.Gromov on 22.06.2017.
  */
-public interface LocalizationCodes
-{
-    String BAD_ARGUMENT_IN_REQUEST = "error.badArgumentInRequest";
+public interface LocalizationCodes {
 
-    String VOTED_ALREADY = "error.alreadyVoted";
+  String BAD_ARGUMENT_IN_REQUEST = "error.badArgumentInRequest";
 
-    String NOT_VOTED_YET = "error.notVotedYet";
+  String VOTED_ALREADY = "error.alreadyVoted";
 
-    String TIME_IS_UP = "error.timeIsUp";
+  String NOT_VOTED_YET = "error.notVotedYet";
 
-    String ACCESS_TO_PROFILE_DENIED = "error.accessToUserProfileDenied";
+  String TIME_IS_UP = "error.timeIsUp";
 
-    String ENTITY_NOT_FOUND = "error.entityNotFound";
+  String ACCESS_TO_PROFILE_DENIED = "error.accessToUserProfileDenied";
 
-    String EMAIL_EXISTS = "error.emailExists";
+  String ENTITY_NOT_FOUND = "error.entityNotFound";
 
-    String INTERNAL_ERROR = "error.internalServerError";
+  String EMAIL_EXISTS = "error.emailExists";
+
+  String INTERNAL_ERROR = "error.internalServerError";
 }

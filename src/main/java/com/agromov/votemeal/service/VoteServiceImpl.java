@@ -38,7 +38,7 @@ public class VoteServiceImpl
     Restaurant restaurant = restaurantRepository.get(restaurantId);
 
     if (restaurant == null) {
-      throw new NotFoundException(/*todo сообщение о ненайденном ресторане*/);
+      throw new NotFoundException();
     }
 
     VoteHistory todayVote = getTodayVote(userId);
@@ -58,7 +58,7 @@ public class VoteServiceImpl
   @Override
   public void unVote(long userId) throws NotFoundException {
     if (voteRepository.delete(userId) == 0) {
-      throw new NotFoundException(/*todo сообщение о ненайденном голосовании*/);
+      throw new NotFoundException();
     }
   }
 

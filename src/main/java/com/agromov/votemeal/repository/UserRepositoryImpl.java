@@ -1,19 +1,14 @@
 package com.agromov.votemeal.repository;
 
-import com.agromov.votemeal.model.Restaurant;
+import static com.agromov.votemeal.util.UserUtils.prepareToSave;
+
 import com.agromov.votemeal.model.User;
-import com.agromov.votemeal.model.Vote;
-import com.agromov.votemeal.model.VoteHistory;
 import com.agromov.votemeal.util.exception.NotFoundException;
+import java.util.List;
+import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.List;
-
-import static com.agromov.votemeal.util.DateTimeUtil.currentDate;
-import static com.agromov.votemeal.util.UserUtils.prepareToSave;
 
 /**
  * Created by A.Gromov on 22.05.2017.

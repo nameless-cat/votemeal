@@ -104,7 +104,7 @@ public class AdminController {
 
     if (date != null) {
       if (date.isAfter(currentDate())) {
-        throw new BadArgumentException(/*todo дата из будущего не допустима*/);
+        throw new BadArgumentException();
       }
 
       return voteService.getVote(date);
