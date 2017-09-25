@@ -18,5 +18,7 @@ public interface VoteRepository {
 
   List<VoteHistory> getHistory(LocalDate date);
 
+  VoteHistory getCurrentUserVote(Long userId);
+
   void update(VoteHistory voteHistory);
 }

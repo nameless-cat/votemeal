@@ -47,6 +47,11 @@ public class VoteRepositoryImpl
   }
 
   @Override
+  public VoteHistory getCurrentUserVote(Long userId) {
+    return voteRepository.getCurrentUserVote(userId, currentDate());
+  }
+
+  @Override
   public void update(VoteHistory voteHistory) {
     voteRepository.update(
         voteHistory.getRestaurant(),

@@ -78,10 +78,6 @@ public class VoteServiceImpl
   }
 
   private VoteHistory getTodayVote(long userId) {
-    return voteRepository.getUserHistory(userId)
-        .stream()
-        .filter(vh -> vh.getDate().equals(currentDate()))
-        .findAny()
-        .orElse(null);
+    return voteRepository.getCurrentUserVote(userId);
   }
 }

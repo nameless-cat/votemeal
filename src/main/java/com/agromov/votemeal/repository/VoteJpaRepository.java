@@ -4,6 +4,8 @@ import com.agromov.votemeal.model.Restaurant;
 import com.agromov.votemeal.model.VoteHistory;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -35,4 +37,7 @@ public interface VoteJpaRepository extends
       @Param("restaurant") Restaurant restaurant,
       @Param("userId") Long userId,
       @Param("date") LocalDate date);
+
+  @Query("SELECT v FROM VoteHistory v WHERE v.key.date=:date AND v.key.userId=:id")
+  VoteHistory getCurrentUserVote(@Param("id") Long userId, @Param("date") LocalDate date);
 }
